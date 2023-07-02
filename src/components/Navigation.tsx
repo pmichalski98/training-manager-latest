@@ -6,7 +6,7 @@ import { IoBarbellSharp } from "react-icons/io5";
 
 const Navigation = () => {
   return (
-    <nav className="container self-end bg-primary/70 px-10 py-6">
+    <nav className="container absolute bottom-0 bg-primary/70 px-10 py-6">
       <ul className="flex justify-around">
         <NavItem title={"History"} Icon={LuHistory} />
         <NavItem title={"Stats"} Icon={IoIosStats} />

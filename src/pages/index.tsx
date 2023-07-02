@@ -1,15 +1,12 @@
 import Head from "next/head";
 import { api } from "~/utils/api";
-import { LuHistory } from "react-icons/lu";
-import { IoIosStats, IoIosBody } from "react-icons/io";
-import { IoBarbellSharp } from "react-icons/io5";
-import NavItem from "~/components/NavItem";
+import { PiHandWavingFill } from "react-icons/pi";
+import { IoBarbell } from "react-icons/io5";
 import React from "react";
 import Navigation from "~/components/Navigation";
+import Header from "~/components/Header";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   return (
     <>
       <Head>
@@ -17,10 +14,10 @@ export default function Home() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex justify-center ">
-        <Navigation />
-        <main className=" min-h-screen"></main>
-      </div>
+      <Navigation />
+      <main className="container mx-auto mt-10 min-h-screen w-11/12">
+        <Header />
+      </main>
     </>
   );
 }
