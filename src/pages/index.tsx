@@ -14,8 +14,8 @@ export default function Home() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navigation />
       <main className="container mx-auto mt-10 min-h-screen w-11/12">
+        <Navigation />
         <Header />
       </main>
     </>
