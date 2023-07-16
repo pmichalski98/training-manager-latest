@@ -4,6 +4,9 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      borderColor: {
+        // primary: "#7ECBFF",
+      },
       backgroundColor: {
         nav: "#13293D",
         primary: "#112941",

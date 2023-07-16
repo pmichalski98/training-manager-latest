@@ -10,10 +10,15 @@ const Header = () => {
         <Logo className="md:hidden " />
         <p>users photo</p>
       </div>
-      <div className="mt-8 flex items-center gap-2">
+      <div className="my-8 flex items-center gap-2">
         <PiHandWavingFill color={"orange"} size={25} />
-        <h2 className=" text-xl">Good Morning!</h2>
+        <h2 className=" text-xl opacity-60">Good Morning!</h2>
       </div>
+      <p className={"text-4xl font-bold"}>User Name </p>
+      <p className="mt-6 font-bold">
+        You have trainined <span className="text-primary">384</span> times
+        already!
+      </p>
     </header>
   );
 };

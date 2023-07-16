@@ -7,8 +7,8 @@ import Logo from "~/components/Logo";
 
 const Navigation = () => {
   return (
-    <nav className="md: container absolute bottom-0 bg-primary/70 px-10 py-6 md:relative">
-      <ul className="flex justify-around md:justify-between">
+    <nav className=" container absolute bottom-0 bg-primary/70 py-6 md:relative">
+      <ul className=" container flex justify-around p-0 md:justify-between">
         <Logo className={"hidden md:flex"} />
         <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
         <NavItem title={"Stats"} Icon={IoIosStats} href={"/stats"} />
