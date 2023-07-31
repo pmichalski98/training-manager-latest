@@ -12,9 +12,11 @@ export default function Home() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container mx-auto mt-10 min-h-screen w-11/12">
-        <Navigation />
-        <Header />
+      <Navigation />
+      <main className="min-h-screen px-3 md:px-6">
+        <div className={"mt-10"}>
+          <Header />
+        </div>
         {/*<h2 className="my-20">Tutaj z grubsza wykres </h2>*/}
         <div className="mt-20 flex items-center justify-between">
           <h2 className=" text-2xl font-bold">Workouts</h2>

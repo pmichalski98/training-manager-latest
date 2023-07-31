@@ -9,7 +9,7 @@ export default {
       },
       backgroundColor: {
         nav: "#13293D",
-        primary: "#112941",
+        primary: "#162F46",
       },
       colors: {
         primary: "#5fd4ee",
