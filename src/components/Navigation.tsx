@@ -7,7 +7,7 @@ import Logo from "~/components/Logo";
 
 const Navigation = () => {
   return (
-    <nav className=" fixed bottom-0 w-full bg-nav py-6 shadow-2xl md:relative md:top-0 ">
+    <nav className="fixed bottom-0 h-28 w-full bg-nav/80 py-6 shadow-2xl  md:top-0 ">
       <ul className="  flex  max-w-screen-lg items-center justify-around">
         <Logo className={"hidden md:flex"} />
         <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
