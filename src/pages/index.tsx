@@ -13,7 +13,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navigation />
-      <main className="min-h-screen px-3 md:px-6">
+      <main className="min-h-screen px-6 md:px-9">
         <div className={"mt-10"}>
           <Header />
         </div>
