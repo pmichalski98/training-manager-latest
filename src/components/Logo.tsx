@@ -6,11 +6,7 @@ export default function Logo(props: ComponentPropsWithoutRef<"div">) {
   const classes = classNames("flex items-center gap-2", props.className);
   return (
     <div className={classes}>
-      <IoBarbell
-        size={40}
-        className="rounded-lg bg-cyan-400 p-1"
-        color={"black"}
-      />
+      <IoBarbell size={40} className="rounded-lg bg-primaryText p-1 text-nav" />
       <h1 className="text-2xl font-medium text-primary md:hidden">
         Training Manager
       </h1>

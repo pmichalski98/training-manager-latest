@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React from "react";
+import React, { useRef, useState } from "react";
 import Navigation from "~/components/Navigation";
 import Header from "~/components/Header";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { type Workout } from "~/types/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addWorkoutSchema } from "~/schemas/add-workout";
+import { GoTrash } from "react-icons/go";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import ErrorText from "~/components/ErrorText";
 
 export default function Home() {
   return (
@@ -17,7 +20,7 @@ export default function Home() {
       <Head>
         <title>Training Manager</title>
         <meta name="description" content="Training Manager gym application" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/icon.png" />
       </Head>
       <Navigation />
       <main className="min-h-screen px-6 pb-28 md:mt-28 md:px-9">
@@ -35,7 +38,7 @@ export default function Home() {
               <Dialog.Overlay className="fixed inset-0  z-20 bg-black/50" />
               <Dialog.Content
                 className={
-                  "fixed left-1/2 top-1/2 z-30 h-1/2 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-primary "
+                  "fixed left-1/2 top-1/2 z-30 h-3/4 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-primary "
                 }
               >
                 <div className="flex w-full items-center justify-between p-6">
@@ -64,47 +67,101 @@ export default function Home() {
     </>
   );
 }
-
 export function AddWorkoutForm() {
-  const { resetField, register, watch } = useForm<Workout>({
+  const [exercises, setExercises] = useState<Pick<Workout, "exerciseName">[]>(
+    []
+  );
+  const {
+    getValues,
+    formState: { errors },
+    handleSubmit,
+    resetField,
+    register,
+    watch,
+  } = useForm<Workout>({
     resolver: zodResolver(addWorkoutSchema),
   });
   console.log(watch());
+  console.log(errors);
 
-  function addExercise() {
+  function addExercise(data: Workout) {
+    setExercises([
+      ...exercises,
+      {
+        exerciseName: data.exerciseName,
+      },
+    ]);
     resetField("exerciseName");
   }
+
+  function deleteExercise(index: number) {
+    setExercises([...exercises.filter((_, i) => i !== index)]);
+  }
+
+  console.log(exercises);
+
   return (
-    <form className="mt-6 flex flex-col space-y-3 px-6">
-      <div className="flex flex-col rounded-lg bg-nav p-3">
-        <label htmlFor="workoutName" className="text-sm text-slate-400">
-          Workout name
-        </label>
-        <Input
-          {...register("workoutName")}
-          type="text"
-          id="workoutName"
-          className="mt-1 "
-        />
-      </div>
-      <div className="flex flex-col rounded-lg bg-nav p-3">
-        <label htmlFor="exerciseName" className="text-sm text-slate-400">
-          Exercise
-        </label>
-        <Input
-          {...register("exerciseName")}
-          type="text"
-          id="exerciseName"
-          className="mt-1 "
-        />
-      </div>
-      <button
-        onClick={addExercise}
-        type="button"
-        className=" w-1/6 self-end rounded-lg bg-cyan-300 px-4 py-2 font-bold text-gray-900 hover:bg-cyan-500"
+    <div className="flex  h-full flex-col  px-6 ">
+      <form
+        onSubmit={handleSubmit((data) => addExercise(data))}
+        className="mt-6 flex flex-col space-y-3 "
       >
-        Add
-      </button>
-    </form>
+        <div className="flex flex-col rounded-lg bg-nav p-3">
+          <label htmlFor="workoutName" className="text-sm text-slate-400">
+            Workout name
+          </label>
+          <Input
+            {...register("workoutName")}
+            type="text"
+            id="workoutName"
+            className="mt-1 "
+          />
+          <ErrorText>{errors.workoutName?.message}</ErrorText>
+        </div>
+        <div className="relative flex flex-col rounded-lg bg-nav p-3">
+          <label htmlFor="exerciseName" className="text-sm text-slate-400">
+            Exercises
+          </label>
+          <Input
+            {...register("exerciseName")}
+            type="text"
+            id="exerciseName"
+            className="mt-1 "
+          />
+          <ErrorText>{errors.exerciseName?.message}</ErrorText>
+          <button className={"absolute right-0 text-5xl"}>+</button>
+        </div>
+      </form>
+      {exercises.length > 0 && (
+        <div className="mt-10 rounded-lg bg-nav p-6">
+          <h3 className="text-center text-2xl font-medium">
+            {getValues("workoutName")}
+          </h3>
+          <ul className="mt-6 space-y-3 pb-6">
+            {exercises.map((exercise, index) => {
+              return (
+                <div
+                  key={exercise.exerciseName}
+                  className="flex  justify-around"
+                >
+                  <div className="flex  w-full gap-1">
+                    <p>{(index + 1).toString().concat(".")}</p>
+                    <li>{exercise.exerciseName}</li>
+                  </div>
+                  <button onClick={() => deleteExercise(index)}>
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {exercises.length > 0 && (
+        <button className=" mt-6 justify-end self-end rounded-lg  bg-primaryText px-4 py-2 font-bold text-gray-900 hover:bg-cyan-500">
+          Add workout
+        </button>
+      )}
+    </div>
   );
 }
