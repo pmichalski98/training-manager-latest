@@ -5,14 +5,15 @@ import Header from "~/components/Header";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AiOutlineClose } from "react-icons/ai";
-import Input from "~/components/Input";
+import Input from "~/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { type Workout } from "~/types/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addWorkoutSchema } from "~/schemas/add-workout";
 import { GoTrash } from "react-icons/go";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import ErrorText from "~/components/ErrorText";
+import ErrorText from "~/components/ui/ErrorText";
+import Modal from "~/components/ui/Modal";
 
 export default function Home() {
   return (
@@ -30,32 +31,17 @@ export default function Home() {
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
         <div className="mt-20 flex items-center justify-between">
           <h2 className=" text-2xl font-bold">Workouts</h2>
-          <Dialog.Root>
-            <Dialog.Trigger>
+          <Modal>
+            <Modal.Button>
               <span className="text-5xl">+</span>
-            </Dialog.Trigger>
-            <Dialog.Portal>
-              <Dialog.Overlay className="fixed inset-0  z-20 bg-black/50" />
-              <Dialog.Content
-                className={
-                  "fixed left-1/2 top-1/2 z-30 h-3/4 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-primary "
-                }
-              >
-                <div className="flex w-full items-center justify-between p-6">
-                  <Dialog.Title className={"mx-auto  text-xl text-slate-400"}>
-                    New workout
-                  </Dialog.Title>
-                  <Dialog.Close className="hover:text-gray-400">
-                    <AiOutlineClose size={35} />
-                  </Dialog.Close>
-                </div>
-                <h3 className="text-center text-3xl font-medium text-white">
-                  Workout Details
-                </h3>
-                <AddWorkoutForm />
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
+            </Modal.Button>
+            <Modal.Content title="halo halo">
+              <h3 className="text-center text-3xl font-medium text-white">
+                Workout Details
+              </h3>
+              <AddWorkoutForm />
+            </Modal.Content>
+          </Modal>
         </div>
         <div className="mt-6 rounded-lg border-2 border-primary/25 p-4">
           <div className="mx-auto flex w-11/12 items-center justify-between ">

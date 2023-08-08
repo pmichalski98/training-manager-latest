@@ -1,6 +1,6 @@
 import React from "react";
 import { PiHandWavingFill } from "react-icons/pi";
-import Logo from "~/components/Logo";
+import Logo from "~/components/ui/Logo";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
