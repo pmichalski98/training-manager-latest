@@ -1,15 +1,11 @@
 import Head from "next/head";
-import React, { useRef, useState } from "react";
-import Navigation from "~/components/Navigation";
+import React, { useState } from "react";
 import Header from "~/components/Header";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import * as Dialog from "@radix-ui/react-dialog";
-import { AiOutlineClose } from "react-icons/ai";
 import Input from "~/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { addWorkoutSchema, type Workout } from "~/types/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GoTrash } from "react-icons/go";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ErrorText from "~/components/ui/ErrorText";
 import Modal from "~/components/ui/Modal";
@@ -33,7 +29,7 @@ export default function Home() {
             <Modal.Button>
               <span className="text-5xl">+</span>
             </Modal.Button>
-            <Modal.Content title="halo halo">
+            <Modal.Content title="New workout">
               <h3 className="text-center text-3xl font-medium text-white">
                 Workout Details
               </h3>
@@ -90,7 +86,8 @@ export function AddWorkoutForm() {
         onSubmit={handleSubmit((data) => addExercise(data))}
         className="mt-6 flex flex-col space-y-3 "
       >
-        <div className="flex flex-col rounded-lg bg-nav p-3">
+        <ErrorText>{errors.workoutName?.message}</ErrorText>
+        <div className="flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
           <label htmlFor="workoutName" className="text-sm text-slate-400">
             Workout name
           </label>
@@ -100,9 +97,9 @@ export function AddWorkoutForm() {
             id="workoutName"
             className="mt-1 "
           />
-          <ErrorText>{errors.workoutName?.message}</ErrorText>
         </div>
-        <div className="relative flex flex-col rounded-lg bg-nav p-3">
+        <ErrorText>{errors.exerciseName?.message}</ErrorText>
+        <div className="relative flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
           <label htmlFor="exerciseName" className="text-sm text-slate-400">
             Exercises
           </label>
@@ -112,8 +109,9 @@ export function AddWorkoutForm() {
             id="exerciseName"
             className="mt-1 "
           />
-          <ErrorText>{errors.exerciseName?.message}</ErrorText>
-          <button className={"absolute right-0 text-5xl"}>+</button>
+          <button className={"absolute inset-y-0 right-0 mr-3 text-5xl"}>
+            +
+          </button>
         </div>
       </form>
       {exercises.length > 0 && (

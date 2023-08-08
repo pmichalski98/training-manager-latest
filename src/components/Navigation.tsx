@@ -5,6 +5,8 @@ import { IoBarbellSharp } from "react-icons/io5";
 import Logo from "~/components/ui/Logo";
 import { IconBaseProps } from "react-icons";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { twMerge } from "tailwind-merge";
 
 const Navigation = () => {
   return (
@@ -26,8 +28,14 @@ interface NavItemProps {
   Icon: ComponentType<IconBaseProps>;
 }
 export const NavItem = ({ href, title, Icon }: NavItemProps) => {
+  const path = usePathname();
+  const active = path === href;
+  const classes = twMerge(
+    "cursor-pointer opacity-75 hover:text-primary hover:opacity-100",
+    active && "text-primary opacity-100"
+  );
   return (
-    <li className="cursor-pointer opacity-75 hover:text-primary hover:opacity-100">
+    <li className={classes}>
       <Link href={href}>
         <Icon size={30} className="mx-auto mb-2" />
         {title}

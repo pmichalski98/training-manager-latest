@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 export type Workout = z.infer<typeof addWorkoutSchema>;
 
 export const addWorkoutSchema = z.object({
