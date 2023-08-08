@@ -13,7 +13,7 @@ const Navigation = () => {
         <Logo className={"hidden md:flex"} />
         <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
         <NavItem title={"Stats"} Icon={IoIosStats} href={"/stats"} />
-        <NavItem title={"Workouts"} Icon={IoBarbellSharp} href={"/workouts"} />
+        <NavItem title={"Workouts"} Icon={IoBarbellSharp} href={"/"} />
         <NavItem title={"Body"} Icon={IoIosBody} href={"/body"} />
       </ul>
     </nav>

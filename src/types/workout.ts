@@ -1,4 +1,7 @@
 import { z } from "zod";
-import { addWorkoutSchema } from "~/schemas/add-workout";
-
 export type Workout = z.infer<typeof addWorkoutSchema>;
+
+export const addWorkoutSchema = z.object({
+  workoutName: z.string().min(1, { message: "Workout name cannot be empty" }),
+  exerciseName: z.string().min(1, { message: "Exercise name cannot be empty" }),
+});
