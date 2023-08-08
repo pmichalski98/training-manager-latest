@@ -17,6 +17,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <ClerkProvider
       appearance={{
         baseTheme: dark,
+        variables: {
+          colorBackground: "#041a28",
+        },
       }}
     >
       {isPublicPage ? (
@@ -26,9 +29,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       ) : (
         <>
           <SignedIn>
-            {/*<Layout>*/}
             <Component {...pageProps} />
-            {/*</Layout>*/}
           </SignedIn>
           <SignedOut>
             <SignInPage />

@@ -1,7 +1,7 @@
 import React from "react";
 import { PiHandWavingFill } from "react-icons/pi";
 import Logo from "~/components/Logo";
-import { useUser } from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 
 const Header = () => {
@@ -20,6 +20,7 @@ const Header = () => {
           />
         )}
       </div>
+      <SignOutButton />
       <div className="my-8 flex items-center gap-2">
         <PiHandWavingFill color={"orange"} size={25} />
         <h2 className=" text-xl opacity-60">Good Morning!</h2>
