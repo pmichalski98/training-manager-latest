@@ -23,8 +23,7 @@ export default function Home() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/icon.png" />
       </Head>
-      <Navigation />
-      <main className="min-h-screen px-6 pb-28 md:mt-28 md:px-9">
+      <>
         <div className={"mt-10"}>
           <Header />
         </div>
@@ -49,7 +48,7 @@ export default function Home() {
             <BsThreeDotsVertical size={20} />
           </div>
         </div>
-      </main>
+      </>
     </>
   );
 }

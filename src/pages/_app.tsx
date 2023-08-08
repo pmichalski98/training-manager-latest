@@ -5,6 +5,7 @@ import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { dark } from "@clerk/themes";
 import SignInPage from "~/components/SignInPage";
+import Layout from "~/components/Layout";
 
 const publicPages: Array<string> = [];
 
@@ -29,7 +30,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       ) : (
         <>
           <SignedIn>
-            <Component {...pageProps} />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
           </SignedIn>
           <SignedOut>
             <SignInPage />
