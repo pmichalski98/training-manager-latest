@@ -10,9 +10,11 @@ import ErrorText from "~/components/ui/ErrorText";
 import Modal from "~/components/ui/Modal";
 import { PiHandWavingFill } from "react-icons/pi";
 import { useUser } from "@clerk/nextjs";
+import { api } from "~/utils/api";
 
 export default function Home() {
   const { user } = useUser();
+  const { data: trainingCount } = api.user.getTrainingsCount.useQuery();
   return (
     <>
       <Head>
@@ -27,9 +29,17 @@ export default function Home() {
             <h2 className=" text-xl opacity-60">Good Morning!</h2>
           </div>
           <p className={"text-4xl font-bold"}>{user?.firstName}</p>
+
           <p className="mt-6 font-bold">
-            You have trainined <span className="text-primary">384</span> times
-            already!
+            {trainingCount
+              ? "You have trainined"
+              : "Start your first training !"}
+            {trainingCount && (
+              <>
+                <span className="text-primary"> {trainingCount}</span> times
+                already!
+              </>
+            )}
           </p>
         </div>
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
