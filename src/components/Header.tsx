@@ -1,34 +1,42 @@
+"use client";
+
 import React from "react";
-import { PiHandWavingFill } from "react-icons/pi";
 import Logo from "~/components/ui/Logo";
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import Dropdown from "~/components/ui/Dropdown";
 
 const Header = () => {
   const { user, isSignedIn } = useUser();
+  const { signOut } = useClerk();
   return (
-    <header>
-      <div className="flex justify-between ">
-        <Logo className="md:hidden " />
-        {isSignedIn && (
-          <Image
-            width={50}
-            height={50}
-            alt="user logo"
-            src={user?.imageUrl}
-            className="rounded-full"
-          />
-        )}
-      </div>
-      <div className="my-8 flex items-center gap-2">
-        <PiHandWavingFill color={"orange"} size={25} />
-        <h2 className=" text-xl opacity-60">Good Morning!</h2>
-      </div>
-      <p className={"text-4xl font-bold"}>{user?.firstName}</p>
-      <p className="mt-6 font-bold">
-        You have trainined <span className="text-primary">384</span> times
-        already!
-      </p>
+    <header className="mt-6 flex justify-between md:hidden">
+      <Logo className="relative " />
+      {isSignedIn && (
+        <Dropdown>
+          <Dropdown.Button>
+            <Image
+              width={50}
+              height={50}
+              alt="user logo"
+              src={user?.imageUrl}
+              className="rounded-full"
+            />
+          </Dropdown.Button>
+          <Dropdown.Content>
+            <div className="w-24 rounded border-2 border-[#7ECBFF]/20 bg-[#1B3A56]/50 p-4 outline-none ">
+              <Dropdown.Item className="outline-none">
+                <button
+                  onClick={() => signOut()}
+                  className=" text-white  hover:text-primary"
+                >
+                  Sign out
+                </button>
+              </Dropdown.Item>
+            </div>
+          </Dropdown.Content>
+        </Dropdown>
+      )}
     </header>
   );
 };

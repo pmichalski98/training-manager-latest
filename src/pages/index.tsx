@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React, { useState } from "react";
-import Header from "~/components/Header";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Input from "~/components/ui/Input";
 import { useForm } from "react-hook-form";
@@ -9,8 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ErrorText from "~/components/ui/ErrorText";
 import Modal from "~/components/ui/Modal";
+import { PiHandWavingFill } from "react-icons/pi";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
+  const { user } = useUser();
   return (
     <>
       <Head>
@@ -20,7 +22,15 @@ export default function Home() {
       </Head>
       <>
         <div className={"mt-10"}>
-          <Header />
+          <div className="my-8 flex items-center gap-2">
+            <PiHandWavingFill color={"orange"} size={25} />
+            <h2 className=" text-xl opacity-60">Good Morning!</h2>
+          </div>
+          <p className={"text-4xl font-bold"}>{user?.firstName}</p>
+          <p className="mt-6 font-bold">
+            You have trainined <span className="text-primary">384</span> times
+            already!
+          </p>
         </div>
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
         <div className="mt-20 flex items-center justify-between">
