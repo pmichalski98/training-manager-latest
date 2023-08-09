@@ -29,10 +29,10 @@ function ModalContent({
 }) {
   return (
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0  z-20 bg-black/50" />
+      <Dialog.Overlay className="fixed inset-0 z-20  bg-black/50" />
       <Dialog.Content
         className={
-          "fixed left-1/2 top-1/2 z-30 h-3/4 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-primary "
+          "fixed left-1/2 top-1/2 z-30 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-primary pb-6 "
         }
       >
         <div className="flex w-full items-center justify-between p-6">

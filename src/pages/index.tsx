@@ -1,8 +1,10 @@
+"use client";
+
 import Head from "next/head";
 import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Input from "~/components/ui/Input";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { addWorkoutSchema, type Workout } from "~/types/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -68,42 +70,32 @@ export default function Home() {
   );
 }
 export function AddWorkoutForm() {
-  const [exercises, setExercises] = useState<Pick<Workout, "exerciseName">[]>(
-    []
-  );
   const {
     getValues,
     formState: { errors },
     handleSubmit,
-    resetField,
+    control,
     register,
-    watch,
   } = useForm<Workout>({
     resolver: zodResolver(addWorkoutSchema),
+    mode: "onBlur",
   });
-  console.log(watch());
-  console.log(errors);
 
-  function addExercise(data: Workout) {
-    setExercises([
-      ...exercises,
-      {
-        exerciseName: data.exerciseName,
-      },
-    ]);
-    resetField("exerciseName");
+  const { fields, update, append, remove } = useFieldArray({
+    control,
+    name: "exercises",
+  });
+  const [exerciseName, setExerciseName] = useState("");
+  const onSubmit = (data) => console.log("data", data);
+  function addExercise() {
+    append({ exerciseName: exerciseName });
+    setExerciseName("");
   }
-
-  function deleteExercise(index: number) {
-    setExercises([...exercises.filter((_, i) => i !== index)]);
-  }
-
-  console.log(exercises);
 
   return (
     <div className="flex  h-full flex-col  px-6 ">
       <form
-        onSubmit={handleSubmit((data) => addExercise(data))}
+        onSubmit={handleSubmit(onSubmit)}
         className="mt-6 flex flex-col space-y-3 "
       >
         <ErrorText>{errors.workoutName?.message}</ErrorText>
@@ -118,52 +110,58 @@ export function AddWorkoutForm() {
             className="mt-1 "
           />
         </div>
-        <ErrorText>{errors.exerciseName?.message}</ErrorText>
-        <div className="relative flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
-          <label htmlFor="exerciseName" className="text-sm text-slate-400">
-            Exercises
+        <div className="flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
+          <label htmlFor="workoutName" className="text-sm text-slate-400">
+            Exercise name
           </label>
           <Input
-            {...register("exerciseName")}
+            value={exerciseName}
+            onChange={(e) => setExerciseName(e.target.value)}
             type="text"
-            id="exerciseName"
+            id="workoutName"
             className="mt-1 "
           />
-          <button className={"absolute inset-y-0 right-0 mr-3 text-5xl"}>
+          <button
+            onClick={addExercise}
+            type="button"
+            id="workoutName"
+            className={"absolute inset-y-0 right-0 mr-3 text-5xl"}
+          >
             +
           </button>
         </div>
-      </form>
-      {exercises.length > 0 && (
+        <ErrorText>{errors.exercises?.message}</ErrorText>
         <div className="mt-10 rounded-lg bg-nav p-6">
           <h3 className="text-center text-2xl font-medium">
             {getValues("workoutName")}
           </h3>
           <ul className="mt-6 space-y-3 pb-6">
-            {exercises.map((exercise, index) => {
+            {fields.map((field, index) => {
               return (
-                <div
-                  key={exercise.exerciseName}
-                  className="flex  justify-around"
-                >
-                  <div className="flex  w-full gap-1">
+                <div key={field.id} className="flex  justify-around">
+                  <div className="flex items-center gap-4">
                     <p>{(index + 1).toString().concat(".")}</p>
-                    <li>{exercise.exerciseName}</li>
+                    <Input
+                      {...register(`exercises.${index}.exerciseName` as const)}
+                      id="exerciseName"
+                      className="mt-1 "
+                    />
+
+                    <button onClick={() => remove(index)}>
+                      <RiDeleteBin6Line />
+                    </button>
                   </div>
-                  <button onClick={() => deleteExercise(index)}>
-                    <RiDeleteBin6Line />
-                  </button>
                 </div>
               );
             })}
           </ul>
         </div>
-      )}
-      {exercises.length > 0 && (
-        <button className=" mt-6 justify-end self-end rounded-lg  bg-primaryText px-4 py-2 font-bold text-gray-900 hover:bg-cyan-500">
-          Add workout
-        </button>
-      )}
+        {fields && (
+          <button className=" mt-6 justify-end self-end rounded-lg  bg-primaryText px-4 py-2 font-bold text-gray-900 hover:bg-cyan-500">
+            Add workout
+          </button>
+        )}
+      </form>
     </div>
   );
 }
