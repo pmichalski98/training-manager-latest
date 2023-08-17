@@ -56,7 +56,7 @@ model Weight {
 
 model Training {
     id            String         @id @default(uuid())
-    label         String         @db.VarChar(255)
+    workoutName         String         @db.VarChar(255)
     exercises     Exercise[]
     trainingUnits TrainingUnit[]
     userId        String
@@ -76,7 +76,7 @@ model TrainingUnit {
 
 model Exercise {
     id             String        @id @default(uuid())
-    label          String        @db.VarChar(255)
+    exerciseName          String        @db.VarChar(255)
     sets           Int           @default(3)
     reps           Int           @default(3)
     weight         Int           @default(12)

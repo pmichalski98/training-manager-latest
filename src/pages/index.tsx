@@ -70,26 +70,32 @@ export default function Home() {
   );
 }
 export function AddWorkoutForm() {
+  api.user.login.useQuery();
   const {
     getValues,
     formState: { errors },
     handleSubmit,
     control,
+    setFocus,
     register,
   } = useForm<Workout>({
     resolver: zodResolver(addWorkoutSchema),
-    mode: "onBlur",
   });
 
-  const { fields, update, append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "exercises",
   });
   const [exerciseName, setExerciseName] = useState("");
-  const onSubmit = (data) => console.log("data", data);
+  const { mutate } = api.workout.addWorkout.useMutation();
+
+  function onSubmit(data: Workout) {
+    mutate(data);
+  }
   function addExercise() {
     append({ exerciseName: exerciseName });
     setExerciseName("");
+    setFocus("workoutName");
   }
 
   return (
@@ -110,7 +116,7 @@ export function AddWorkoutForm() {
             className="mt-1 "
           />
         </div>
-        <div className="flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
+        <div className="relative flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
           <label htmlFor="workoutName" className="text-sm text-slate-400">
             Exercise name
           </label>
@@ -131,20 +137,19 @@ export function AddWorkoutForm() {
           </button>
         </div>
         <ErrorText>{errors.exercises?.message}</ErrorText>
-        <div className="mt-10 rounded-lg bg-nav p-6">
+        <div className="mt-10 rounded-lg bg-nav p-6 ">
           <h3 className="text-center text-2xl font-medium">
             {getValues("workoutName")}
           </h3>
-          <ul className="mt-6 space-y-3 pb-6">
+          <ul className="mt-6  space-y-3 pb-6 ">
             {fields.map((field, index) => {
               return (
-                <div key={field.id} className="flex  justify-around">
+                <div key={field.id} className="flex  justify-around  ">
                   <div className="flex items-center gap-4">
-                    <p>{(index + 1).toString().concat(".")}</p>
+                    <p className="">{(index + 1).toString().concat(".")}</p>
                     <Input
                       {...register(`exercises.${index}.exerciseName` as const)}
                       id="exerciseName"
-                      className="mt-1 "
                     />
 
                     <button onClick={() => remove(index)}>
