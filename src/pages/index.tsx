@@ -1,7 +1,7 @@
 "use client";
 
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Input from "~/components/ui/Input";
 import { useFieldArray, useForm } from "react-hook-form";
 import {
@@ -20,6 +20,7 @@ import { api } from "~/utils/api";
 import { MdUpdate } from "react-icons/md";
 import Button from "~/components/ui/Button";
 import OptionsDropdown from "~/components/OptionsDropdown";
+import AddWorkoutForm from "~/components/AddWorkoutForm";
 
 export default function Home() {
   api.user.login.useQuery();
@@ -87,15 +88,18 @@ export default function Home() {
                 </span>
                 <p>3 days ago..</p>
               </div>
-              <ul className="text-sm opacity-75">
-                {workout.exercises.map((exercise) => {
-                  return (
-                    <li key={exercise.id}>
-                      <p>{exercise.exerciseName}</p>
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="flex justify-between">
+                <ul className="text-sm opacity-75">
+                  {workout.exercises.map((exercise) => {
+                    return (
+                      <li key={exercise.id}>
+                        <p className="capitalize">{exercise.exerciseName}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <Button className="h-fit self-end">Start training </Button>
+              </div>
             </div>
           );
         })}
@@ -218,103 +222,6 @@ export function EditWorkoutForm({
           <Button disabled={isEditing} className="self-end font-bold ">
             Save changes
           </Button>
-        )}
-      </form>
-    </div>
-  );
-}
-export function AddWorkoutForm() {
-  const {
-    getValues,
-    formState: { errors },
-    handleSubmit,
-    control,
-    register,
-  } = useForm<Workout>({
-    resolver: zodResolver(addWorkoutSchema),
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "exercises",
-  });
-  const [exerciseName, setExerciseName] = useState("");
-  const { mutate } = api.workout.addWorkout.useMutation();
-
-  function onSubmit(data: Workout) {
-    mutate(data);
-  }
-
-  function addExercise() {
-    append({ exerciseName: exerciseName });
-    setExerciseName("");
-  }
-
-  return (
-    <div className="flex  h-full flex-col  px-6 ">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="mt-6 flex flex-col space-y-3 "
-      >
-        <ErrorText>{errors.workoutName?.message}</ErrorText>
-        <div className="flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
-          <label htmlFor="workoutName" className="text-sm text-slate-400">
-            Workout name
-          </label>
-          <Input
-            {...register("workoutName")}
-            type="text"
-            id="workoutName"
-            className="mt-1 "
-          />
-        </div>
-        <div className="relative flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
-          <label htmlFor="workoutName" className="text-sm text-slate-400">
-            Exercise name
-          </label>
-          <Input
-            value={exerciseName}
-            onChange={(e) => setExerciseName(e.target.value)}
-            type="text"
-            id="workoutName"
-            className="mt-1 "
-          />
-          <button
-            onClick={addExercise}
-            type="button"
-            id="workoutName"
-            className={"absolute inset-y-0 right-0 mr-3 text-5xl"}
-          >
-            +
-          </button>
-        </div>
-        <ErrorText>{errors.exercises?.message}</ErrorText>
-        <div className="mt-10 rounded-lg bg-nav p-6 ">
-          <h3 className="text-center text-2xl font-medium">
-            {getValues("workoutName")}
-          </h3>
-          <ul className="mt-6  space-y-3 pb-6 ">
-            {fields.map((field, index) => {
-              return (
-                <div key={field.id} className="flex  justify-around  ">
-                  <div className="flex items-center gap-4">
-                    <p className="">{(index + 1).toString().concat(".")}</p>
-                    <Input
-                      {...register(`exercises.${index}.exerciseName` as const)}
-                      id="exerciseName"
-                    />
-
-                    <button onClick={() => remove(index)}>
-                      <RiDeleteBin6Line />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </ul>
-        </div>
-        {fields.length > 0 && (
-          <Button className="self-end font-bold  ">Add workout</Button>
         )}
       </form>
     </div>
