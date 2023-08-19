@@ -1,15 +1,14 @@
 "use client";
 
 import Head from "next/head";
-import React, { useEffect, useRef, useState } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import React, { useState } from "react";
 import Input from "~/components/ui/Input";
 import { useFieldArray, useForm } from "react-hook-form";
 import {
   addWorkoutSchema,
   editWorkoutSchema,
   type Workout,
-  WorkoutWithId,
+  type WorkoutWithId,
 } from "~/types/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -19,21 +18,15 @@ import { PiHandWavingFill } from "react-icons/pi";
 import { useUser } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 import { MdUpdate } from "react-icons/md";
-import DropDown from "~/components/ui/Dropdown";
 import Button from "~/components/ui/Button";
+import OptionsDropdown from "~/components/OptionsDropdown";
 
 export default function Home() {
   api.user.login.useQuery();
-  const utils = api.useContext();
+  const [openAddModal, setOpenAddModal] = useState(false);
   const { user } = useUser();
   const { data: trainingCount } = api.user.getTrainingsCount.useQuery();
   const { data: workouts } = api.workout.getWorkouts.useQuery();
-  const { mutate: deleteTraining, isLoading: isDeleting } =
-    api.workout.deleteWorkout.useMutation({
-      onSuccess: async () => {
-        await utils.workout.getWorkouts.invalidate();
-      },
-    });
 
   console.log(workouts);
   return (
@@ -66,7 +59,7 @@ export default function Home() {
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
         <div className="mt-20 flex items-center justify-between">
           <h2 className=" text-2xl font-bold">Workouts</h2>
-          <Modal>
+          <Modal open={openAddModal} onOpenChange={setOpenAddModal}>
             <Modal.Button>
               <span className="text-5xl">+</span>
             </Modal.Button>
@@ -86,40 +79,7 @@ export default function Home() {
             >
               <div className="mx-auto flex  items-center justify-between ">
                 <h3 className="text-lg font-bold">{workout.workoutName}</h3>
-                <DropDown>
-                  <DropDown.Button>
-                    <BsThreeDotsVertical size={20} />
-                  </DropDown.Button>
-                  <DropDown.Content>
-                    <div className=" space-y-1 rounded border-2 border-[#7ECBFF]/20 bg-[#1B3A56]/50 px-3 py-1 outline-none ">
-                      <Button
-                        onClick={() =>
-                          deleteTraining({ workoutId: workout.id })
-                        }
-                        disabled={isDeleting}
-                        variant="secondary"
-                        className="capitalize"
-                      >
-                        delete
-                      </Button>
-                      <Modal>
-                        <Modal.Button>
-                          <Button variant="secondary" className="capitalize">
-                            edit
-                          </Button>
-                        </Modal.Button>
-                        <Modal.Content
-                          title={`Edit ${workout.workoutName} workout`}
-                        >
-                          <h3 className="text-center text-3xl font-medium text-white">
-                            Workout Details
-                          </h3>
-                          <EditWorkoutForm workout={workout} />
-                        </Modal.Content>
-                      </Modal>
-                    </div>
-                  </DropDown.Content>
-                </DropDown>
+                <OptionsDropdown workout={workout} />
               </div>
               <div className="flex items-center gap-2 text-sm opacity-75">
                 <span className="opacity-75">
@@ -144,7 +104,13 @@ export default function Home() {
   );
 }
 
-export function EditWorkoutForm({ workout }: { workout: WorkoutWithId }) {
+export function EditWorkoutForm({
+  workout,
+  closeModal,
+}: {
+  workout: WorkoutWithId;
+  closeModal: (value: boolean) => void;
+}) {
   const utils = api.useContext();
   const {
     getValues,
@@ -170,6 +136,7 @@ export function EditWorkoutForm({ workout }: { workout: WorkoutWithId }) {
   const { mutate: editWorkout, isLoading: isEditing } =
     api.workout.editWorkout.useMutation({
       onSuccess: async () => {
+        closeModal(false);
         await utils.workout.getWorkouts.invalidate();
       },
     });
