@@ -148,6 +148,7 @@ export function EditWorkoutForm({ workout }: { workout: WorkoutWithId }) {
   const utils = api.useContext();
   const {
     getValues,
+    trigger,
     formState: { errors },
     handleSubmit,
     control,
@@ -197,6 +198,7 @@ export function EditWorkoutForm({ workout }: { workout: WorkoutWithId }) {
             {...register("workoutName")}
             type="text"
             id="workoutName"
+            onBlur={() => trigger("workoutName")}
             className="mt-1 "
           />
         </div>
