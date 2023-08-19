@@ -7,7 +7,7 @@ function Layout({ children }: TLayout) {
   return (
     <>
       <Navigation />
-      <main className="-mb-28 min-h-screen overflow-auto px-6 sm:px-14  md:px-9 md:pt-28">
+      <main className="-mb-28 min-h-screen overflow-auto px-6 pb-28 sm:px-14  md:px-9 md:pt-28">
         <Header />
         {children}
       </main>
