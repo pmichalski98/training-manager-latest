@@ -1,9 +1,9 @@
-import React, { ComponentType } from "react";
+import React, { type ComponentType } from "react";
 import { LuHistory } from "react-icons/lu";
 import { IoIosBody, IoIosStats } from "react-icons/io";
 import { IoBarbellSharp } from "react-icons/io5";
 import Logo from "~/components/ui/Logo";
-import { IconBaseProps } from "react-icons";
+import { type IconBaseProps } from "react-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";

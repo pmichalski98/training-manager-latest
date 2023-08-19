@@ -1,4 +1,4 @@
-import { editWorkoutSchema, WorkoutWithId } from "~/types/workout";
+import { editWorkoutSchema, type WorkoutWithId } from "~/types/workout";
 import { api } from "~/utils/api";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

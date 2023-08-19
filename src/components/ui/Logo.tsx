@@ -1,5 +1,5 @@
 import { IoBarbell } from "react-icons/io5";
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { type ComponentPropsWithoutRef } from "react";
 import classNames from "classnames";
 import Link from "next/link";
 

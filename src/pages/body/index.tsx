@@ -1,6 +1,6 @@
 import React from "react";
 
-function Index(props) {
+function Index() {
   return <div>Body page</div>;
 }
 

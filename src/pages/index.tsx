@@ -1,18 +1,7 @@
 "use client";
 
 import Head from "next/head";
-import React, { useRef, useState } from "react";
-import Input from "~/components/ui/Input";
-import { useFieldArray, useForm } from "react-hook-form";
-import {
-  addWorkoutSchema,
-  editWorkoutSchema,
-  type Workout,
-  type WorkoutWithId,
-} from "~/types/workout";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import ErrorText from "~/components/ui/ErrorText";
+import React, { useState } from "react";
 import Modal from "~/components/ui/Modal";
 import { PiHandWavingFill } from "react-icons/pi";
 import { useUser } from "@clerk/nextjs";

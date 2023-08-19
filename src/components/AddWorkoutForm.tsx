@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { addWorkoutSchema, Workout } from "~/types/workout";
+import { addWorkoutSchema, type Workout } from "~/types/workout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import ErrorText from "~/components/ui/ErrorText";
@@ -33,14 +33,14 @@ export function AddWorkoutForm() {
     mutate(data);
   }
 
-  function addExercise() {
+  const addExercise = useCallback(() => {
     setExerciseName("");
     append({ exerciseName: exerciseName }, { shouldFocus: false });
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     ref.current.focus();
-  }
+  }, [append, exerciseName]);
 
   useEffect(() => {
     const keyDownHandler = (e: KeyboardEvent) => {
@@ -53,7 +53,7 @@ export function AddWorkoutForm() {
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [exerciseName]);
+  }, [addExercise, exerciseName]);
 
   return (
     <div className="flex  h-full flex-col  px-6 ">
