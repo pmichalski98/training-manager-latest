@@ -3,9 +3,10 @@ import DropDown from "~/components/ui/Dropdown";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Button from "~/components/ui/Button";
 import Modal from "~/components/ui/Modal";
-import { EditWorkoutForm } from "~/pages";
 import { api } from "~/utils/api";
 import { type WorkoutWithId } from "~/types/workout";
+import EditWorkoutForm from "~/components/EditWorkoutForm";
+import IconButton from "~/components/IconButton";
 
 function OptionsDropdown({ workout }: { workout: WorkoutWithId }) {
   const utils = api.useContext();
@@ -19,7 +20,9 @@ function OptionsDropdown({ workout }: { workout: WorkoutWithId }) {
   return (
     <DropDown>
       <DropDown.Button>
-        <BsThreeDotsVertical size={20} />
+        <IconButton>
+          <BsThreeDotsVertical size={20} />
+        </IconButton>
       </DropDown.Button>
       <DropDown.Content>
         <div className=" space-y-1 rounded border-2 border-[#7ECBFF]/20 bg-[#1B3A56]/50 px-3 py-1 outline-none ">
