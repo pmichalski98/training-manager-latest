@@ -1,5 +1,3 @@
-"use client";
-
 import Head from "next/head";
 import React, { useState } from "react";
 import Modal from "~/components/ui/Modal";
@@ -58,7 +56,7 @@ export default function Home() {
               <h3 className="text-center text-3xl font-medium text-white">
                 Workout Details
               </h3>
-              <AddWorkoutForm />
+              <AddWorkoutForm closeModal={setOpenAddModal} />
             </Modal.Content>
           </Modal>
         </div>

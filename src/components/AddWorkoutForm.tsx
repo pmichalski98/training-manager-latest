@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { addWorkoutSchema, type Workout } from "~/types/workout";
@@ -9,8 +7,14 @@ import ErrorText from "~/components/ui/ErrorText";
 import Input from "~/components/ui/Input";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Button from "~/components/ui/Button";
+import { useUtils } from "~/hooks/useUtils";
 
-export function AddWorkoutForm() {
+export function AddWorkoutForm({
+  closeModal,
+}: {
+  closeModal: (value: boolean) => void;
+}) {
+  const utils = useUtils();
   const {
     getValues,
     formState: { errors },
@@ -26,11 +30,16 @@ export function AddWorkoutForm() {
     name: "exercises",
   });
   const [exerciseName, setExerciseName] = useState("");
-  const { mutate } = api.workout.addWorkout.useMutation();
+  const { mutate, isLoading: isAdding } = api.workout.addWorkout.useMutation({
+    onSuccess: async () => {
+      await utils.workout.getWorkouts.invalidate();
+    },
+  });
   const ref = useRef(null);
 
   function onSubmit(data: Workout) {
     mutate(data);
+    closeModal(false);
   }
 
   const addExercise = useCallback(() => {
@@ -99,7 +108,7 @@ export function AddWorkoutForm() {
           <h3 className="text-center text-2xl font-medium">
             {getValues("workoutName")}
           </h3>
-          <ul className="mt-6  space-y-3 pb-6 ">
+          <ul className="mt-6 space-y-3 pb-6 ">
             {fields.map((field, index) => {
               return (
                 <div key={field.id} className="flex  justify-around  ">
@@ -120,7 +129,9 @@ export function AddWorkoutForm() {
           </ul>
         </div>
         {fields.length > 0 && (
-          <Button className="self-end font-bold  ">Add workout</Button>
+          <Button disabled={isAdding} className="self-end font-bold  ">
+            Add workout
+          </Button>
         )}
       </form>
     </div>

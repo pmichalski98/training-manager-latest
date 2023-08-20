@@ -7,6 +7,7 @@ import ErrorText from "~/components/ui/ErrorText";
 import Input from "~/components/ui/Input";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Button from "~/components/ui/Button";
+import { useUtils } from "~/hooks/useUtils";
 
 function EditWorkoutForm({
   workout,
@@ -15,7 +16,7 @@ function EditWorkoutForm({
   workout: WorkoutWithId;
   closeModal: (value: boolean) => void;
 }) {
-  const utils = api.useContext();
+  const utils = useUtils();
   const {
     getValues,
     trigger,
