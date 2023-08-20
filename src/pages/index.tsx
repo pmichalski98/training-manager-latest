@@ -1,23 +1,16 @@
 import Head from "next/head";
-import React, { useState } from "react";
-import Modal from "~/components/ui/Modal";
-import { PiHandWavingFill } from "react-icons/pi";
-import { useUser } from "@clerk/nextjs";
+import React from "react";
 import { api } from "~/utils/api";
 import { MdUpdate } from "react-icons/md";
 import Button from "~/components/ui/Button";
 import OptionsDropdown from "~/components/OptionsDropdown";
-import AddWorkoutForm from "~/components/AddWorkoutForm";
-import IconButton from "~/components/IconButton";
+import WelcomeUser from "~/components/WelcomeUser";
+import AddWorkoutModal from "~/components/AddWorkoutModal";
 
 export default function Home() {
   api.user.login.useQuery();
-  const [openAddModal, setOpenAddModal] = useState(false);
-  const { user } = useUser();
-  const { data: trainingCount } = api.user.getTrainingsCount.useQuery();
   const { data: workouts } = api.workout.getWorkouts.useQuery();
 
-  console.log(workouts);
   return (
     <>
       <Head>
@@ -26,40 +19,9 @@ export default function Home() {
         <link rel="icon" href="/icon.png" />
       </Head>
       <div className="mb-10">
-        <div className={" mt-10"}>
-          <div className="my-8 flex items-center gap-2">
-            <PiHandWavingFill color={"orange"} size={25} />
-            <h2 className=" text-xl opacity-60">Good Morning!</h2>
-          </div>
-          <p className={"text-4xl font-bold"}>{user?.firstName}</p>
-
-          <p className="mt-6 font-bold">
-            {trainingCount
-              ? "You have trainined"
-              : "Start your first training !"}
-            {trainingCount && (
-              <>
-                <span className="text-primary"> {trainingCount}</span> times
-                already!
-              </>
-            )}
-          </p>
-        </div>
+        <WelcomeUser />
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
-        <div className="mt-20 flex items-center justify-between">
-          <h2 className=" text-2xl font-bold">Workouts</h2>
-          <Modal open={openAddModal} onOpenChange={setOpenAddModal}>
-            <Modal.Button>
-              <IconButton>+</IconButton>
-            </Modal.Button>
-            <Modal.Content title="New workout">
-              <h3 className="text-center text-3xl font-medium text-white">
-                Workout Details
-              </h3>
-              <AddWorkoutForm closeModal={setOpenAddModal} />
-            </Modal.Content>
-          </Modal>
-        </div>
+        <AddWorkoutModal />
         {workouts?.map((workout) => {
           return (
             <div

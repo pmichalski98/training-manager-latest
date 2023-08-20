@@ -15,6 +15,15 @@ export function AddWorkoutForm({
   closeModal: (value: boolean) => void;
 }) {
   const utils = useUtils();
+  const inputRef = useRef(null);
+
+  const [exerciseName, setExerciseName] = useState("");
+  const { mutate, isLoading: isAdding } = api.workout.addWorkout.useMutation({
+    onSuccess: async () => {
+      await utils.workout.getWorkouts.invalidate();
+    },
+  });
+
   const {
     getValues,
     formState: { errors },
@@ -29,13 +38,6 @@ export function AddWorkoutForm({
     control,
     name: "exercises",
   });
-  const [exerciseName, setExerciseName] = useState("");
-  const { mutate, isLoading: isAdding } = api.workout.addWorkout.useMutation({
-    onSuccess: async () => {
-      await utils.workout.getWorkouts.invalidate();
-    },
-  });
-  const ref = useRef(null);
 
   function onSubmit(data: Workout) {
     mutate(data);
@@ -48,7 +50,7 @@ export function AddWorkoutForm({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    ref.current.focus();
+    inputRef.current.focus();
   }, [append, exerciseName]);
 
   useEffect(() => {
@@ -79,6 +81,7 @@ export function AddWorkoutForm({
             {...register("workoutName")}
             type="text"
             id="workoutName"
+            autoFocus
             className="mt-1 "
           />
         </div>
@@ -87,7 +90,7 @@ export function AddWorkoutForm({
             Exercise name
           </label>
           <Input
-            ref={ref}
+            ref={inputRef}
             value={exerciseName}
             onChange={(e) => setExerciseName(e.target.value)}
             type="text"

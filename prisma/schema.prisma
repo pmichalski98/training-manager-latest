@@ -57,6 +57,7 @@ model Weight {
 model Training {
     id            String         @id @default(uuid())
     workoutName         String         @db.VarChar(255)
+    createdAt   DateTime @default(now())
     exercises     Exercise[]
     trainingUnits TrainingUnit[]
     userId        String
