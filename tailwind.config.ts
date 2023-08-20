@@ -10,6 +10,8 @@ export default {
       backgroundColor: {
         nav: "#13293D",
         primary: "#162F46",
+        inputBg: "#1D3E5E",
+
         card: "#1B3A56",
         primaryText: "#5fd4ee",
       },
@@ -17,6 +19,8 @@ export default {
         nav: "#13293D",
         primary: "#5fd4ee",
         secondary: "#618eb7",
+        lightCyan: "#B6D8F8",
+        fadedBlue: "#6F8FAC",
       },
     },
   },

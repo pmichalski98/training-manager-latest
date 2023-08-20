@@ -6,6 +6,7 @@ import Button from "~/components/ui/Button";
 import OptionsDropdown from "~/components/OptionsDropdown";
 import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
+import Link from "next/link";
 
 export default function Home() {
   api.user.login.useQuery();
@@ -48,7 +49,9 @@ export default function Home() {
                     );
                   })}
                 </ul>
-                <Button className="h-fit self-end">Start training </Button>
+                <Link href={`/start/${workout.id}`} className="h-fit self-end">
+                  Start training{" "}
+                </Link>
               </div>
             </div>
           );

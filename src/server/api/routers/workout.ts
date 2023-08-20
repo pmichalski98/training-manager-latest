@@ -40,6 +40,24 @@ export const workoutRouter = createTRPCRouter({
         include: { exercises: true },
       });
     }),
+  startTraining: privateProcedure
+    .input(z.string().uuid())
+    .query(async ({ ctx, input }) => {
+      const trainingUnit = await ctx.prisma.trainingUnit.findMany({
+        where: { trainingId: input },
+        orderBy: { createdAt: "desc" },
+        include: { exercises: true },
+      });
+      if (trainingUnit.length === 0) {
+        const training = await ctx.prisma.training.findUnique({
+          where: { id: input },
+          include: { exercises: true },
+        });
+        if (!training) throw new TRPCError({ code: "NOT_FOUND" });
+        return training;
+      }
+      return trainingUnit[0];
+    }),
   addWorkout: privateProcedure
     .input(addWorkoutSchema)
     .mutation(async ({ ctx, input }) => {
