@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { type WorkoutWithId } from "~/types/workout";
 import ExerciseTable from "~/components/ExerciseTable";
+import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
 
 function Id() {
+  const [trainingStartTime, setTrainingStartTime] = useState(new Date());
+
   const {
     query: { id },
   } = useRouter();
@@ -15,10 +18,13 @@ function Id() {
 
   return (
     <div>
-      <div className="mt-10">
+      <div className="mt-10 space-y-4">
         <h1 className="text-2xl font-medium capitalize">
-          <span>{training.workoutName} workout</span>
+          {training.workoutName}
         </h1>
+        <div className="flex w-fit items-center  gap-2 rounded-lg bg-nav p-4 ">
+          <TrainingTimeTicker startTime={trainingStartTime.getTime()} />
+        </div>
       </div>
       {training.exercises.map((exercise) => {
         return (
