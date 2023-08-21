@@ -1,88 +1,94 @@
 datasource db {
-    provider     = "mysql"
-    url          = env("DATABASE_URL")
-    relationMode = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model User {
-    id        String     @id @default(cuid())
-    createdAt DateTime   @default(now())
-    trainings Training[]
-    weight    Weight[]
-    body      Body[]
-    kcal      Kcal[]
-    photo     Photo[]
+  id        String     @id @default(cuid())
+  createdAt DateTime   @default(now())
+  trainings Training[]
+  weight    Weight[]
+  body      Body[]
+  kcal      Kcal[]
+  photo     Photo[]
 }
 
 model Photo {
-    id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Kcal {
-    id        String   @id @default(uuid())
-    kcal      Int
-    createdAt DateTime @default(now())
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  kcal      Int
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Body {
-    id        String   @id @default(uuid())
-    neck      Float?
-    chest     Float?
-    waist     Float?
-    hips      Float?
-    thigh     Float?
-    biceps    Float?
-    createdAt DateTime @default(now())
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  neck      Float?
+  chest     Float?
+  waist     Float?
+  hips      Float?
+  thigh     Float?
+  biceps    Float?
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Weight {
-    id        String   @id @default(uuid())
-    weight    Float
-    createdAt DateTime @default(now())
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  weight    Float
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Training {
-    id            String         @id @default(uuid())
-    workoutName         String         @db.VarChar(255)
-    createdAt   DateTime @default(now())
-    exercises     Exercise[]
-    trainingUnits TrainingUnit[]
-    userId        String
-    user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String         @id @default(uuid())
+  workoutName   String         @db.VarChar(255)
+  createdAt     DateTime       @default(now())
+  exercises     Exercise[]
+  trainingUnits TrainingUnit[]
+  userId        String
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model TrainingUnit {
-    id         String     @id @default(uuid())
-    workoutName      String     @db.VarChar(255)
-    exercises  Exercise[]
-    createdAt  DateTime
-    endedAt    DateTime
-    trainingId String
-    Training   Training?  @relation(fields: [trainingId], references: [id], onDelete: Cascade)
-    userId     String
+  id          String     @id @default(uuid())
+  workoutName String     @db.VarChar(255)
+  exercises   Exercise[]
+  createdAt   DateTime
+  endedAt     DateTime
+  trainingId  String
+  Training    Training?  @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  userId      String
 }
 
 model Exercise {
-    id             String        @id @default(uuid())
-    exerciseName          String        @db.VarChar(255)
-    sets           Int           @default(3)
-    reps           Int           @default(3)
-    weight         Int           @default(12)
-    training       Training?     @relation(fields: [trainingId], references: [id], onDelete: Cascade)
-    trainingId     String
-    trainingUnit   TrainingUnit? @relation(fields: [trainingUnitId], references: [id], onDelete: Cascade)
-    trainingUnitId String?
+  id             String           @id @default(uuid())
+  exerciseName   String           @db.VarChar(255)
+  trainingVolume TrainingVolume[]
+  training       Training?        @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId     String
+  trainingUnit   TrainingUnit?    @relation(fields: [trainingUnitId], references: [id], onDelete: Cascade)
+  trainingUnitId String?
+}
+
+model TrainingVolume {
+  id         String    @id @default(uuid())
+  weight     Int       @default(12)
+  reps       Int       @default(3)
+  Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
+  exerciseId String?
 }
