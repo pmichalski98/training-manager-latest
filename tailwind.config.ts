@@ -10,8 +10,8 @@ export default {
       backgroundColor: {
         nav: "#13293D",
         primary: "#162F46",
-        inputBg: "#1D3E5E",
-
+        setRow: "#1D3E5E",
+        bgInput: "#5FD4EE",
         card: "#1B3A56",
         primaryText: "#5fd4ee",
       },
