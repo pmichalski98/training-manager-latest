@@ -14,6 +14,9 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
 import { AiOutlineCheck } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
+import Modal from "~/components/ui/Modal";
+import { redirect } from "next/navigation";
+import { router } from "next/client";
 
 function Id() {
   const [trainingStartTime, setTrainingStartTime] = useState(new Date());
@@ -34,6 +37,7 @@ function Id() {
     handleSubmit,
     control,
     watch,
+    reset,
     register,
   } = useForm<trainingUnitSchema>({
     resolver: zodResolver(trainingUnitSchema),
@@ -55,8 +59,14 @@ function Id() {
       </div>
     );
 
+  async function formSubmit(data: trainingUnitSchema) {
+    console.log(data);
+    reset();
+    await router.push("/");
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(formSubmit)}>
       <section className="my-10 space-y-4">
         <h1 className="text-2xl font-medium capitalize">
           {training.workoutName}
@@ -65,12 +75,14 @@ function Id() {
           <div className="flex w-fit basis-1/3 items-center  gap-2 rounded-lg bg-nav p-4 ">
             <TrainingTimeTicker startTime={trainingStartTime.getTime()} />
           </div>
-          <button
-            className=" basis-2/3 rounded-2xl bg-primaryText text-lg font-bold text-nav hover:bg-cyan-500"
-            type="button"
-          >
-            Finish workout
-          </button>
+          <Modal>
+            <Modal.Button className=" basis-2/3 rounded-2xl bg-primaryText text-lg font-bold text-nav hover:bg-cyan-500">
+              Finish workout
+            </Modal.Button>
+            <Modal.Content title="Are you sure ? ">
+              <button onClick={handleSubmit(formSubmit)}>send it</button>
+            </Modal.Content>
+          </Modal>
         </div>
       </section>
       {fields.map((exercise, index) => {
@@ -181,7 +193,8 @@ function Sets({
                         disabled={checkedRow[index]}
                         className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                         {...register(
-                          `exercises.${nestIndex}.trainingVolume.${index}.reps`
+                          `exercises.${nestIndex}.trainingVolume.${index}.reps`,
+                          { valueAsNumber: true }
                         )}
                       />
                     </div>
@@ -191,7 +204,8 @@ function Sets({
                         disabled={checkedRow[index]}
                         className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                         {...register(
-                          `exercises.${nestIndex}.trainingVolume.${index}.weight`
+                          `exercises.${nestIndex}.trainingVolume.${index}.weight`,
+                          { valueAsNumber: true }
                         )}
                       />
                     </div>
@@ -201,7 +215,8 @@ function Sets({
                         disabled={checkedRow[index]}
                         className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                         {...register(
-                          `exercises.${nestIndex}.trainingVolume.${index}.rpe`
+                          `exercises.${nestIndex}.trainingVolume.${index}.rpe`,
+                          { valueAsNumber: true }
                         )}
                       />
                     </div>
@@ -214,7 +229,9 @@ function Sets({
                         }
                         className="flex h-7 w-7   items-center justify-center whitespace-nowrap rounded bg-bgInput/10 aria-checked:bg-green-400/60 "
                       >
-                        <AiOutlineCheck size={20} />
+                        <Checkbox.Indicator>
+                          <AiOutlineCheck size={20} />
+                        </Checkbox.Indicator>
                       </Checkbox.Root>
                     </div>
                   </div>
