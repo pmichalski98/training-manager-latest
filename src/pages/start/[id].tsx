@@ -137,39 +137,41 @@ function NestedArray({
                         <div className=" whitespace-nowrap px-3 py-4  pl-6 pr-3  font-medium  sm:pl-6">
                           <p>{index + 1}</p>
                         </div>
-                        <div>
+                        <div className="whitespace-nowrap  px-3 py-4">
                           <input
                             disabled={checkedState[index]}
-                            className=" whitespace-nowrap bg-transparent px-3 py-4  "
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                             {...register(
                               `exercises.${nestIndex}.trainingVolume.${index}.reps`
                             )}
                           />
                         </div>
-                        <div className=" whitespace-nowrap px-3 py-4">
+                        <div className="w-fit whitespace-nowrap px-3 py-4">
                           <input
                             disabled={checkedState[index]}
-                            className=" bg-transparent "
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                             {...register(
                               `exercises.${nestIndex}.trainingVolume.${index}.weight`
                             )}
                           />
                         </div>
-                        <div>
+                        <div className="whitespace-nowrap px-3 py-4 ">
                           <input
                             disabled={checkedState[index]}
-                            className=" whitespace-nowrap bg-transparent px-3 py-4  "
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                             {...register(
                               `exercises.${nestIndex}.trainingVolume.${index}.rpe`
                             )}
                           />
                         </div>
-                        <div className={` whitespace-nowrap px-3 py-4 `}>
+                        <div
+                          className={` ml-auto mr-6 flex w-fit items-center whitespace-nowrap `}
+                        >
                           <Checkbox.Root
                             onCheckedChange={(checked) =>
                               handleChecked(!!checked, index)
                             }
-                            className="flex h-6 w-6   items-center justify-center whitespace-nowrap rounded bg-bgInput/10 aria-checked:bg-green-400/80 peer-aria-checked:bg-green-400"
+                            className="flex h-7 w-7   items-center justify-center whitespace-nowrap rounded bg-bgInput/10 aria-checked:bg-green-400/60 "
                           >
                             <Checkbox.Indicator>
                               <AiOutlineCheck size={20} />
