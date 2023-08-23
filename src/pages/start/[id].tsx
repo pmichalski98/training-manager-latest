@@ -113,42 +113,58 @@ function NestedArray({
       <div className="mt-8 flex flex-col">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+            <div className="overflow-hidden border-t border-slate-200/20 ">
               <div className=" min-w-full  ">
                 <div>
-                  <div className="grid grid-cols-4">
+                  <div className="grid grid-cols-5">
                     <ColumnHeader>Sets</ColumnHeader>
                     <ColumnHeader>Reps</ColumnHeader>
-                    <ColumnHeader>Weight</ColumnHeader>
+                    <ColumnHeader>Weight (kg)</ColumnHeader>
+                    <ColumnHeader>RPE</ColumnHeader>
                   </div>
                 </div>
-                <div className="space-y-2  px-3">
+                <div className="space-y-2 px-3  text-sm">
                   {sets.map((set, index) => {
                     return (
                       <div
                         key={set.id}
-                        className={` grid grid-cols-4 rounded-lg ${
-                          checkedState[index] ? "bg-green-400/80" : "bg-setRow"
+                        className={` grid grid-cols-5 rounded-lg transition duration-500 ease-in-out ${
+                          checkedState[index]
+                            ? " bg-gradient-to-r from-[#33FF00]/30 via-[#00FF29]/40 to-[#00FFD1]/30 "
+                            : "bg-setRow"
                         }`}
                       >
-                        <div className="whitespace-nowrap  px-3 py-4  pl-6 pr-3 text-sm font-medium  sm:pl-6">
-                          {index + 1}
+                        <div className=" whitespace-nowrap px-3 py-4  pl-6 pr-3  font-medium  sm:pl-6">
+                          <p>{index + 1}</p>
                         </div>
-                        <input
-                          className="whitespace-nowrap bg-transparent px-3 py-4 text-sm "
-                          {...register(
-                            `exercises.${nestIndex}.trainingVolume.${index}.reps`
-                          )}
-                        />{" "}
-                        <input
-                          className="whitespace-nowrap bg-transparent px-3 py-4 text-sm "
-                          {...register(
-                            `exercises.${nestIndex}.trainingVolume.${index}.weight`
-                          )}
-                        />
-                        <div
-                          className={`whitespace-nowrap   px-3 py-4 text-sm`}
-                        >
+                        <div>
+                          <input
+                            disabled={checkedState[index]}
+                            className=" whitespace-nowrap bg-transparent px-3 py-4  "
+                            {...register(
+                              `exercises.${nestIndex}.trainingVolume.${index}.reps`
+                            )}
+                          />
+                        </div>
+                        <div className=" whitespace-nowrap px-3 py-4">
+                          <input
+                            disabled={checkedState[index]}
+                            className=" bg-transparent "
+                            {...register(
+                              `exercises.${nestIndex}.trainingVolume.${index}.weight`
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <input
+                            disabled={checkedState[index]}
+                            className=" whitespace-nowrap bg-transparent px-3 py-4  "
+                            {...register(
+                              `exercises.${nestIndex}.trainingVolume.${index}.rpe`
+                            )}
+                          />
+                        </div>
+                        <div className={` whitespace-nowrap px-3 py-4 `}>
                           <Checkbox.Root
                             onCheckedChange={(checked) =>
                               handleChecked(!!checked, index)
@@ -167,7 +183,7 @@ function NestedArray({
                     <button
                       type="button"
                       className="w-1/2"
-                      onClick={() => append({ weight: 0, reps: 0 })}
+                      onClick={() => append({ weight: 0, reps: 0, rpe: 9 })}
                     >
                       add set
                     </button>

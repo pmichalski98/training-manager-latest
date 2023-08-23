@@ -39,6 +39,7 @@ export const trainingUnitSchema = z.object({
         z.object({
           weight: z.number(),
           reps: z.number(),
+          rpe: z.number().min(1).max(10),
         })
       ),
     })
