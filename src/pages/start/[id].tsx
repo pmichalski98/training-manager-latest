@@ -119,26 +119,29 @@ function NestedArray({
                   <div className="grid grid-cols-5">
                     <ColumnHeader>Sets</ColumnHeader>
                     <ColumnHeader>Reps</ColumnHeader>
-                    <ColumnHeader>Weight (kg)</ColumnHeader>
+                    <ColumnHeader>
+                      Weight <span className="text-xs">(kg)</span>
+                    </ColumnHeader>
                     <ColumnHeader>RPE</ColumnHeader>
                   </div>
                 </div>
-                <div className="space-y-2 px-3  text-sm">
+                <div className="space-y-2   text-sm">
                   {sets.map((set, index) => {
                     return (
                       <div
                         key={set.id}
-                        className={` grid grid-cols-5 rounded-lg transition duration-500 ease-in-out ${
+                        className={` grid  grid-cols-5 rounded-lg transition duration-500 ease-in-out ${
                           checkedState[index]
                             ? " bg-gradient-to-r from-[#33FF00]/30 via-[#00FF29]/40 to-[#00FFD1]/30 "
                             : "bg-setRow"
                         }`}
                       >
-                        <div className=" whitespace-nowrap px-3 py-4  pl-6 pr-3  font-medium  sm:pl-6">
+                        <div className=" flex items-center justify-center whitespace-nowrap px-3 py-2  font-medium ">
                           <p>{index + 1}</p>
                         </div>
                         <div className="whitespace-nowrap  px-3 py-4">
                           <input
+                            type="tel"
                             disabled={checkedState[index]}
                             className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                             {...register(
@@ -148,6 +151,7 @@ function NestedArray({
                         </div>
                         <div className="w-fit whitespace-nowrap px-3 py-4">
                           <input
+                            type="tel"
                             disabled={checkedState[index]}
                             className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                             {...register(
@@ -157,6 +161,7 @@ function NestedArray({
                         </div>
                         <div className="whitespace-nowrap px-3 py-4 ">
                           <input
+                            type="tel"
                             disabled={checkedState[index]}
                             className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
                             {...register(
@@ -173,9 +178,7 @@ function NestedArray({
                             }
                             className="flex h-7 w-7   items-center justify-center whitespace-nowrap rounded bg-bgInput/10 aria-checked:bg-green-400/60 "
                           >
-                            <Checkbox.Indicator>
-                              <AiOutlineCheck size={20} />
-                            </Checkbox.Indicator>
+                            <AiOutlineCheck size={20} />
                           </Checkbox.Root>
                         </div>
                       </div>
@@ -207,7 +210,7 @@ function NestedArray({
 }
 function ColumnHeader({ children }: { children: ReactNode }) {
   return (
-    <div className="px-3 py-3.5 text-left text-sm text-fadedBlue first:pl-8 first:sm:pl-6">
+    <div className="px-3 py-3.5 text-center text-sm text-fadedBlue first:pl-8">
       {children}
     </div>
   );

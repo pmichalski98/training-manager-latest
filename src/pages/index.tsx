@@ -50,7 +50,7 @@ export default function Home() {
                   })}
                 </ul>
                 <Link href={`/start/${workout.id}`} className="h-fit self-end">
-                  Start training{" "}
+                  Start training
                 </Link>
               </div>
             </div>
