@@ -61,7 +61,6 @@ function Id() {
 
   async function formSubmit(data: trainingUnitSchema) {
     console.log(data);
-    reset();
     await router.push("/");
   }
 
@@ -72,11 +71,11 @@ function Id() {
           {training.workoutName}
         </h1>
         <div className="flex gap-6 ">
-          <div className="flex w-fit basis-1/3 items-center  gap-2 rounded-lg bg-nav p-4 ">
+          <div className=" flex w-fit  basis-2/5 items-center gap-2  whitespace-nowrap rounded-lg bg-nav p-4 ">
             <TrainingTimeTicker startTime={trainingStartTime.getTime()} />
           </div>
           <Modal>
-            <Modal.Button className=" basis-2/3 rounded-2xl bg-primaryText  font-bold text-nav hover:bg-cyan-500">
+            <Modal.Button className="flex-1 rounded-2xl bg-primaryText px-6  font-bold text-nav hover:bg-cyan-500">
               Finish workout
             </Modal.Button>
             <Modal.Content title="Are you sure ? ">
@@ -247,7 +246,7 @@ function Sets({
                   <span className="translate-y-0.5">Add new set</span>
                 </button>
                 <button
-                  className="flex basis-1/2 items-center gap-2 rounded-r-lg bg-nav px-3 py-1  hover:bg-red-700/60"
+                  className="flex basis-1/2 items-center gap-2 rounded-r-lg bg-red-700/60 px-3  py-1 hover:bg-red-700/60  sm:bg-nav"
                   type="button"
                   onClick={removeSet}
                 >
@@ -264,7 +263,7 @@ function Sets({
 }
 function ColumnHeader({ children }: { children: ReactNode }) {
   return (
-    <h3 className="px-3 py-3.5 text-center text-sm text-fadedBlue first:pl-8">
+    <h3 className="whitespace-nowrap px-3 py-3.5 text-center text-sm text-fadedBlue first:pl-8">
       {children}
     </h3>
   );
