@@ -88,9 +88,9 @@ model Exercise {
 
 model TrainingVolume {
   id         String    @id @default(uuid())
-  weight     Int       @default(12)
-  reps       Int       @default(3)
-  rpe Int @default(9)
+  weight     Int
+  reps       Int
+  rpe Int
   Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
   exerciseId String?
 }

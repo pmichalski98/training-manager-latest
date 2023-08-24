@@ -46,7 +46,12 @@ export const workoutRouter = createTRPCRouter({
       const trainingUnit = await ctx.prisma.trainingUnit.findMany({
         where: { trainingId: input },
         orderBy: { createdAt: "desc" },
-        include: { exercises: { include: { trainingVolume: true } } },
+        include: {
+          exercises: {
+            include: { trainingVolume: true },
+            orderBy: { sortIndex: "asc" },
+          },
+        },
       });
       if (trainingUnit.length === 0) {
         const training = await ctx.prisma.training.findUnique({
