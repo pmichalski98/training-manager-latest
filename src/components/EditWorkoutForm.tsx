@@ -51,7 +51,7 @@ function EditWorkoutForm({
   }
 
   function addExercise() {
-    append({ exerciseName: exerciseName });
+    append({ exerciseName: exerciseName, sortIndex: fields.length });
     setExerciseName("");
   }
 
