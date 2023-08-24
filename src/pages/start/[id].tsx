@@ -237,22 +237,22 @@ function Sets({
                   </div>
                 );
               })}
-              <section className="flex  gap-2 whitespace-nowrap   rounded-lg">
+              <section className="flex whitespace-nowrap   rounded-lg">
                 <button
                   type="button"
-                  className="flex basis-1/2 items-center gap-2 rounded-2xl bg-nav px-3 hover:bg-bgInput/10"
+                  className="flex basis-1/2 items-center gap-2 rounded-l-lg bg-nav px-3 hover:bg-bgInput/10"
                   onClick={addSet}
                 >
                   <span className="text-4xl hover:text-gray-400">+</span>
                   <span className="translate-y-0.5">Add new set</span>
                 </button>
                 <button
-                  className="flex basis-1/2 items-center gap-2 rounded-2xl bg-nav px-3 py-1  hover:bg-red-700/60"
+                  className="flex basis-1/2 items-center gap-2 rounded-r-lg bg-nav px-3 py-1  hover:bg-red-700/60"
                   type="button"
                   onClick={removeSet}
                 >
                   <span className="text-4xl hover:text-gray-400">-</span>
-                  <p className="translate-y-0.5">Remove last set</p>{" "}
+                  <p className="translate-y-0.5">Remove last set</p>
                 </button>
               </section>
             </section>
