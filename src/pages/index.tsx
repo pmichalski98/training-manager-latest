@@ -27,7 +27,7 @@ export default function Home() {
           return (
             <div
               key={workout.id}
-              className="mt-6 space-y-2 rounded-lg px-8 py-4 ring-1 ring-primary/30 hover:ring-primary"
+              className="mt-6 space-y-2 rounded-lg px-4 py-4 ring-1 ring-primary/30 hover:ring-primary sm:px-6"
             >
               <div className="mx-auto flex  items-center justify-between ">
                 <h3 className="text-lg font-bold">{workout.workoutName}</h3>

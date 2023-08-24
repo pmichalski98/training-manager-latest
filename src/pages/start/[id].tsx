@@ -15,6 +15,10 @@ import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
 import { AiOutlineCheck } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
 import Modal from "~/components/ui/Modal";
+import Link from "next/link";
+import { GiTrashCan } from "react-icons/gi";
+import { FaTrashCan } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa";
 
 function Id() {
   const [trainingStartTime, setTrainingStartTime] = useState(new Date());
@@ -98,13 +102,15 @@ function Id() {
         );
       })}
       <section>
-        <button
-          className="flex w-full items-center gap-2 rounded-2xl bg-red-700/60 px-3 py-1"
-          type="button"
-        >
-          <span className="text-4xl hover:text-gray-400">-</span>
-          <p className="translate-y-0.5">Cancel workout</p>
-        </button>
+        <Modal>
+          <Modal.Button className="flex w-full items-center  gap-2 rounded-lg bg-red-700/60 px-3 py-4 ">
+            <FaTrash size={15} />
+            Cancel workout
+          </Modal.Button>
+          <Modal.Content title="Are you sure you want to cancel workout ? ">
+            <Link href="/">Send it</Link>
+          </Modal.Content>
+        </Modal>
       </section>
     </form>
   );
