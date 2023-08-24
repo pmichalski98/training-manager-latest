@@ -76,7 +76,7 @@ function Id() {
             <TrainingTimeTicker startTime={trainingStartTime.getTime()} />
           </div>
           <Modal>
-            <Modal.Button className=" basis-2/3 rounded-2xl bg-primaryText text-lg font-bold text-nav hover:bg-cyan-500">
+            <Modal.Button className=" basis-2/3 rounded-2xl bg-primaryText  font-bold text-nav hover:bg-cyan-500">
               Finish workout
             </Modal.Button>
             <Modal.Content title="Are you sure ? ">
@@ -143,9 +143,11 @@ function Sets({
   }
 
   function getLastSetValues() {
-    return getValues(
+    const values = getValues(
       `exercises.${nestIndex}.trainingVolume.${sets.length - 1}`
     );
+    if (!values) return { weight: 0, reps: 0, rpe: 9 };
+    return values;
   }
 
   function addSet() {
@@ -155,9 +157,7 @@ function Sets({
 
   function removeSet() {
     remove(sets.length - 1);
-    setCheckedRow(
-      checkedRow.filter((_, index) => index !== checkedRow.length - 1)
-    );
+    setCheckedRow(checkedRow.filter((_, index) => index === checkedRow.length));
   }
 
   return (
