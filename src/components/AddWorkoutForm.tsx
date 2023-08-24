@@ -30,6 +30,7 @@ export function AddWorkoutForm({
     handleSubmit,
     control,
     register,
+    watch,
   } = useForm<Workout>({
     resolver: zodResolver(addWorkoutSchema),
   });
@@ -46,7 +47,10 @@ export function AddWorkoutForm({
 
   const addExercise = useCallback(() => {
     setExerciseName("");
-    append({ exerciseName: exerciseName }, { shouldFocus: false });
+    append(
+      { exerciseName: exerciseName, sortIndex: fields.length },
+      { shouldFocus: false }
+    );
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call

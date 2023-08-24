@@ -76,7 +76,10 @@ export const workoutRouter = createTRPCRouter({
       where: {
         userId: ctx.userId,
       },
-      include: { exercises: true, trainingUnits: true },
+      include: {
+        exercises: { orderBy: { sortIndex: "asc" } },
+        trainingUnits: true,
+      },
       orderBy: { createdAt: "asc" },
     });
     if (!res) throw new TRPCError({ code: "NOT_FOUND" });

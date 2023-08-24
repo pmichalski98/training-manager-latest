@@ -78,6 +78,7 @@ model TrainingUnit {
 model Exercise {
   id             String           @id @default(uuid())
   exerciseName   String           @db.VarChar(255)
+  sortIndex Int
   trainingVolume TrainingVolume[]
   training       Training?        @relation(fields: [trainingId], references: [id], onDelete: Cascade)
   trainingId     String

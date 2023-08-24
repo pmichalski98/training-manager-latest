@@ -8,6 +8,7 @@ export const addWorkoutSchema = z.object({
   workoutName: z.string().min(1, { message: "Workout name cannot be empty" }),
   exercises: z.array(
     z.object({
+      sortIndex: z.number(),
       exerciseName: z
         .string()
         .min(1, { message: "Exercise name cannot be empty" }),
@@ -19,6 +20,7 @@ export const editWorkoutSchema = z.object({
   workoutName: z.string().min(1, { message: "Workout name cannot be empty" }),
   exercises: z.array(
     z.object({
+      sortIndex: z.number(),
       exerciseName: z
         .string()
         .min(1, { message: "Exercise name cannot be empty" }),
