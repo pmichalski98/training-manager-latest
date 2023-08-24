@@ -15,12 +15,11 @@ import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
 import { AiOutlineCheck } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
 import Modal from "~/components/ui/Modal";
-import { redirect } from "next/navigation";
-import { router } from "next/client";
 
 function Id() {
   const [trainingStartTime, setTrainingStartTime] = useState(new Date());
   const {
+    push,
     query: { id },
   } = useRouter();
   if (typeof id !== "string") throw new Error("no id");
@@ -61,7 +60,7 @@ function Id() {
 
   async function formSubmit(data: trainingUnitSchema) {
     console.log(data);
-    await router.push("/");
+    await push("/");
   }
 
   return (
