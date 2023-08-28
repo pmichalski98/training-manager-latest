@@ -1,5 +1,9 @@
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
-import { addWorkoutSchema, editWorkoutSchema } from "~/types/workout";
+import {
+  addWorkoutSchema,
+  editWorkoutSchema,
+  trainingUnitSchema,
+} from "~/types/workout";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
@@ -38,6 +42,33 @@ export const workoutRouter = createTRPCRouter({
           },
         },
         include: { exercises: true },
+      });
+    }),
+  finishTrainingUnit: privateProcedure
+    .input(trainingUnitSchema)
+    .mutation(async ({ ctx, input }) => {
+      const trainingUnit = await ctx.prisma.trainingUnit.create({
+        data: {
+          workoutName: input.workoutName,
+          trainingId: input.id,
+          userId: ctx.userId,
+          createdAt: input.createdAt,
+        },
+      });
+      input.exercises.map(async (exercise) => {
+        await ctx.prisma.exercise.create({
+          data: {
+            trainingId: input.id,
+            trainingUnitId: trainingUnit.id,
+            sortIndex: exercise.sortIndex,
+            exerciseName: exercise.exerciseName,
+            trainingVolume: {
+              createMany: {
+                data: exercise.trainingVolume,
+              },
+            },
+          },
+        });
       });
     }),
   startTraining: privateProcedure
@@ -83,7 +114,6 @@ export const workoutRouter = createTRPCRouter({
       },
       include: {
         exercises: { orderBy: { sortIndex: "asc" } },
-        trainingUnits: true,
       },
       orderBy: { createdAt: "asc" },
     });

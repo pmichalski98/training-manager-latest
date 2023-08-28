@@ -34,6 +34,7 @@ export const trainingUnitSchema = z.object({
   exercises: z.array(
     z.object({
       id: z.string().uuid(),
+      sortIndex: z.number(),
       exerciseName: z
         .string()
         .min(1, { message: "Exercise name cannot be empty" }),

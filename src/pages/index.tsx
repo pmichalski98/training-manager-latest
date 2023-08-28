@@ -2,7 +2,6 @@ import Head from "next/head";
 import React from "react";
 import { api } from "~/utils/api";
 import { MdUpdate } from "react-icons/md";
-import Button from "~/components/ui/Button";
 import OptionsDropdown from "~/components/OptionsDropdown";
 import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
@@ -11,6 +10,25 @@ import Link from "next/link";
 export default function Home() {
   api.user.login.useQuery();
   const { data: workouts } = api.workout.getWorkouts.useQuery();
+
+  if (!workouts) return <div>Loading ...</div>;
+
+  // Definatly not the best way of dealing with this
+  const workoutsWithoutDuplicatedEx = workouts.map((workout) => {
+    const exercises = workout.exercises.filter(
+      (exercise, index, array) =>
+        index ===
+        array.findIndex((v) => {
+          if (v.exerciseName === exercise.exerciseName) {
+            return v;
+          }
+        })
+    );
+    return {
+      ...workout,
+      exercises,
+    };
+  });
 
   return (
     <>
@@ -23,7 +41,7 @@ export default function Home() {
         <WelcomeUser />
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
         <AddWorkoutModal />
-        {workouts?.map((workout) => {
+        {workoutsWithoutDuplicatedEx.map((workout) => {
           return (
             <div
               key={workout.id}

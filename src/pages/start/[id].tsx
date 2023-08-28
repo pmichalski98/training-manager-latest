@@ -16,8 +16,6 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
 import Modal from "~/components/ui/Modal";
 import Link from "next/link";
-import { GiTrashCan } from "react-icons/gi";
-import { FaTrashCan } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 
 function Id() {
@@ -33,6 +31,8 @@ function Id() {
     refetchInterval: false,
     refetchOnWindowFocus: false,
   });
+  const { mutate: finishTraining } =
+    api.workout.finishTrainingUnit.useMutation();
 
   const {
     getValues,
@@ -63,7 +63,7 @@ function Id() {
     );
 
   async function formSubmit(data: trainingUnitSchema) {
-    console.log(data);
+    finishTraining(data);
     await push("/");
   }
 
