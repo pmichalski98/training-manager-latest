@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { BiSolidTimeFive, BiTimeFive } from "react-icons/bi";
+import { BiSolidTimeFive } from "react-icons/bi";
 
 interface TickerProps {
   startTime: number;

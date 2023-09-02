@@ -1,4 +1,4 @@
-import { editWorkoutSchema, type WorkoutWithId } from "~/types/workout";
+import { editTrainingSchema, type TrainingWithId } from "~/types/training";
 import { api } from "~/utils/api";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,10 +10,10 @@ import Button from "~/components/ui/Button";
 import { useUtils } from "~/hooks/useUtils";
 
 function EditWorkoutForm({
-  workout,
+  training,
   closeModal,
 }: {
-  workout: WorkoutWithId;
+  training: TrainingWithId;
   closeModal: (value: boolean) => void;
 }) {
   const utils = useUtils();
@@ -24,12 +24,12 @@ function EditWorkoutForm({
     handleSubmit,
     control,
     register,
-  } = useForm<WorkoutWithId>({
-    resolver: zodResolver(editWorkoutSchema),
+  } = useForm<TrainingWithId>({
+    resolver: zodResolver(editTrainingSchema),
     defaultValues: {
-      id: workout.id,
-      exercises: workout.exercises,
-      workoutName: workout.workoutName,
+      trainingId: training.trainingId,
+      exercises: training.exercises,
+      trainingName: training.trainingName,
     },
   });
 
@@ -38,16 +38,16 @@ function EditWorkoutForm({
     name: "exercises",
   });
   const [exerciseName, setExerciseName] = useState("");
-  const { mutate: editWorkout, isLoading: isEditing } =
-    api.workout.editWorkout.useMutation({
+  const { mutate: editTraining, isLoading: isEditing } =
+    api.training.editTraining.useMutation({
       onSuccess: async () => {
         closeModal(false);
-        await utils.workout.getWorkouts.invalidate();
+        await utils.training.getTrainings.invalidate();
       },
     });
 
-  function onSubmit(data: WorkoutWithId) {
-    editWorkout(data);
+  function onSubmit(data: TrainingWithId) {
+    editTraining(data);
   }
 
   function addExercise() {
@@ -61,16 +61,16 @@ function EditWorkoutForm({
         onSubmit={handleSubmit(onSubmit)}
         className="mt-6 flex flex-col space-y-3 "
       >
-        <ErrorText>{errors.workoutName?.message}</ErrorText>
+        <ErrorText>{errors.trainingName?.message}</ErrorText>
         <div className="flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
           <label htmlFor="workoutName" className="text-sm text-slate-400">
             Workout name
           </label>
           <Input
-            {...register("workoutName")}
+            {...register("trainingName")}
             type="text"
             id="workoutName"
-            onBlur={() => trigger("workoutName")}
+            onBlur={() => trigger("trainingName")}
             className="mt-1 "
           />
         </div>
@@ -97,7 +97,7 @@ function EditWorkoutForm({
         <ErrorText>{errors.exercises?.message}</ErrorText>
         <div className="mt-10 rounded-lg bg-nav p-6 ">
           <h3 className="text-center text-2xl font-medium">
-            {getValues("workoutName")}
+            {getValues("trainingName")}
           </h3>
           <ul className="mt-6  space-y-3 pb-6 ">
             {fields.map((field, index) => {

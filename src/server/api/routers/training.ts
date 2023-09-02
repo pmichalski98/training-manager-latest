@@ -1,13 +1,13 @@
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import {
-  addWorkoutSchema,
-  editWorkoutSchema,
+  addTrainingSchema,
+  editTrainingSchema,
   trainingUnitSchema,
-} from "~/types/workout";
+} from "~/types/training";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
-export const workoutRouter = createTRPCRouter({
+export const trainingRouter = createTRPCRouter({
   getTrainingsCount: privateProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.trainingUnit.count({
       where: { userId: ctx.userId },
@@ -18,25 +18,25 @@ export const workoutRouter = createTRPCRouter({
       return res;
     }
   }),
-  deleteWorkout: privateProcedure
-    .input(z.object({ workoutId: z.string() }))
+  deleteTraining: privateProcedure
+    .input(z.object({ trainingId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const res = await ctx.prisma.training.delete({
-        where: { id: input.workoutId },
+        where: { trainingId: input.trainingId },
       });
       if (!res) throw new TRPCError({ code: "NOT_FOUND" });
       return res;
     }),
-  editWorkout: privateProcedure
-    .input(editWorkoutSchema)
+  editTraining: privateProcedure
+    .input(editTrainingSchema)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.training.update({
-        where: { id: input.id },
+        where: { trainingId: input.trainingId },
         data: {
-          workoutName: input.workoutName,
+          trainingName: input.trainingName,
           exercises: {
             deleteMany: {
-              trainingId: input.id,
+              trainingId: input.trainingId,
             },
             createMany: { data: input.exercises },
           },
@@ -49,57 +49,45 @@ export const workoutRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const trainingUnit = await ctx.prisma.trainingUnit.create({
         data: {
-          workoutName: input.workoutName,
-          trainingId: input.id,
-          userId: ctx.userId,
           createdAt: input.createdAt,
+          trainingName: input.trainingName,
+          trainingId: input.trainingId,
+          userId: ctx.userId,
+          exercises: {
+            createMany: { data: input.exercises },
+          },
         },
       });
-      input.exercises.map(async (exercise) => {
-        await ctx.prisma.exercise.create({
-          data: {
-            trainingId: input.id,
-            trainingUnitId: trainingUnit.id,
-            sortIndex: exercise.sortIndex,
-            exerciseName: exercise.exerciseName,
-            trainingVolume: {
-              createMany: {
-                data: exercise.trainingVolume,
-              },
-            },
-          },
-        });
-      });
+      if (!trainingUnit) throw new TRPCError({ code: "BAD_REQUEST" });
+      return { affectedRecords: 1 };
     }),
   startTraining: privateProcedure
     .input(z.string().uuid())
     .query(async ({ ctx, input }) => {
+      console.log(input);
       const trainingUnit = await ctx.prisma.trainingUnit.findMany({
         where: { trainingId: input },
-        orderBy: { createdAt: "desc" },
-        include: {
-          exercises: {
-            include: { trainingVolume: true },
-            orderBy: { sortIndex: "asc" },
-          },
-        },
+        orderBy: { endedAt: "asc" },
+        include: { exercises: { orderBy: { sortIndex: "asc" } } },
       });
       if (trainingUnit.length === 0) {
         const training = await ctx.prisma.training.findUnique({
-          where: { id: input },
-          include: { exercises: { include: { trainingVolume: true } } },
+          where: { trainingId: input },
+          include: { exercises: { orderBy: { sortIndex: "asc" } } },
         });
         if (!training) throw new TRPCError({ code: "NOT_FOUND" });
+        console.log("t");
         return training;
       }
-      return trainingUnit[0];
+      console.log("unit");
+      return trainingUnit[trainingUnit.length - 1];
     }),
-  addWorkout: privateProcedure
-    .input(addWorkoutSchema)
+  addTraining: privateProcedure
+    .input(addTrainingSchema)
     .mutation(async ({ ctx, input }) => {
       const res = await ctx.prisma.training.create({
         data: {
-          workoutName: input.workoutName,
+          trainingName: input.trainingName,
           exercises: { createMany: { data: input.exercises } },
           userId: ctx.userId,
         },
@@ -107,15 +95,16 @@ export const workoutRouter = createTRPCRouter({
       if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
       return res;
     }),
-  getWorkouts: privateProcedure.query(async ({ ctx }) => {
+  getTrainings: privateProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.training.findMany({
       where: {
         userId: ctx.userId,
       },
       include: {
-        exercises: { orderBy: { sortIndex: "asc" } },
+        exercises: {
+          orderBy: { sortIndex: "asc" },
+        },
       },
-      orderBy: { createdAt: "asc" },
     });
     if (!res) throw new TRPCError({ code: "NOT_FOUND" });
     return res;

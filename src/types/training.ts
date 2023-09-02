@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export type Workout = z.infer<typeof addWorkoutSchema>;
-export type WorkoutWithId = z.infer<typeof editWorkoutSchema>;
+export type Training = z.infer<typeof addTrainingSchema>;
+export type TrainingWithId = z.infer<typeof editTrainingSchema>;
 export type trainingUnitSchema = z.infer<typeof trainingUnitSchema>;
 
-export const addWorkoutSchema = z.object({
-  workoutName: z.string().min(1, { message: "Workout name cannot be empty" }),
+export const addTrainingSchema = z.object({
+  trainingName: z.string().min(1, { message: "Workout name cannot be empty" }),
   exercises: z.array(
     z.object({
       sortIndex: z.number(),
@@ -15,9 +15,9 @@ export const addWorkoutSchema = z.object({
     })
   ),
 });
-export const editWorkoutSchema = z.object({
-  id: z.string().uuid(),
-  workoutName: z.string().min(1, { message: "Workout name cannot be empty" }),
+export const editTrainingSchema = z.object({
+  trainingId: z.string().uuid(),
+  trainingName: z.string().min(1, { message: "Workout name cannot be empty" }),
   exercises: z.array(
     z.object({
       sortIndex: z.number(),
@@ -28,23 +28,20 @@ export const editWorkoutSchema = z.object({
   ),
 });
 export const trainingUnitSchema = z.object({
-  id: z.string().uuid(),
+  trainingId: z.string().uuid(),
   createdAt: z.date(),
-  workoutName: z.string().min(1, { message: "Workout name cannot be empty" }),
+  trainingName: z.string().min(1, { message: "Workout name cannot be empty" }),
   exercises: z.array(
     z.object({
-      id: z.string().uuid(),
+      trainingId: z.string().uuid(),
       sortIndex: z.number(),
       exerciseName: z
         .string()
         .min(1, { message: "Exercise name cannot be empty" }),
-      trainingVolume: z.array(
-        z.object({
-          weight: z.number(),
-          reps: z.number(),
-          rpe: z.number().min(1).max(10),
-        })
-      ),
+      sets: z.number(),
+      rpe: z.number(),
+      reps: z.number(),
+      weight: z.number(),
     })
   ),
 });

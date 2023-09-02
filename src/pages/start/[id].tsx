@@ -1,14 +1,8 @@
 import React, { ReactNode, useState } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
-import {
-  Control,
-  useFieldArray,
-  useForm,
-  UseFormGetValues,
-  UseFormRegister,
-} from "react-hook-form";
-import { trainingUnitSchema } from "~/types/workout";
+import { useFieldArray, useForm } from "react-hook-form";
+import { trainingUnitSchema } from "~/types/training";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
@@ -20,19 +14,33 @@ import { FaTrash } from "react-icons/fa";
 
 function Id() {
   const [trainingStartTime, setTrainingStartTime] = useState(new Date());
+
+  const [checkedRow, setCheckedRow] = useState<boolean[]>([]);
+
+  function handleCheckedRow(checked: boolean, index: number) {
+    const copiedArray = [...checkedRow];
+    copiedArray[index] = checked;
+    setCheckedRow(copiedArray);
+  }
   const {
     push,
     query: { id },
   } = useRouter();
   if (typeof id !== "string") throw new Error("no id");
 
-  const { data: training, isLoading } = api.workout.startTraining.useQuery(id, {
-    refetchOnMount: false,
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-  });
+  const { data: training, isLoading } = api.training.startTraining.useQuery(
+    id,
+    {
+      cacheTime: 0,
+      refetchOnMount: false,
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  console.log(training, "started");
   const { mutate: finishTraining } =
-    api.workout.finishTrainingUnit.useMutation();
+    api.training.finishTrainingUnit.useMutation();
 
   const {
     getValues,
@@ -40,6 +48,7 @@ function Id() {
     handleSubmit,
     control,
     watch,
+    setValue,
     reset,
     register,
   } = useForm<trainingUnitSchema>({
@@ -63,15 +72,17 @@ function Id() {
     );
 
   async function formSubmit(data: trainingUnitSchema) {
+    setValue("createdAt", trainingStartTime);
+    console.log(watch());
     finishTraining(data);
     await push("/");
   }
 
   return (
-    <form onSubmit={handleSubmit(formSubmit)}>
-      <section className="my-10 space-y-4">
+    <form className="mx-auto max-w-2xl" onSubmit={handleSubmit(formSubmit)}>
+      <section className="my-10 space-y-4 ">
         <h1 className="text-2xl font-medium capitalize">
-          {training.workoutName}
+          {training.trainingName}
         </h1>
         <div className="flex gap-6 ">
           <div className=" flex w-fit  basis-2/5 items-center gap-2  whitespace-nowrap rounded-lg bg-nav p-4 ">
@@ -93,11 +104,86 @@ function Id() {
             <h2 className="text-xl font-semibold capitalize text-lightCyan">
               {exercise.exerciseName}
             </h2>
-            <Sets
-              getValues={getValues}
-              nestIndex={index}
-              {...{ control, register }}
-            />
+            <section className="flex flex-col ">
+              <div className="-mx-2 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 ">
+                <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                  <div className="overflow-hidden border-t border-slate-200/20 ">
+                    <section className="grid grid-cols-5">
+                      <ColumnHeader>Sets</ColumnHeader>
+                      <ColumnHeader>Reps</ColumnHeader>
+                      <ColumnHeader>
+                        Weight <span className="text-xs">(kg)</span>
+                      </ColumnHeader>
+                      <ColumnHeader>RPE</ColumnHeader>
+                    </section>
+                    <section className="space-y-2   text-sm">
+                      <div
+                        className={` grid  grid-cols-5 rounded-lg transition duration-500 ease-in-out ${
+                          checkedRow[index]
+                            ? " bg-gradient-to-r from-[#33FF00]/30 via-[#00FF29]/40 to-[#00FFD1]/30 "
+                            : "bg-setRow"
+                        }`}
+                      >
+                        <div className="whitespace-nowrap  px-3 py-4">
+                          <input
+                            type="tel"
+                            disabled={checkedRow[index]}
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
+                            {...register(`exercises.${index}.sets`, {
+                              valueAsNumber: true,
+                            })}
+                          />
+                        </div>
+                        <div className="whitespace-nowrap  px-3 py-4">
+                          <input
+                            type="tel"
+                            disabled={checkedRow[index]}
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
+                            {...register(`exercises.${index}.reps`, {
+                              valueAsNumber: true,
+                            })}
+                          />
+                        </div>
+                        <div className=" whitespace-nowrap px-3 py-4">
+                          <input
+                            type="tel"
+                            disabled={checkedRow[index]}
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
+                            {...register(`exercises.${index}.weight`, {
+                              valueAsNumber: true,
+                            })}
+                          />
+                        </div>
+                        <div className="whitespace-nowrap px-3 py-4 ">
+                          <input
+                            type="tel"
+                            disabled={checkedRow[index]}
+                            className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
+                            {...register(`exercises.${index}.rpe`, {
+                              valueAsNumber: true,
+                            })}
+                          />
+                        </div>
+                        <div
+                          className={` ml-auto mr-6 flex  items-center whitespace-nowrap `}
+                        >
+                          <Checkbox.Root
+                            onCheckedChange={(checked) =>
+                              handleCheckedRow(!!checked, index)
+                            }
+                            className="flex h-7 w-7   items-center justify-center whitespace-nowrap rounded bg-bgInput/10 aria-checked:bg-green-400/60 "
+                          >
+                            <Checkbox.Indicator>
+                              <AiOutlineCheck size={20} />
+                            </Checkbox.Indicator>
+                          </Checkbox.Root>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </section>
           </section>
         );
       })}
@@ -117,155 +203,6 @@ function Id() {
 }
 
 export default Id;
-
-function Sets({
-  getValues,
-  nestIndex,
-  control,
-  register,
-}: {
-  nestIndex: number;
-  getValues: UseFormGetValues<trainingUnitSchema>;
-  control: Control<trainingUnitSchema>;
-  register: UseFormRegister<trainingUnitSchema>;
-}) {
-  const {
-    fields: sets,
-    append,
-    remove,
-  } = useFieldArray({
-    control,
-    name: `exercises.${nestIndex}.trainingVolume`,
-  });
-
-  const [checkedRow, setCheckedRow] = useState<boolean[]>([]);
-
-  function handleCheckedRow(checked: boolean, index: number) {
-    const copiedArray = [...checkedRow];
-    copiedArray[index] = checked;
-    setCheckedRow(copiedArray);
-  }
-
-  function getLastSetValues() {
-    const values = getValues(
-      `exercises.${nestIndex}.trainingVolume.${sets.length - 1}`
-    );
-    if (!values) return { weight: 0, reps: 0, rpe: 9 };
-    return values;
-  }
-
-  function addSet() {
-    append(getLastSetValues());
-    setCheckedRow([...checkedRow, false]);
-  }
-
-  function removeSet() {
-    remove(sets.length - 1);
-    setCheckedRow(checkedRow.filter((_, index) => index === checkedRow.length));
-  }
-
-  return (
-    <section className="flex flex-col">
-      <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-          <div className="overflow-hidden border-t border-slate-200/20 ">
-            <section className="grid grid-cols-5">
-              <ColumnHeader>Sets</ColumnHeader>
-              <ColumnHeader>Reps</ColumnHeader>
-              <ColumnHeader>
-                Weight <span className="text-xs">(kg)</span>
-              </ColumnHeader>
-              <ColumnHeader>RPE</ColumnHeader>
-            </section>
-            <section className="space-y-2   text-sm">
-              {sets.map((set, index) => {
-                return (
-                  <div
-                    key={set.id}
-                    className={` grid  grid-cols-5 rounded-lg transition duration-500 ease-in-out ${
-                      checkedRow[index]
-                        ? " bg-gradient-to-r from-[#33FF00]/30 via-[#00FF29]/40 to-[#00FFD1]/30 "
-                        : "bg-setRow"
-                    }`}
-                  >
-                    <h4 className=" flex items-center justify-center whitespace-nowrap px-3 py-2  font-medium ">
-                      {index + 1}
-                    </h4>
-                    <div className="whitespace-nowrap  px-3 py-4">
-                      <input
-                        type="tel"
-                        disabled={checkedRow[index]}
-                        className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
-                        {...register(
-                          `exercises.${nestIndex}.trainingVolume.${index}.reps`,
-                          { valueAsNumber: true }
-                        )}
-                      />
-                    </div>
-                    <div className=" whitespace-nowrap px-3 py-4">
-                      <input
-                        type="tel"
-                        disabled={checkedRow[index]}
-                        className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
-                        {...register(
-                          `exercises.${nestIndex}.trainingVolume.${index}.weight`,
-                          { valueAsNumber: true }
-                        )}
-                      />
-                    </div>
-                    <div className="whitespace-nowrap px-3 py-4 ">
-                      <input
-                        type="tel"
-                        disabled={checkedRow[index]}
-                        className="     w-full rounded bg-bgInput/10 px-3 py-2 text-center  "
-                        {...register(
-                          `exercises.${nestIndex}.trainingVolume.${index}.rpe`,
-                          { valueAsNumber: true }
-                        )}
-                      />
-                    </div>
-                    <div
-                      className={` ml-auto mr-6 flex  items-center whitespace-nowrap `}
-                    >
-                      <Checkbox.Root
-                        onCheckedChange={(checked) =>
-                          handleCheckedRow(!!checked, index)
-                        }
-                        className="flex h-7 w-7   items-center justify-center whitespace-nowrap rounded bg-bgInput/10 aria-checked:bg-green-400/60 "
-                      >
-                        <Checkbox.Indicator>
-                          <AiOutlineCheck size={20} />
-                        </Checkbox.Indicator>
-                      </Checkbox.Root>
-                    </div>
-                  </div>
-                );
-              })}
-              <section className="flex whitespace-nowrap   rounded-lg">
-                <button
-                  type="button"
-                  className="flex basis-1/2 items-center gap-2 rounded-l-lg bg-nav px-3 hover:bg-bgInput/10"
-                  onClick={addSet}
-                >
-                  <span className="text-4xl hover:text-gray-400">+</span>
-                  <span className="translate-y-0.5">Add new set</span>
-                </button>
-                <button
-                  className="flex basis-1/2 items-center gap-2 rounded-r-lg bg-red-700/60 px-3  py-1 hover:bg-red-700/60  sm:bg-nav"
-                  type="button"
-                  onClick={removeSet}
-                >
-                  <span className="text-4xl hover:text-gray-400">-</span>
-                  <p className="translate-y-0.5">Remove last set</p>
-                </button>
-              </section>
-            </section>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 function ColumnHeader({ children }: { children: ReactNode }) {
   return (
     <h3 className="whitespace-nowrap px-3 py-3.5 text-center text-sm text-fadedBlue first:pl-8">

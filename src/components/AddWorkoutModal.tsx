@@ -11,7 +11,7 @@ function AddWorkoutModal() {
       <h2 className=" text-2xl font-bold">Workouts</h2>
       <Modal open={openAddModal} onOpenChange={setOpenAddModal}>
         <Modal.Button>
-          <IconButton>+</IconButton>
+          <span className="text-5xl hover:text-gray-400">+</span>
         </Modal.Button>
         <Modal.Content title="New workout">
           <h3 className="text-center text-3xl font-medium text-white">

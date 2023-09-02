@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { addWorkoutSchema, type Workout } from "~/types/workout";
+import { addTrainingSchema, type Training } from "~/types/training";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import ErrorText from "~/components/ui/ErrorText";
@@ -18,9 +18,9 @@ export function AddWorkoutForm({
   const inputRef = useRef(null);
 
   const [exerciseName, setExerciseName] = useState("");
-  const { mutate, isLoading: isAdding } = api.workout.addWorkout.useMutation({
+  const { mutate, isLoading: isAdding } = api.training.addTraining.useMutation({
     onSuccess: async () => {
-      await utils.workout.getWorkouts.invalidate();
+      await utils.training.getTrainings.invalidate();
     },
   });
 
@@ -31,8 +31,8 @@ export function AddWorkoutForm({
     control,
     register,
     watch,
-  } = useForm<Workout>({
-    resolver: zodResolver(addWorkoutSchema),
+  } = useForm<Training>({
+    resolver: zodResolver(addTrainingSchema),
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -40,11 +40,12 @@ export function AddWorkoutForm({
     name: "exercises",
   });
 
-  function onSubmit(data: Workout) {
+  function onSubmit(data: Training) {
     mutate(data);
     closeModal(false);
   }
 
+  console.log(watch());
   const addExercise = useCallback(() => {
     setExerciseName("");
     append(
@@ -76,13 +77,13 @@ export function AddWorkoutForm({
         onSubmit={handleSubmit(onSubmit)}
         className="mt-6 flex flex-col space-y-3 "
       >
-        <ErrorText>{errors.workoutName?.message}</ErrorText>
+        <ErrorText>{errors.trainingName?.message}</ErrorText>
         <div className="flex flex-col rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
           <label htmlFor="workoutName" className="text-sm text-slate-400">
             Workout name
           </label>
           <Input
-            {...register("workoutName")}
+            {...register("trainingName")}
             type="text"
             id="workoutName"
             autoFocus
@@ -113,7 +114,7 @@ export function AddWorkoutForm({
         <ErrorText>{errors.exercises?.message}</ErrorText>
         <div className="mt-10 rounded-lg bg-nav p-6 ">
           <h3 className="text-center text-2xl font-medium">
-            {getValues("workoutName")}
+            {getValues("trainingName")}
           </h3>
           <ul className="mt-6 space-y-3 pb-6 ">
             {fields.map((field, index) => {

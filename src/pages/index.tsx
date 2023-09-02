@@ -9,13 +9,13 @@ import Link from "next/link";
 
 export default function Home() {
   api.user.login.useQuery();
-  const { data: workouts } = api.workout.getWorkouts.useQuery();
+  const { data: trainings } = api.training.getTrainings.useQuery();
 
-  if (!workouts) return <div>Loading ...</div>;
+  if (!trainings) return <div>Loading ...</div>;
 
   // Definatly not the best way of dealing with this
-  const workoutsWithoutDuplicatedEx = workouts.map((workout) => {
-    const exercises = workout.exercises.filter(
+  const workoutsWithoutDuplicatedEx = trainings.map((training) => {
+    const exercises = training.exercises.filter(
       (exercise, index, array) =>
         index ===
         array.findIndex((v) => {
@@ -25,7 +25,7 @@ export default function Home() {
         })
     );
     return {
-      ...workout,
+      ...training,
       exercises,
     };
   });
@@ -41,15 +41,15 @@ export default function Home() {
         <WelcomeUser />
         <h2 className="my-20">Tutaj z grubsza wykres </h2>
         <AddWorkoutModal />
-        {workoutsWithoutDuplicatedEx.map((workout) => {
+        {workoutsWithoutDuplicatedEx.map((training) => {
           return (
             <div
-              key={workout.id}
+              key={training.trainingId}
               className="mt-6 space-y-2 rounded-lg px-4 py-4 ring-1 ring-primary/30 hover:ring-primary sm:px-6"
             >
               <div className="mx-auto flex  items-center justify-between ">
-                <h3 className="text-lg font-bold">{workout.workoutName}</h3>
-                <OptionsDropdown workout={workout} />
+                <h3 className="text-lg font-bold">{training.trainingName}</h3>
+                <OptionsDropdown training={training} />
               </div>
               <div className="flex items-center gap-2 text-sm opacity-75">
                 <span className="opacity-75">
@@ -59,7 +59,7 @@ export default function Home() {
               </div>
               <div className="flex justify-between">
                 <ul className="text-sm opacity-75">
-                  {workout.exercises.map((exercise) => {
+                  {training.exercises.map((exercise) => {
                     return (
                       <li key={exercise.id}>
                         <p className="capitalize">{exercise.exerciseName}</p>
@@ -69,7 +69,7 @@ export default function Home() {
                 </ul>
               </div>
               <div className="text-right">
-                <Link href={`/start/${workout.id}`} className="">
+                <Link href={`/start/${training.trainingId}`} className="">
                   Start training
                 </Link>
               </div>
