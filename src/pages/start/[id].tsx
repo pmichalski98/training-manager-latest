@@ -11,9 +11,12 @@ import { ClipLoader } from "react-spinners";
 import Modal from "~/components/ui/Modal";
 import Link from "next/link";
 import { FaTrash } from "react-icons/fa";
+import Button from "~/components/ui/Button";
+import { useUtils } from "~/hooks/useUtils";
 
 function Id() {
   const [trainingStartTime, setTrainingStartTime] = useState(new Date());
+  const utils = useUtils();
 
   const [checkedRow, setCheckedRow] = useState<boolean[]>([]);
 
@@ -73,7 +76,6 @@ function Id() {
 
   async function formSubmit(data: trainingUnitSchema) {
     setValue("createdAt", trainingStartTime);
-    console.log(watch());
     finishTraining(data);
     await push("/");
   }
@@ -194,7 +196,7 @@ function Id() {
             Cancel workout
           </Modal.Button>
           <Modal.Content title="Are you sure you want to cancel workout ? ">
-            <Link href="/">Send it</Link>
+            <Button>Send it</Button>
           </Modal.Content>
         </Modal>
       </section>

@@ -101,6 +101,7 @@ export const trainingRouter = createTRPCRouter({
         userId: ctx.userId,
       },
       include: {
+        trainingUnits: { orderBy: { endedAt: "desc" }, take: 1 },
         exercises: {
           orderBy: { sortIndex: "asc" },
         },

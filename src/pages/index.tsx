@@ -10,10 +10,9 @@ import Link from "next/link";
 export default function Home() {
   api.user.login.useQuery();
   const { data: trainings } = api.training.getTrainings.useQuery();
-
   if (!trainings) return <div>Loading ...</div>;
 
-  // Definatly not the best way of dealing with this
+  // Definitely not the best way of dealing with this
   const workoutsWithoutDuplicatedEx = trainings.map((training) => {
     const exercises = training.exercises.filter(
       (exercise, index, array) =>
@@ -29,6 +28,12 @@ export default function Home() {
       exercises,
     };
   });
+
+  function getDaysSinceLastTraining(lastTrained: number[]) {
+    if (lastTrained === undefined) return "start your first training";
+    const num = new Date().getDate() - lastTrained[0]!;
+    return `${num} days ago ...`;
+  }
 
   return (
     <>
@@ -55,7 +60,11 @@ export default function Home() {
                 <span className="opacity-75">
                   <MdUpdate size={20} />
                 </span>
-                <p>3 days ago..</p>
+                <p>
+                  {getDaysSinceLastTraining(
+                    training.trainingUnits.map((unit) => unit.endedAt.getDate())
+                  )}
+                </p>
               </div>
               <div className="flex justify-between">
                 <ul className="text-sm opacity-75">
