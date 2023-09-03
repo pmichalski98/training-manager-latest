@@ -8,6 +8,7 @@ import Input from "~/components/ui/Input";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Button from "~/components/ui/Button";
 import { useUtils } from "~/hooks/useUtils";
+import IconButton from "~/components/IconButton";
 
 function EditWorkoutForm({
   training,
@@ -91,7 +92,7 @@ function EditWorkoutForm({
             id="workoutName"
             className={"absolute inset-y-0 right-0 mr-3 text-5xl"}
           >
-            +
+            <IconButton>+</IconButton>
           </button>
         </div>
         <ErrorText>{errors.exercises?.message}</ErrorText>
@@ -111,7 +112,9 @@ function EditWorkoutForm({
                     />
 
                     <button onClick={() => remove(index)}>
-                      <RiDeleteBin6Line />
+                      <IconButton className="text-xl">
+                        <RiDeleteBin6Line />
+                      </IconButton>
                     </button>
                   </div>
                 </div>

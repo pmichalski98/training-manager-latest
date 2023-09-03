@@ -9,7 +9,6 @@ import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
 import { AiOutlineCheck } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
 import Modal from "~/components/ui/Modal";
-import Link from "next/link";
 import { FaTrash } from "react-icons/fa";
 import Button from "~/components/ui/Button";
 import { useUtils } from "~/hooks/useUtils";
@@ -46,13 +45,10 @@ function Id() {
     api.training.finishTrainingUnit.useMutation();
 
   const {
-    getValues,
     formState: { errors },
     handleSubmit,
     control,
-    watch,
     setValue,
-    reset,
     register,
   } = useForm<trainingUnitSchema>({
     resolver: zodResolver(trainingUnitSchema),
