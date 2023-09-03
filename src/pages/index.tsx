@@ -6,11 +6,17 @@ import OptionsDropdown from "~/components/OptionsDropdown";
 import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
 import Link from "next/link";
+import Spinner from "~/components/Spinner";
 
 export default function Home() {
   api.user.login.useQuery();
   const { data: trainings } = api.training.getTrainings.useQuery();
-  if (!trainings) return <div>Loading ...</div>;
+  if (!trainings)
+    return (
+      <div className="-my-36 flex h-screen items-center justify-center overflow-hidden">
+        <Spinner size={24} />
+      </div>
+    );
 
   // Definitely not the best way of dealing with this
   const workoutsWithoutDuplicatedEx = trainings.map((training) => {
