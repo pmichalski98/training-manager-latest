@@ -79,6 +79,8 @@ model Exercise {
   id             String        @id @default(uuid())
   exerciseName          String        @db.VarChar(255)
   sortIndex Int
+  userId String
+  createdAt DateTime @default(now())
   rpe Int @default(9)
   sets           Int           @default(3)
   reps           Int           @default(3)

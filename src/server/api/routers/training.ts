@@ -30,6 +30,12 @@ export const trainingRouter = createTRPCRouter({
   editTraining: privateProcedure
     .input(editTrainingSchema)
     .mutation(({ ctx, input }) => {
+      const data = input.exercises.map((exercise) => {
+        return {
+          userId: ctx.userId,
+          ...exercise,
+        };
+      });
       return ctx.prisma.training.update({
         where: { trainingId: input.trainingId },
         data: {
@@ -38,7 +44,7 @@ export const trainingRouter = createTRPCRouter({
             deleteMany: {
               trainingId: input.trainingId,
             },
-            createMany: { data: input.exercises },
+            createMany: { data },
           },
         },
         include: { exercises: true },
@@ -47,6 +53,12 @@ export const trainingRouter = createTRPCRouter({
   finishTrainingUnit: privateProcedure
     .input(trainingUnitSchema)
     .mutation(async ({ ctx, input }) => {
+      const data = input.exercises.map((exercise) => {
+        return {
+          userId: ctx.userId,
+          ...exercise,
+        };
+      });
       const trainingUnit = await ctx.prisma.trainingUnit.create({
         data: {
           createdAt: input.createdAt,
@@ -54,7 +66,7 @@ export const trainingRouter = createTRPCRouter({
           trainingId: input.trainingId,
           userId: ctx.userId,
           exercises: {
-            createMany: { data: input.exercises },
+            createMany: { data },
           },
         },
       });
@@ -85,10 +97,18 @@ export const trainingRouter = createTRPCRouter({
   addTraining: privateProcedure
     .input(addTrainingSchema)
     .mutation(async ({ ctx, input }) => {
+      const data = input.exercises.map((exercise) => {
+        return {
+          userId: ctx.userId,
+          ...exercise,
+        };
+      });
       const res = await ctx.prisma.training.create({
         data: {
           trainingName: input.trainingName,
-          exercises: { createMany: { data: input.exercises } },
+          exercises: {
+            createMany: { data },
+          },
           userId: ctx.userId,
         },
       });
