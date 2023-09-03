@@ -7,6 +7,7 @@ import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
 import Link from "next/link";
 import Spinner from "~/components/Spinner";
+import Chart from "~/components/Chart";
 
 export default function Home() {
   api.user.login.useQuery();
@@ -47,10 +48,13 @@ export default function Home() {
         <title>Training Manager</title>
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <div className="mb-10">
         <WelcomeUser />
-        <h2 className="my-20">Tutaj z grubsza wykres </h2>
+        <div className="mt-10  rounded bg-primaryText/60 text-white">
+          <Chart />
+        </div>
         <AddWorkoutModal />
         {workoutsWithoutDuplicatedEx.map((training) => {
           return (

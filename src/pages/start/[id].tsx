@@ -7,23 +7,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { TrainingTimeTicker } from "~/components/TrainingTimeTicker";
 import { AiOutlineCheck } from "react-icons/ai";
-import { ClipLoader } from "react-spinners";
 import Modal from "~/components/ui/Modal";
 import { FaTrash } from "react-icons/fa";
 import Button from "~/components/ui/Button";
-import { useUtils } from "~/hooks/useUtils";
+import Link from "next/link";
+import Spinner from "~/components/Spinner";
 
 function Id() {
   const [trainingStartTime, setTrainingStartTime] = useState(new Date());
-  const utils = useUtils();
-
   const [checkedRow, setCheckedRow] = useState<boolean[]>([]);
 
-  function handleCheckedRow(checked: boolean, index: number) {
-    const copiedArray = [...checkedRow];
-    copiedArray[index] = checked;
-    setCheckedRow(copiedArray);
-  }
   const {
     push,
     query: { id },
@@ -40,40 +33,39 @@ function Id() {
     }
   );
 
-  console.log(training, "started");
   const { mutate: finishTraining } =
     api.training.finishTrainingUnit.useMutation();
 
-  const {
-    formState: { errors },
-    handleSubmit,
-    control,
-    setValue,
-    register,
-  } = useForm<trainingUnitSchema>({
-    resolver: zodResolver(trainingUnitSchema),
-    defaultValues: async () =>
-      await new Promise((resolve) => {
-        setTimeout(resolve, 500);
-      }),
-    values: training,
-  });
+  const { handleSubmit, control, setValue, register } =
+    useForm<trainingUnitSchema>({
+      resolver: zodResolver(trainingUnitSchema),
+      defaultValues: async () =>
+        await new Promise((resolve) => {
+          setTimeout(resolve, 500);
+        }),
+      values: training,
+    });
   const { fields } = useFieldArray({
     control,
     name: "exercises",
   });
-  if (!training) return;
   if (isLoading)
     return (
-      <div className="flex h-screen items-center justify-center pb-40">
-        <ClipLoader size={130} color="#5FD4EE" />
+      <div className="-my-40 flex h-screen items-center justify-center">
+        <Spinner size={24} />
       </div>
     );
+  if (!training) return;
 
   async function formSubmit(data: trainingUnitSchema) {
     setValue("createdAt", trainingStartTime);
     finishTraining(data);
     await push("/");
+  }
+  function handleCheckedRow(checked: boolean, index: number) {
+    const copiedArray = [...checkedRow];
+    copiedArray[index] = checked;
+    setCheckedRow(copiedArray);
   }
 
   return (
@@ -91,7 +83,19 @@ function Id() {
               Finish workout
             </Modal.Button>
             <Modal.Content title="Are you sure ? ">
-              <button onClick={handleSubmit(formSubmit)}>send it</button>
+              <div className="mt-6 flex w-full justify-between px-10">
+                <Button
+                  className=" font-medium"
+                  onClick={handleSubmit(formSubmit)}
+                >
+                  Save training
+                </Button>
+                <Modal.Button asChild>
+                  <Button variant="danger" className="">
+                    Go back
+                  </Button>
+                </Modal.Button>
+              </div>
             </Modal.Content>
           </Modal>
         </div>
@@ -187,12 +191,24 @@ function Id() {
       })}
       <section>
         <Modal>
-          <Modal.Button className="flex w-full items-center  gap-2 rounded-lg bg-red-700/60 px-3 py-4 ">
+          <Modal.Button className="flex w-full items-center gap-2  rounded-lg bg-red-700/60 px-3 py-4 hover:bg-red-800 ">
             <FaTrash size={15} />
             Cancel workout
           </Modal.Button>
           <Modal.Content title="Are you sure you want to cancel workout ? ">
-            <Button>Send it</Button>
+            <h2 className={"text-center  text-lg text-slate-300"}>
+              All of this workout's data will be lost !
+            </h2>
+            <div className="mt-6 flex w-full justify-between px-10">
+              <Link href="/">
+                <Button type="button">Cancel</Button>
+              </Link>
+              <Modal.Button asChild>
+                <Button variant="danger" className="">
+                  Go back
+                </Button>
+              </Modal.Button>
+            </div>
           </Modal.Content>
         </Modal>
       </section>

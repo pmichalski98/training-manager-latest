@@ -2,7 +2,7 @@ import React, { type ComponentPropsWithoutRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 type TButton = ComponentPropsWithoutRef<"button"> & {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "danger";
 };
 function Button({
   className,
@@ -11,10 +11,11 @@ function Button({
   ...props
 }: TButton) {
   const classes = twMerge(
-    " rounded-lg  ",
+    " rounded-lg  px-4 py-2",
     variant === "primary" &&
-      "bg-primaryText text-gray-900 hover:bg-cyan-500  px-4 py-2 disabled:bg-cyan-900",
+      "bg-primaryText text-gray-900 hover:bg-cyan-500   disabled:bg-cyan-900",
     variant === "secondary" && "hover:text-primary disabled:text-gray-400",
+    variant === "danger" && "bg-red-700/60 hover:bg-red-800",
     className
   );
   return (
