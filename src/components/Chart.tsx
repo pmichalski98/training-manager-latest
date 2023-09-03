@@ -28,16 +28,22 @@ function InnerChart({ width, height }: { width: number; height: number }) {
 
   const xScale = d3
     .scaleLinear()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     .domain(d3.extent(data.map((d) => d[0])))
     .range([0, width]);
   const yScale = d3
     .scaleLinear()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     .domain(d3.extent(data.map((d) => d[1])))
     .range([height, 0]);
   const line = d3
     .line()
     .x((d) => xScale(d[0]))
     .y((d) => yScale(d[1]));
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const d = line(data);
   return (
     <>

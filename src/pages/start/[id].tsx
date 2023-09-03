@@ -197,7 +197,7 @@ function Id() {
           </Modal.Button>
           <Modal.Content title="Are you sure you want to cancel workout ? ">
             <h2 className={"text-center  text-lg text-slate-300"}>
-              All of this workout's data will be lost !
+              All of this workouts data will be lost !
             </h2>
             <div className="mt-6 flex w-full justify-between px-10">
               <Link href="/">
