@@ -2,6 +2,7 @@ import React from "react";
 import * as d3 from "d3";
 import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
+import parseISO from "date-fns/parseISO";
 
 export default function Chart() {
   const [ref, bounds] = useMeasure();
@@ -34,23 +35,6 @@ function InnerChart({
   width: number;
   height: number;
 }) {
-  const filteredData = data.map((data) => {
-    return {
-      createdAt: data.createdAt.getDate(),
-      weight: data.weight,
-    };
-  });
-  console.log(data);
-  const dummyData = [
-    [0, 6],
-    [5, 10],
-    [10, 35],
-    [15, 50],
-    [50, 60],
-    [140, 140],
-    [180, 60],
-  ];
-
   const margin = {
     top: 10,
     right: 10,
@@ -62,21 +46,21 @@ function InnerChart({
     .scaleLinear()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    .domain(d3.extent(dummyData.map((d) => d[0])))
+    .domain(d3.extent(data.map((d) => d.createdAt)))
     .range([margin.left, width - margin.right]);
   const yScale = d3
     .scaleLinear()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    .domain(d3.extent(dummyData.map((d) => d[1])))
+    .domain(d3.extent(data.map((d) => d.weight)))
     .range([height - margin.top, margin.bottom]);
   const line = d3
     .line()
-    .x((d) => xScale(d[0]))
-    .y((d) => yScale(d[1]));
+    .x((d) => xScale(d.createdAt))
+    .y((d) => yScale(d.weight));
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const d = line(dummyData);
+  const d = line(data);
   return (
     <>
       <svg viewBox={`0 0 ${width} ${height}`}>
