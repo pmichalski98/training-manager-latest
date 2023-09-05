@@ -52,7 +52,7 @@ export default function Home() {
       </Head>
       <div className="mb-10">
         <WelcomeUser />
-        <div className="mt-10  rounded bg-primaryText/60 text-white">
+        <div className="mt-10 rounded-md  bg-card p-4 text-white">
           <Chart />
         </div>
         <AddWorkoutModal />
