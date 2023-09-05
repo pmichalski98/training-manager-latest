@@ -2,6 +2,7 @@ import React from "react";
 import * as d3 from "d3";
 import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
+import { motion } from "framer-motion";
 
 export default function Chart() {
   const [ref, bounds] = useMeasure();
@@ -25,7 +26,12 @@ export default function Chart() {
       <p className="text-center text-2xl capitalize">{entries.exerciseName}</p>
       <div ref={ref} className="relative h-full w-full ">
         {bounds.width > 0 && (
-          <InnerChart width={bounds.width} data={data} height={bounds.height} />
+          <InnerChart
+            key={entries.exerciseName}
+            width={bounds.width}
+            data={data}
+            height={bounds.height}
+          />
         )}
       </div>
     </>
@@ -76,7 +82,12 @@ function InnerChart({
   return (
     <>
       <svg viewBox={`0 0 ${width} ${height}`}>
-        <path
+        <motion.path
+          initial={{
+            pathLength: 0,
+          }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 1, type: "spring" }}
           className="text-blue-400"
           d={d}
           fill="none"

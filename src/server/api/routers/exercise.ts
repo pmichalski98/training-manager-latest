@@ -16,6 +16,7 @@ export const exerciseRouter = createTRPCRouter({
         exerciseName: randomExercise,
       },
       orderBy: { createdAt: "asc" },
+      skip: 1,
       select: {
         weight: true,
       },
