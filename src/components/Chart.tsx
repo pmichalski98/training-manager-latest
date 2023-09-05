@@ -82,50 +82,67 @@ function InnerChart({
   return (
     <>
       <svg viewBox={`0 0 ${width} ${height}`}>
-        <motion.path
-          initial={{
-            pathLength: 0,
-          }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1, type: "spring" }}
-          className="text-blue-400"
-          d={d}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.5}
-        />
-        {yScale.ticks(5).map((weight, index, array) => (
-          <g
-            className="text-slate-400"
-            transform={`translate(0,${yScale(weight)})`}
-            key={weight}
+        {data.length <= 1 ? (
+          <text
+            y={height / 2}
+            className="mx-auto text-center text-xl"
+            fill="currentColor"
+            alignmentBaseline="middle"
           >
-            <line
-              strokeDasharray="1,6"
-              x1={margin.left}
-              x2={width - margin.right}
+            Go to the gym to get data for charts
+          </text>
+        ) : (
+          <>
+            <motion.path
+              initial={{
+                pathLength: 0,
+              }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1, type: "spring" }}
+              className="text-blue-400"
+              d={d}
+              fill="none"
               stroke="currentColor"
+              strokeWidth={1.5}
             />
-            <text
-              alignmentBaseline="middle"
-              className="text-sm "
-              fill="currentColor"
-            >
-              {weight}
-            </text>
-          </g>
-        ))}
-        {xScale.ticks(data.length - 1).map((trainingsCount) => (
-          <g
-            transform={`translate(${xScale(trainingsCount)},${height})`}
-            className="text-slate-400"
-            key={trainingsCount}
-          >
-            <text className="text-sm " textAnchor="middle" fill="currentColor">
-              {trainingsCount}
-            </text>
-          </g>
-        ))}
+            {yScale.ticks(5).map((weight, index, array) => (
+              <g
+                className="text-slate-400"
+                transform={`translate(0,${yScale(weight)})`}
+                key={weight}
+              >
+                <line
+                  strokeDasharray="1,6"
+                  x1={margin.left}
+                  x2={width - margin.right}
+                  stroke="currentColor"
+                />
+                <text
+                  alignmentBaseline="middle"
+                  className="text-sm "
+                  fill="currentColor"
+                >
+                  {weight}
+                </text>
+              </g>
+            ))}
+            {xScale.ticks(data.length - 1).map((trainingsCount) => (
+              <g
+                transform={`translate(${xScale(trainingsCount)},${height})`}
+                className="text-slate-400"
+                key={trainingsCount}
+              >
+                <text
+                  className="text-sm "
+                  textAnchor="middle"
+                  fill="currentColor"
+                >
+                  {trainingsCount}
+                </text>
+              </g>
+            ))}
+          </>
+        )}
       </svg>
     </>
   );

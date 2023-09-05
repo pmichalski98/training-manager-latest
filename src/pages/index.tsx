@@ -37,7 +37,7 @@ export default function Home() {
   });
 
   function getDaysSinceLastTraining(lastTrained: number[]) {
-    if (lastTrained === undefined) return "start your first training";
+    if (lastTrained.length === 0) return "Start your first training";
     const num = new Date().getDate() - lastTrained[0]!;
     return `${num} days ago ...`;
   }
