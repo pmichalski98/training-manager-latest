@@ -10,7 +10,7 @@ import { twMerge } from "tailwind-merge";
 
 const Navigation = () => {
   return (
-    <nav className="fixed bottom-0 z-10 h-28 w-full bg-nav/80 py-6 shadow-2xl  md:top-0 ">
+    <nav className="fixed bottom-0 z-10 h-28 w-full bg-nav/80 py-6 shadow-2xl md:top-0  md:bg-nav ">
       <ul className="  flex  max-w-screen-lg items-center justify-around px-10">
         <Logo className={"hidden md:flex"} />
         <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
