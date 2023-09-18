@@ -8,16 +8,6 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 export const trainingRouter = createTRPCRouter({
-  getTrainingsCount: privateProcedure.query(async ({ ctx }) => {
-    const res = await ctx.prisma.trainingUnit.count({
-      where: { userId: ctx.userId },
-    });
-    if (!res) {
-      return null;
-    } else {
-      return res;
-    }
-  }),
   deleteTraining: privateProcedure
     .input(z.object({ trainingId: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -76,23 +66,13 @@ export const trainingRouter = createTRPCRouter({
   startTraining: privateProcedure
     .input(z.string().uuid())
     .query(async ({ ctx, input }) => {
-      console.log(input);
       const trainingUnit = await ctx.prisma.trainingUnit.findMany({
         where: { trainingId: input },
         orderBy: { endedAt: "asc" },
         include: { exercises: { orderBy: { sortIndex: "asc" } } },
       });
-      if (trainingUnit.length === 0) {
-        const training = await ctx.prisma.training.findUnique({
-          where: { trainingId: input },
-          include: { exercises: { orderBy: { sortIndex: "asc" } } },
-        });
-        if (!training) throw new TRPCError({ code: "NOT_FOUND" });
-        console.log("t");
-        return training;
-      }
-      console.log("unit");
-      return trainingUnit[trainingUnit.length - 1];
+      if (!trainingUnit) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      return trainingUnit.at(-1);
     }),
   addTraining: privateProcedure
     .input(addTrainingSchema)
@@ -103,7 +83,7 @@ export const trainingRouter = createTRPCRouter({
           ...exercise,
         };
       });
-      const res = await ctx.prisma.training.create({
+      const training = await ctx.prisma.training.create({
         data: {
           trainingName: input.trainingName,
           exercises: {
@@ -112,8 +92,29 @@ export const trainingRouter = createTRPCRouter({
           userId: ctx.userId,
         },
       });
-      if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
-      return res;
+      const data1 = input.exercises.map((exercise) => {
+        return {
+          userId: ctx.userId,
+          trainingId: training.trainingId,
+          ...exercise,
+        };
+      });
+      const trainingUnit = await ctx.prisma.trainingUnit.create({
+        data: {
+          trainingName: input.trainingName,
+          createdAt: new Date(),
+          trainingId: training.trainingId,
+          userId: ctx.userId,
+          exercises: {
+            createMany: {
+              data: data1,
+            },
+          },
+        },
+      });
+      if (!training) throw new TRPCError({ code: "BAD_REQUEST" });
+      if (!trainingUnit) throw new TRPCError({ code: "BAD_REQUEST" });
+      return training;
     }),
   getTrainings: privateProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.training.findMany({

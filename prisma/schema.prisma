@@ -55,9 +55,9 @@ model Weight {
 }
 
 model Training {
-  trainingId            String         @id @default(uuid())
-  trainingName         String         @db.VarChar(255)
-  createdAt DateTime @default(now())
+  trainingId    String         @id @default(uuid())
+  trainingName  String         @db.VarChar(255)
+  createdAt     DateTime       @default(now())
   exercises     Exercise[]
   trainingUnits TrainingUnit[]
   userId        String
@@ -65,23 +65,23 @@ model Training {
 }
 
 model TrainingUnit {
-  id         String     @id @default(uuid())
-  trainingName      String     @db.VarChar(255)
-  exercises  Exercise[]
-  createdAt  DateTime
-  endedAt    DateTime @default(now())
-  trainingId String
-  Training   Training?  @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
-  userId     String
+  id           String     @id @default(uuid())
+  trainingName String     @db.VarChar(255)
+  exercises    Exercise[]
+  createdAt    DateTime
+  endedAt      DateTime   @default(now())
+  trainingId   String
+  Training     Training?  @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
+  userId       String
 }
 
 model Exercise {
   id             String        @id @default(uuid())
-  exerciseName          String        @db.VarChar(255)
-  sortIndex Int
-  userId String
-  createdAt DateTime @default(now())
-  rpe Int @default(9)
+  exerciseName   String        @db.VarChar(255)
+  sortIndex      Int
+  userId         String
+  createdAt      DateTime      @default(now())
+  rpe            Int           @default(9)
   sets           Int           @default(3)
   reps           Int           @default(3)
   weight         Int           @default(12)

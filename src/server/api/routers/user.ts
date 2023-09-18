@@ -16,8 +16,15 @@ export const userRouter = createTRPCRouter({
     return user;
   }),
   getTrainingsCount: privateProcedure.query(async ({ ctx }) => {
+    const trainingsCount = await ctx.prisma.training.count({
+      where: {
+        userId: ctx.userId,
+      },
+    });
+
     const res = await ctx.prisma.trainingUnit.count({
       where: { userId: ctx.userId },
+      skip: trainingsCount,
     });
     if (!res) {
       return null;

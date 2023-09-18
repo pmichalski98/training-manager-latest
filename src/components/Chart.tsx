@@ -47,6 +47,7 @@ function InnerChart({
   width: number;
   height: number;
 }) {
+  console.log({ width, height });
   const margin = {
     top: 25,
     right: 20,
@@ -89,7 +90,7 @@ function InnerChart({
             fill="currentColor"
             alignmentBaseline="middle"
           >
-            Go to the gym to get data for charts
+            Not enough data for this exercise
           </text>
         ) : (
           <>
