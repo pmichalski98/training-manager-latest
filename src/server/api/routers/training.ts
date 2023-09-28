@@ -43,6 +43,7 @@ export const trainingRouter = createTRPCRouter({
   finishTrainingUnit: privateProcedure
     .input(trainingUnitSchema)
     .mutation(async ({ ctx, input }) => {
+      console.log(input, "server");
       const data = input.exercises.map((exercise) => {
         return {
           userId: ctx.userId,

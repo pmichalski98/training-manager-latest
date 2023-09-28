@@ -47,7 +47,6 @@ function InnerChart({
   width: number;
   height: number;
 }) {
-  console.log({ width, height });
   const margin = {
     top: 25,
     right: 20,

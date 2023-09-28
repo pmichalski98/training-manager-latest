@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -14,8 +14,8 @@ import Link from "next/link";
 import Spinner from "~/components/Spinner";
 
 function Id() {
-  const [trainingStartTime, setTrainingStartTime] = useState(new Date());
   const [checkedRow, setCheckedRow] = useState<boolean[]>([]);
+  const trainingStartTime = new Date();
 
   const {
     push,
@@ -36,7 +36,7 @@ function Id() {
   const { mutate: finishTraining } =
     api.training.finishTrainingUnit.useMutation();
 
-  const { handleSubmit, control, setValue, register } =
+  const { handleSubmit, control, watch, getValues, setValue, register } =
     useForm<trainingUnitSchema>({
       resolver: zodResolver(trainingUnitSchema),
       defaultValues: async () =>
@@ -49,6 +49,7 @@ function Id() {
     control,
     name: "exercises",
   });
+
   if (isLoading)
     return (
       <div className="-my-40 flex h-screen items-center justify-center">
@@ -58,8 +59,7 @@ function Id() {
   if (!training) return;
 
   async function formSubmit(data: trainingUnitSchema) {
-    setValue("createdAt", trainingStartTime);
-    finishTraining(data);
+    finishTraining({ ...data, createdAt: trainingStartTime });
     await push("/");
   }
   function handleCheckedRow(checked: boolean, index: number) {
