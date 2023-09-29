@@ -2,7 +2,7 @@ import Head from "next/head";
 import React from "react";
 import { api } from "~/utils/api";
 import { MdUpdate } from "react-icons/md";
-import OptionsDropdown from "~/components/OptionsDropdown";
+import TrainingOptionsDropDown from "~/components/TrainingOptionsDropDown";
 import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
 import Link from "next/link";
@@ -64,7 +64,7 @@ export default function Home() {
             >
               <div className="mx-auto flex  items-center justify-between ">
                 <h3 className="text-lg font-bold">{training.trainingName}</h3>
-                <OptionsDropdown training={training} />
+                <TrainingOptionsDropDown training={training} />
               </div>
               <div className="flex items-center gap-2 text-sm opacity-75">
                 <span className="opacity-75">

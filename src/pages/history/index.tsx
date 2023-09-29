@@ -1,9 +1,10 @@
 import React from "react";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import OptionsDropdown from "~/components/OptionsDropdown";
+import TrainingOptionsDropDown from "~/components/TrainingOptionsDropDown";
 import { MdUpdate } from "react-icons/md";
 import * as datefns from "date-fns";
+import TrainingUnitOptionsDropDown from "~/components/TrainingUnitOptionsDropDown";
 function Index() {
   const { data } = api.trainingUnit.getTrainingHistory.useQuery();
 
@@ -32,10 +33,15 @@ function Index() {
             trainingUnit.createdAt.getSeconds()
         )
         .map((trainingUnit) => {
-          let duration = Math.abs(
-            trainingUnit.endedAt - trainingUnit.createdAt
-          );
-          console.log(new Date(duration).getSeconds());
+          const hour =
+            trainingUnit.endedAt.getHours() - trainingUnit.createdAt.getHours();
+          const minutes =
+            trainingUnit.endedAt.getMinutes() -
+            trainingUnit.createdAt.getMinutes();
+          const seconds =
+            trainingUnit.endedAt.getSeconds() -
+            trainingUnit.createdAt.getSeconds();
+          console.log(hour, minutes, seconds);
           return (
             <div className="mt-32" key={trainingUnit.id}>
               <h2 className="mb-6 text-xl font-medium text-fadedBlue">
@@ -46,13 +52,17 @@ function Index() {
                   <h3 className="text-lg font-bold">
                     {trainingUnit.trainingName}
                   </h3>
-                  <OptionsDropdown training={trainingUnit} />
+                  <TrainingUnitOptionsDropDown trainingUnit={trainingUnit} />
                 </div>
                 <div className="flex items-center gap-2 text-sm opacity-75">
                   <span className="opacity-75">
-                    <MdUpdate size={20} />
+                    <MdUpdate size={25} />
                   </span>
-                  {/*<p>{new Date(duration).getSeconds()}</p>*/}
+                  <p className="text-base">{`0${hour}:${
+                    minutes < 10 ? "0".concat(minutes.toString()) : minutes
+                  }:${
+                    seconds < 10 ? "0".concat(seconds.toString()) : seconds
+                  }`}</p>
                 </div>
                 <div className="flex justify-between">
                   <ul className="text-sm opacity-75">

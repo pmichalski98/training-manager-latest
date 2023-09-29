@@ -8,7 +8,13 @@ import { type TrainingWithId } from "~/types/training";
 import EditWorkoutForm from "~/components/EditWorkoutForm";
 import IconButton from "~/components/IconButton";
 
-function OptionsDropdown({ training }: { training: TrainingWithId }) {
+function TrainingOptionsDropDown({
+  training,
+  trainingUnit,
+}: {
+  trainingUnit?: boolean;
+  training: TrainingWithId;
+}) {
   const utils = api.useContext();
   const [openEditModal, setOpenEditModal] = useState(false);
   const { mutate: deleteTraining, isLoading: isDeleting } =
@@ -56,4 +62,4 @@ function OptionsDropdown({ training }: { training: TrainingWithId }) {
   );
 }
 
-export default OptionsDropdown;
+export default TrainingOptionsDropDown;
