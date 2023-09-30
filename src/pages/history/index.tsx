@@ -1,10 +1,10 @@
 import React from "react";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import TrainingOptionsDropDown from "~/components/TrainingOptionsDropDown";
 import { MdUpdate } from "react-icons/md";
 import * as datefns from "date-fns";
 import TrainingUnitOptionsDropDown from "~/components/TrainingUnitOptionsDropDown";
+
 function Index() {
   const { data } = api.trainingUnit.getTrainingHistory.useQuery();
 
@@ -41,7 +41,6 @@ function Index() {
           const seconds =
             trainingUnit.endedAt.getSeconds() -
             trainingUnit.createdAt.getSeconds();
-          console.log(hour, minutes, seconds);
           return (
             <div className="mt-32" key={trainingUnit.id}>
               <h2 className="mb-6 text-xl font-medium text-fadedBlue">

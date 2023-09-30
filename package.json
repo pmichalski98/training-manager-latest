@@ -23,6 +23,7 @@
     "@trpc/next": "^10.26.0",
     "@trpc/react-query": "^10.26.0",
     "@trpc/server": "^10.26.0",
+    "aws-sdk": "^2.1467.0",
     "d3": "^7.8.5",
     "date-fns": "^2.30.0",
     "framer-motion": "^10.16.4",
