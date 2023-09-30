@@ -4,6 +4,8 @@ import Modal from "~/components/ui/Modal";
 import IconButton from "~/components/IconButton";
 import AddWorkoutForm from "~/components/AddWorkoutForm";
 import FileDropZone from "~/components/FileDropZone";
+import * as Dialog from "@radix-ui/react-dialog";
+import { AiOutlineClose } from "react-icons/ai";
 
 function Index() {
   return (
@@ -39,14 +41,26 @@ function AddPictureModal() {
         <Modal.Button>
           <IconButton>+</IconButton>
         </Modal.Button>
-        <Modal.Content title="">
-          <h3 className="text-center text-3xl font-medium text-white">
-            Photo Upload
-          </h3>
-          <div className="p-4">
-            <FileDropZone />
-          </div>
-        </Modal.Content>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-20  bg-black/50" />
+          <Dialog.Content
+            className={
+              "fixed left-1/2 top-1/2 z-30 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-primary pb-6 "
+            }
+          >
+            <div className="flex w-full items-center justify-between p-6">
+              <Dialog.Title className={"mx-auto  text-3xl font-medium "}>
+                Photo Upload
+              </Dialog.Title>
+              <Dialog.Close className="hover:text-gray-400">
+                <AiOutlineClose size={35} />
+              </Dialog.Close>
+            </div>
+            <div className="p-4">
+              <FileDropZone closeModal={setOpenAddModal} />
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
       </Modal>
     </div>
   );

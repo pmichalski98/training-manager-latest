@@ -5,7 +5,7 @@ function Spinner({ size = 8 }: { size?: number }) {
     <div role="status">
       <svg
         aria-hidden="true"
-        className={`mr-2 h-${size} w-${size} animate-spin fill-primary text-gray-200 dark:text-gray-600`}
+        className={`h-${size} w-${size} animate-spin fill-primary text-gray-200 dark:text-gray-600`}
         viewBox="0 0 100 101"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"

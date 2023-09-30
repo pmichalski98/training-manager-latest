@@ -3,7 +3,7 @@ import { api } from "~/utils/api";
 import FormData from "form-data";
 import Button from "~/components/ui/Button";
 import Image from "next/image";
-import { AiFillDelete } from "react-icons/ai";
+import Spinner from "~/components/Spinner";
 
 interface Fields {
   "Content-Type": string;
@@ -12,16 +12,19 @@ interface Fields {
   "X-Amz-Signature": string;
 }
 
-function FileDropZone() {
+function FileDropZone({
+  closeModal,
+}: {
+  closeModal: (param: boolean) => void;
+}) {
   const [file, setFile] = useState<File>();
   const utils = api.useContext();
 
   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     setFile(e.currentTarget.files?.[0]);
   }
-  const { mutateAsync: getPresignedUrl } = api.photos.uploadPhoto.useMutation(
-    {}
-  );
+  const { mutateAsync: getPresignedUrl, isLoading } =
+    api.photos.uploadPhoto.useMutation({});
 
   async function handleFileUpload(e: FormEvent) {
     e.preventDefault();
@@ -58,9 +61,10 @@ function FileDropZone() {
   return (
     <>
       <form
-        className=" flex flex-col"
+        className={` flex flex-col`}
         onSubmit={(e) => {
           handleFileUpload(e).catch(console.error);
+          closeModal(false);
         }}
       >
         <div className="relative   ">
@@ -90,22 +94,28 @@ function FileDropZone() {
             </div>
           </label>
           <input
-            className="absolute left-0 top-0 h-full w-full cursor-pointer bg-rose-400 opacity-0  "
+            className={`absolute left-0 top-0 h-full w-full cursor-pointer bg-rose-400 opacity-0`}
             id="file"
             type="file"
             onChange={handleFileChange}
           />
         </div>
         {file && (
-          <div className="mt-10 flex  gap-2 ">
+          <div className=" mt-10 flex items-center gap-2 ">
             <Image
               src={URL.createObjectURL(blob)}
               alt={"Photo to upload"}
-              width={50}
-              height={50}
+              width={150}
+              height={150}
             />
-            <AiFillDelete size={20} onClick={() => setFile(undefined)} />
-            <Button disabled={!file}>Upload file</Button>
+            <div className="ml-auto flex gap-2">
+              <Button className="text-center" disabled={!file}>
+                {isLoading ? <Spinner /> : "Upload file"}
+              </Button>
+              <Button onClick={() => setFile(undefined)} variant="danger">
+                Cancel
+              </Button>
+            </div>
           </div>
         )}
       </form>
