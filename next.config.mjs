@@ -8,7 +8,7 @@ await import("./src/env.mjs");
 const config = {
   reactStrictMode: true,
 images: {
-  domains: ['img.clerk.com']
+  domains: ['img.clerk.com','training-manager.s3.eu-central-1.amazonaws.com']
 },
   /**
    * If you have `experimental: { appDir: true }` set, then you must comment the below `i18n` config
