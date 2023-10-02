@@ -8,6 +8,7 @@ import AddWorkoutModal from "~/components/AddWorkoutModal";
 import Link from "next/link";
 import Spinner from "~/components/Spinner";
 import Chart from "~/components/Chart";
+import * as datefns from "date-fns";
 
 export default function Home() {
   api.user.login.useQuery();
@@ -36,10 +37,12 @@ export default function Home() {
     };
   });
 
-  function getDaysSinceLastTraining(lastTrained: number[]) {
+  function getDaysSinceLastTraining(lastTrained: Date[]) {
     if (lastTrained.length === 0) return "Start your first training";
-    const num = new Date().getDate() - lastTrained[0]!;
-    return `${num} days ago ...`;
+    return `${datefns.differenceInDays(
+      new Date(),
+      lastTrained[0]!
+    )} days ago ...`;
   }
 
   return (
@@ -72,7 +75,7 @@ export default function Home() {
                 </span>
                 <p>
                   {getDaysSinceLastTraining(
-                    training.trainingUnits.map((unit) => unit.endedAt.getDate())
+                    training.trainingUnits.map((unit) => unit.endedAt)
                   )}
                 </p>
               </div>
