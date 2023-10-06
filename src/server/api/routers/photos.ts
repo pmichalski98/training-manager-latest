@@ -12,22 +12,24 @@ const s3 = new S3({
   region: "eu-central-1",
 });
 export const photosRouter = createTRPCRouter({
-  uploadPhoto: privateProcedure.mutation(async ({ ctx }) => {
-    const { id: photoId } = await ctx.prisma.photo.create({
-      data: { userId: ctx.userId },
-    });
-    return s3.createPresignedPost({
-      Bucket: "training-manager",
-      Fields: {
-        key: photoId,
-      },
-      Conditions: [
-        ["starts-with", "$Content-Type", "image/"],
-        ["content-length-range", 0, 10000000],
-      ],
-      Expires: 30,
-    });
-  }),
+  uploadPhoto: privateProcedure
+    .input(z.number().optional())
+    .mutation(async ({ ctx, input }) => {
+      const { id: photoId } = await ctx.prisma.photo.create({
+        data: { userId: ctx.userId, weight: input },
+      });
+      return s3.createPresignedPost({
+        Bucket: "training-manager",
+        Fields: {
+          key: photoId,
+        },
+        Conditions: [
+          ["starts-with", "$Content-Type", "image/"],
+          ["content-length-range", 0, 10000000],
+        ],
+        Expires: 30,
+      });
+    }),
   getPhotos: privateProcedure.query(async ({ ctx }) => {
     const photos = await ctx.prisma.photo.findMany({
       where: {

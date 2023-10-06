@@ -189,7 +189,7 @@ function AddPictureModal() {
                     <h2 className="font-medium">
                       {datefns.format(photo.createdAt, "MMM do ")}
                     </h2>
-                    <p className="text-fadedBlue">78 kg</p>
+                    <p className="text-fadedBlue">{photo.weight} kg</p>
                   </div>
                   <Button
                     onClick={() => deletePhoto({ photoId: photo.id })}

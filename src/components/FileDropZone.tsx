@@ -27,15 +27,11 @@ function FileDropZone({
   }
   const { mutateAsync: getPresignedUrl, isLoading } =
     api.photos.uploadPhoto.useMutation({});
-  const { mutate: addWeight } = api.body.addWeight.useMutation();
 
   async function handleFileUpload(e: FormEvent) {
     e.preventDefault();
     if (!file) return;
-    const { url, fields } = await getPresignedUrl();
-    if (weight) {
-      addWeight(weight);
-    }
+    const { url, fields } = await getPresignedUrl(weight);
     const urlFields: Fields = {
       ...fields,
       "Content-Type": file.type,
@@ -112,6 +108,8 @@ function FileDropZone({
                 src={URL.createObjectURL(blob)}
                 alt={"Photo to upload"}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
               />
             </div>
             <div className="space-y-6">
