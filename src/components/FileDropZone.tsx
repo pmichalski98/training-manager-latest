@@ -1,9 +1,10 @@
-import { type ChangeEvent, type FormEvent, useState } from "react";
+import React, { type ChangeEvent, type FormEvent, useState } from "react";
 import { api } from "~/utils/api";
 import FormData from "form-data";
 import Button from "~/components/ui/Button";
 import Image from "next/image";
 import Spinner from "~/components/Spinner";
+import Input from "~/components/ui/Input";
 
 interface Fields {
   "Content-Type": string;
@@ -17,6 +18,7 @@ function FileDropZone({
 }: {
   closeModal: (param: boolean) => void;
 }) {
+  const [weight, setWeight] = useState<number | undefined>();
   const [file, setFile] = useState<File>();
   const utils = api.useContext();
 
@@ -25,12 +27,15 @@ function FileDropZone({
   }
   const { mutateAsync: getPresignedUrl, isLoading } =
     api.photos.uploadPhoto.useMutation({});
+  const { mutate: addWeight } = api.body.addWeight.useMutation();
 
   async function handleFileUpload(e: FormEvent) {
     e.preventDefault();
     if (!file) return;
     const { url, fields } = await getPresignedUrl();
-
+    if (weight) {
+      addWeight(weight);
+    }
     const urlFields: Fields = {
       ...fields,
       "Content-Type": file.type,
@@ -101,20 +106,38 @@ function FileDropZone({
           />
         </div>
         {file && (
-          <div className=" mt-10 flex items-center gap-2 ">
-            <Image
-              src={URL.createObjectURL(blob)}
-              alt={"Photo to upload"}
-              width={150}
-              height={150}
-            />
-            <div className="ml-auto flex gap-2">
-              <Button className="text-center" disabled={!file}>
-                {isLoading ? <Spinner /> : "Upload file"}
-              </Button>
-              <Button onClick={() => setFile(undefined)} variant="danger">
-                Cancel
-              </Button>
+          <div className=" mt-10 grid grid-cols-2 gap-10  ">
+            <div className="relative ">
+              <Image
+                src={URL.createObjectURL(blob)}
+                alt={"Photo to upload"}
+                fill
+              />
+            </div>
+            <div className="space-y-6">
+              <div className="relative flex flex-col gap-1 rounded-lg bg-nav p-3 ring-1 ring-slate-400/10">
+                <label htmlFor="weight" className="text-sm text-slate-400">
+                  Weight (kg)
+                </label>
+                <Input
+                  value={weight}
+                  onChange={(e) => setWeight(Number(e.currentTarget.value))}
+                  type="text"
+                  id="weight"
+                />
+              </div>
+              <div className="w-full space-y-2">
+                <Button className="w-full text-center" disabled={!file}>
+                  {isLoading ? <Spinner /> : "Upload photo"}
+                </Button>
+                <Button
+                  className="w-full"
+                  onClick={() => setFile(undefined)}
+                  variant="danger"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         )}
