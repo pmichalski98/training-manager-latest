@@ -14,6 +14,7 @@ import * as datefns from "date-fns";
 import { GoTrash } from "react-icons/go";
 import { motion } from "framer-motion";
 import useMeasure from "react-use-measure";
+import Input from "~/components/ui/Input";
 
 export interface PartsModel {
   head?: JSX.Element;
@@ -31,6 +32,7 @@ export interface PartsModel {
   leftFoot?: JSX.Element;
   rightFoot?: JSX.Element;
 }
+const measurementParts = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
 export default function Index() {
   const [headRef, headBounds] = useMeasure();
 
@@ -97,6 +99,9 @@ export default function Index() {
         <AddPictureModal />
         <section className="mt-10 ">
           <h2 className=" text-2xl font-bold">Measurements</h2>
+          <div>
+            <AddMeasurementsModal />
+          </div>
           {/*<BodyComponent onClick={() => console.log("halo")} />*/}
           {/*<svg className="absolute px-11">*/}
           {/*  {bodyParts.rightLeg}*/}
@@ -105,6 +110,49 @@ export default function Index() {
           {/*<svg className="h-screen">{bodyParts.leftLeg}</svg>*/}
         </section>
       </div>
+    </>
+  );
+}
+
+function AddMeasurementsModal() {
+  return (
+    <>
+      <Modal>
+        <Modal.Button>
+          <IconButton>+</IconButton>
+        </Modal.Button>
+        <Modal.Content title="Adding measurements">
+          <div className="mx-auto px-20">
+            <form>
+              <div className=" mb-10 grid grid-cols-2 gap-10">
+                {measurementParts.map((bodyPart) => (
+                  <div key={bodyPart} className=" flex flex-col ">
+                    <label
+                      htmlFor={bodyPart}
+                      className="capitalize text-slate-400"
+                    >
+                      {bodyPart}
+                    </label>
+                    <div className="flex items-center gap-1">
+                      <Input
+                        // value={exerciseName}
+                        // onChange={(e) => setExerciseName(e.target.value)}
+                        type="number"
+                        id={bodyPart}
+                        className="mt-1 min-w-0  rounded-lg bg-nav px-2 py-1 ring-1 ring-slate-400/10 "
+                      />
+                      <span>cm</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="w-full text-right">
+                <Button className="w-1/3 font-medium ">Save</Button>
+              </div>
+            </form>
+          </div>
+        </Modal.Content>
+      </Modal>
     </>
   );
 }
