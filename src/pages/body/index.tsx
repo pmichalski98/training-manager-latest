@@ -1,24 +1,23 @@
-import React, { useState } from "react";
-import Head from "next/head";
-import Modal from "~/components/ui/Modal";
-import IconButton from "~/components/IconButton";
-import FileDropZone from "~/components/FileDropZone";
+import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
+import * as datefns from "date-fns";
+import { motion } from "framer-motion";
+import Head from "next/head";
+import Image from "next/image";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
-import { useUtils } from "~/hooks/useUtils";
-import { api } from "~/utils/api";
+import { GoTrash } from "react-icons/go";
+import useMeasure from "react-use-measure";
+import FileDropZone from "~/components/FileDropZone";
+import IconButton from "~/components/IconButton";
 import Spinner from "~/components/Spinner";
 import Button from "~/components/ui/Button";
-import Image from "next/image";
-import * as datefns from "date-fns";
-import { GoTrash } from "react-icons/go";
-import { motion } from "framer-motion";
-import useMeasure from "react-use-measure";
 import Input from "~/components/ui/Input";
-import { log } from "console";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import Modal from "~/components/ui/Modal";
+import { useUtils } from "~/hooks/useUtils";
 import { addMeasurementsSchema, addMeasurementsType } from "~/types/body";
+import { api } from "~/utils/api";
 
 type Measurements = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
 const measurementParts: Measurements = [
@@ -57,17 +56,25 @@ export default function Index() {
   );
 }
 
-function AddMeasurementsForm() {
+function AddMeasurementsForm({
+  closeModal,
+}: {
+  closeModal: (value: boolean) => void;
+}) {
+  const { mutateAsync, isLoading } = api.body.addNewMeasurements.useMutation();
   const {
     handleSubmit,
     formState: { errors },
+    reset,
     register,
   } = useForm<addMeasurementsType>({
     resolver: zodResolver(addMeasurementsSchema),
   });
 
-  function formSubmit(data: addMeasurementsType) {
-    console.log("data", data);
+  async function formSubmit(data: addMeasurementsType) {
+    await mutateAsync(data);
+    reset();
+    closeModal(false);
   }
   return (
     <form onSubmit={handleSubmit(formSubmit)}>
@@ -90,22 +97,25 @@ function AddMeasurementsForm() {
         ))}
       </div>
       <div className="w-full text-right">
-        <Button className="w-1/3 font-medium ">Save</Button>
+        <Button className="w-1/3 font-medium " disabled={isLoading}>
+          Save
+        </Button>
       </div>
     </form>
   );
 }
 
 function AddMeasurementsModal() {
+  const [open, setOpen] = useState(false);
   return (
     <>
-      <Modal>
+      <Modal open={open} onOpenChange={setOpen}>
         <Modal.Button>
           <IconButton>+</IconButton>
         </Modal.Button>
         <Modal.Content title="Adding measurements">
           <div className="mx-auto px-14">
-            <AddMeasurementsForm />
+            <AddMeasurementsForm closeModal={setOpen} />
           </div>
         </Modal.Content>
       </Modal>
