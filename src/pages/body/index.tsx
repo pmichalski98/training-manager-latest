@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
+import { log } from "console";
 import * as datefns from "date-fns";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
@@ -46,13 +47,72 @@ export default function Index() {
         </h1>
         <AddPhotoModal />
         <section className="mt-10 ">
-          <h2 className=" text-2xl font-bold">Measurements</h2>
-          <div>
-            <AddMeasurementsModal />
-          </div>
+          <AddMeasurementsModal />
+          <Measurements />
         </section>
       </div>
     </>
+  );
+}
+
+function Measurements() {
+  const { data } = api.body.getMeasurements.useQuery();
+  console.log(Object.entries(data[0]));
+  return (
+    <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto"></div>
+        </div>
+        <div className="mt-8 flex flex-col">
+          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <SortableColumn>Body part (cm)</SortableColumn>
+                      <SortableColumn>First</SortableColumn>
+                      <SortableColumn>Last</SortableColumn>
+                      <SortableColumn>Change</SortableColumn>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {data?.map((row) => (
+                      <tr key={row.id}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                          {row.biceps}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {row.chest}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {row.waist}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {row.hips}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SortableColumn({ children }: { children: ReactNode }) {
+  return (
+    <th
+      scope="col"
+      className="px-3 py-3.5 text-left text-sm text-gray-900 first:pl-4 first:sm:pl-6"
+    >
+      {children}
+    </th>
   );
 }
 
@@ -110,9 +170,12 @@ function AddMeasurementsModal() {
   return (
     <>
       <Modal open={open} onOpenChange={setOpen}>
-        <Modal.Button>
-          <IconButton>+</IconButton>
-        </Modal.Button>
+        <div className="flex items-center justify-between">
+          <h2 className=" text-2xl font-bold">Measurements</h2>
+          <Modal.Button>
+            <IconButton>+</IconButton>
+          </Modal.Button>
+        </div>
         <Modal.Content title="Adding measurements">
           <div className="mx-auto px-14">
             <AddMeasurementsForm closeModal={setOpen} />
