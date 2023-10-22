@@ -69,27 +69,27 @@ function Measurements() {
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="bg-gray-50">
-                    <tr>
+                  <thead className="bg-nav">
+                    <tr className="">
                       <SortableColumn>Body part (cm)</SortableColumn>
                       <SortableColumn>First</SortableColumn>
                       <SortableColumn>Last</SortableColumn>
                       <SortableColumn>Change</SortableColumn>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 bg-white">
+                  <tbody className="  divide-y divide-secondary bg-card">
                     {data?.map((row) => (
                       <tr key={row.bodypart}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-gray-900 sm:pl-6">
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
                           {row.bodypart}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
                           {row.firstValue}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
                           {row.lastValue}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
                           {row.change}
                         </td>
                       </tr>
@@ -109,7 +109,7 @@ function SortableColumn({ children }: { children: ReactNode }) {
   return (
     <th
       scope="col"
-      className="px-3 py-3.5 text-left text-sm text-gray-900 first:pl-4 first:sm:pl-6"
+      className="px-3 py-3.5 text-left text-sm text-white first:pl-4 first:sm:pl-6"
     >
       {children}
     </th>
@@ -279,7 +279,7 @@ function AddPhotoModal() {
                 <Dialog.Title className={"mx-auto  text-3xl font-medium "}>
                   Photo Upload
                 </Dialog.Title>
-                <Dialog.Close className="hover:text-gray-400">
+                <Dialog.Close className="hover:text-white">
                   <AiOutlineClose size={35} />
                 </Dialog.Close>
               </div>
