@@ -1,8 +1,6 @@
-import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
-import z from "zod";
 import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { addMeasurementsSchema } from "~/types/body";
-import { log } from "console";
 
 export const bodyRouter = createTRPCRouter({
   addNewMeasurements: privateProcedure
@@ -39,17 +37,14 @@ export const bodyRouter = createTRPCRouter({
       }
       return diff.toFixed(1);
     }
-    //@ts-ignore
     const firstEntry = Object.entries(measurements.at(0));
     const latestEntryValues = Object.values(
-      //@ts-ignore
       measurements.at(measurements.length - 1)
     );
-    //@ts-ignore
 
     const latestMeasurements = firstEntry.map((entry, index) => {
       const lastValue = latestEntryValues[index];
-      const change = calculateDifference(lastValue!, entry![1] as number);
+      const change = calculateDifference(lastValue!, entry[1] as number);
       return {
         bodypart: entry[0],
         firstValue: Number(entry[1]).toFixed(1),
