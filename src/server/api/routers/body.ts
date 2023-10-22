@@ -24,20 +24,39 @@ export const bodyRouter = createTRPCRouter({
         biceps: true,
         chest: true,
         hips: true,
-        id: true,
         neck: true,
         thigh: true,
         waist: true,
       },
     });
-    // turn this data into 1 object ### bodypart # fristentry # secondentry # difference
+    if (!measurements) return;
+
+    function calculateDifference(lastValue: number, firstValue: number) {
+      const diff = lastValue - firstValue;
+      if (diff >= 0) {
+        const positiveValue = "+".concat(diff.toFixed(1).toString());
+        return positiveValue;
+      }
+      return diff.toFixed(1);
+    }
+    //@ts-ignore
     const firstEntry = Object.entries(measurements.at(0));
-    const latestEntry = Object.entries(
+    const latestEntryValues = Object.values(
+      //@ts-ignore
       measurements.at(measurements.length - 1)
     );
+    //@ts-ignore
 
-    console.log(firstEntry, latestEntry);
-
-    // return latestMeasurements;
+    const latestMeasurements = firstEntry.map((entry, index) => {
+      const lastValue = latestEntryValues[index];
+      const change = calculateDifference(lastValue!, entry![1] as number);
+      return {
+        bodypart: entry[0],
+        firstValue: Number(entry[1]).toFixed(1),
+        lastValue: lastValue?.toFixed(1),
+        change,
+      };
+    });
+    return latestMeasurements;
   }),
 });

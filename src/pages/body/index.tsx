@@ -57,7 +57,7 @@ export default function Index() {
 
 function Measurements() {
   const { data } = api.body.getMeasurements.useQuery();
-  console.log(Object.entries(data[0]));
+
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -79,18 +79,18 @@ function Measurements() {
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {data?.map((row) => (
-                      <tr key={row.id}>
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          {row.biceps}
+                      <tr key={row.bodypart}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-gray-900 sm:pl-6">
+                          {row.bodypart}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {row.chest}
+                          {row.firstValue}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {row.waist}
+                          {row.lastValue}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {row.hips}
+                          {row.change}
                         </td>
                       </tr>
                     ))}
