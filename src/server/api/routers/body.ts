@@ -49,7 +49,7 @@ export const bodyRouter = createTRPCRouter({
 
     const latestMeasurements = firstEntry.map((entry, index) => {
       const lastValue = latestEntryValues[index];
-      const change = calculateDifference(lastValue!, entry[1] as number);
+      const change = calculateDifference(lastValue!, entry[1]);
       return {
         bodypart: entry[0],
         firstValue: Number(entry[1]).toFixed(1),
