@@ -37,8 +37,13 @@ export const bodyRouter = createTRPCRouter({
       }
       return diff.toFixed(1);
     }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
     const firstEntry = Object.entries(measurements.at(0));
     const latestEntryValues = Object.values(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
       measurements.at(measurements.length - 1)
     );
 

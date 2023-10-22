@@ -36,12 +36,12 @@ model Kcal {
 
 model Body {
   id        String   @id @default(uuid())
-  neck      Float?
-  chest     Float?
-  waist     Float?
-  hips      Float?
-  thigh     Float?
-  biceps    Float?
+  neck      Float
+  chest     Float
+  waist     Float
+  hips      Float
+  thigh     Float
+  biceps    Float
   createdAt DateTime @default(now())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
