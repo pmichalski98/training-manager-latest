@@ -55,9 +55,15 @@ export default function Index() {
 }
 
 function Measurements() {
-  const { data } = api.body.getMeasurements.useQuery();
+  const { data, isLoading } = api.body.getMeasurements.useQuery();
 
-  if (!data) return <Spinner />;
+  if (!data && isLoading)
+    return (
+      <div className="mx-auto w-1/12">
+        <Spinner size={16} />
+      </div>
+    );
+
   console.log(data);
 
   return (
@@ -211,7 +217,7 @@ function PhotoList() {
   const [ref, bounds] = useMeasure();
   const utils = useUtils();
 
-  const { data: photos, isLoading: photosIsLoading } =
+  const { data: photos, isLoading: photosAreLoading } =
     api.photos.getPhotos.useQuery();
 
   const { mutate: deletePhoto, isLoading: deleteIsLoading } =
@@ -221,10 +227,10 @@ function PhotoList() {
       },
     });
 
-  if (photosIsLoading) {
+  if (photosAreLoading && !data) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner />
+      <div className="flex items-center justify-center">
+        <Spinner size={10} />
       </div>
     );
   }
