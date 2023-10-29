@@ -73,12 +73,27 @@ function Measurements() {
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="bg-nav">
                     <tr className="">
-                      <SortableColumn>Body part (cm)</SortableColumn>
                       <SortableColumn>
-                        First ({datefns.format(data.dates[0]!, "MMM do")})
+                        <div className="sm:flex">
+                          Body part &nbsp;
+                          <p className="">(cm)</p>
+                        </div>
                       </SortableColumn>
                       <SortableColumn>
-                        Last ({datefns.format(data.dates[1]!, "MMM do")})
+                        <div className="sm:flex">
+                          First &nbsp;
+                          <p className="">
+                            ({datefns.format(data.dates[0]!, "MMM d")})
+                          </p>
+                        </div>
+                      </SortableColumn>
+                      <SortableColumn>
+                        <div className="sm:flex">
+                          Last &nbsp;
+                          <p className="">
+                            ({datefns.format(data.dates[1]!, "MMM d")}){" "}
+                          </p>
+                        </div>
                       </SortableColumn>
                       <SortableColumn>Change</SortableColumn>
                     </tr>

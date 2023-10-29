@@ -1,5 +1,4 @@
 import { TRPCError } from "@trpc/server";
-import { log } from "console";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { addMeasurementsSchema } from "~/types/body";
 
