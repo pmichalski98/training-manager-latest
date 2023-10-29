@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { log } from "console";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { addMeasurementsSchema } from "~/types/body";
 
@@ -25,9 +26,29 @@ export const bodyRouter = createTRPCRouter({
         neck: true,
         thigh: true,
         waist: true,
+        createdAt: true,
       },
     });
     if (!measurements) return;
+
+    const filteredMeasurements = measurements.filter(
+      (measurement, index) => index === 0 || index === measurements.length - 1
+    );
+
+    const dates = filteredMeasurements.map(
+      (filteredMeasurement, i) => filteredMeasurement.createdAt
+    );
+
+    const filteredData = filteredMeasurements.map((measurement) => {
+      return {
+        biceps: measurement.biceps,
+        chest: measurement.chest,
+        hips: measurement.hips,
+        neck: measurement.neck,
+        thigh: measurement.thigh,
+        waist: measurement.waist,
+      };
+    });
 
     function calculateDifference(lastValue: number, firstValue: number) {
       const diff = lastValue - firstValue;
@@ -39,12 +60,12 @@ export const bodyRouter = createTRPCRouter({
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    const firstEntry = Object.entries(measurements.at(0));
+    // @ts-ignore
+    const firstEntry = Object.entries(filteredData.at(0));
     const latestEntryValues = Object.values(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      measurements.at(measurements.length - 1)
+      filteredData.at(filteredData.length - 1)
     );
 
     const latestMeasurements = firstEntry.map((entry, index) => {
@@ -53,10 +74,10 @@ export const bodyRouter = createTRPCRouter({
       return {
         bodypart: entry[0],
         firstValue: Number(entry[1]).toFixed(1),
-        lastValue: lastValue?.toFixed(1),
+        lastValue: lastValue!.toFixed(1),
         change,
       };
     });
-    return latestMeasurements;
+    return { latestMeasurements, dates };
   }),
 });

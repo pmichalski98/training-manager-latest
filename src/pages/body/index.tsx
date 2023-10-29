@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
-import { log } from "console";
 import * as datefns from "date-fns";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Image from "next/image";
-import { ReactNode, useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
@@ -17,7 +16,7 @@ import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import Modal from "~/components/ui/Modal";
 import { useUtils } from "~/hooks/useUtils";
-import { addMeasurementsSchema, addMeasurementsType } from "~/types/body";
+import { addMeasurementsSchema, type addMeasurementsType } from "~/types/body";
 import { api } from "~/utils/api";
 
 type Measurements = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
@@ -58,6 +57,9 @@ export default function Index() {
 function Measurements() {
   const { data } = api.body.getMeasurements.useQuery();
 
+  if (!data) return <Spinner />;
+  console.log(data);
+
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -72,13 +74,17 @@ function Measurements() {
                   <thead className="bg-nav">
                     <tr className="">
                       <SortableColumn>Body part (cm)</SortableColumn>
-                      <SortableColumn>First</SortableColumn>
-                      <SortableColumn>Last</SortableColumn>
+                      <SortableColumn>
+                        First ({datefns.format(data.dates[0]!, "MMM do")})
+                      </SortableColumn>
+                      <SortableColumn>
+                        Last ({datefns.format(data.dates[1]!, "MMM do")})
+                      </SortableColumn>
                       <SortableColumn>Change</SortableColumn>
                     </tr>
                   </thead>
                   <tbody className="  divide-y divide-secondary bg-card">
-                    {data?.map((row) => (
+                    {data?.latestMeasurements?.map((row) => (
                       <tr key={row.bodypart}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
                           {row.bodypart}
