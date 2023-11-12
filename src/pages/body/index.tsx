@@ -155,7 +155,80 @@ function AddWeightKcalForm({
 }
 
 function WeightAndKcal() {
-  return <div></div>;
+  const { data, isLoading } = api.body.getWeight.useQuery();
+
+  if (!data && isLoading)
+    return (
+      <div className="mx-auto w-1/12">
+        <Spinner size={16} />
+      </div>
+    );
+
+  if (!data) return <div>No data </div>;
+  console.log(data, "here");
+  const reversed = data.reverse();
+  console.log(reversed, "revers");
+  return (
+    <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto"></div>
+        </div>
+        <div className="mt-8 flex flex-col">
+          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead className="bg-nav">
+                    <tr className="">
+                      <SortableColumn>
+                        <div className="sm:flex">Date</div>
+                      </SortableColumn>
+                      <SortableColumn>
+                        <div className="sm:flex">
+                          Weight &nbsp;
+                          <p className="">(kg)</p>
+                        </div>
+                      </SortableColumn>
+                      <SortableColumn>
+                        <div className="sm:flex">
+                          Difference &nbsp;
+                          <p className="">(kg)</p>
+                        </div>
+                      </SortableColumn>
+                    </tr>
+                  </thead>
+                  <tbody className=" divide-y divide-secondary bg-card">
+                    {data.reverse().map((weight) => (
+                      <tr key={weight.id}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
+                          {datefns.format(weight.createdAt, "dd MMM yyyy")}
+                        </td>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
+                          {weight.weight}
+                        </td>
+                        <td
+                          className={`whitespace-nowrap  py-4 pl-4 pr-3 text-sm font-medium capitalize ${
+                            weight.diff! <= 0
+                              ? "text-green-400"
+                              : "text-red-500"
+                          } sm:pl-6`}
+                        >
+                          {weight.diff && weight.diff > 0
+                            ? "+".concat(weight.diff.toString())
+                            : weight.diff}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 function Measurements() {
   const { data, isLoading } = api.body.getMeasurements.useQuery();

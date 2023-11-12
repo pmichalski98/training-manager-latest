@@ -13,6 +13,56 @@ export const bodyRouter = createTRPCRouter({
       if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
       return res;
     }),
+  getKcal: privateProcedure.query(async ({ ctx }) => {
+    const kcal = await ctx.prisma.kcal.findMany({
+      where: {
+        userId: ctx.userId,
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    if (!kcal) throw new TRPCError({ code: "BAD_REQUEST" });
+    return kcal;
+  }),
+  getWeight: privateProcedure.query(async ({ ctx }) => {
+    const weight = await ctx.prisma.weight.findMany({
+      where: {
+        userId: ctx.userId,
+      },
+      orderBy: { createdAt: "asc" },
+    });
+    if (!weight) throw new TRPCError({ code: "BAD_REQUEST" });
+    const diffs = calculateDiff(weight);
+    function calculateDiff(
+      data: {
+        id: string;
+        weight: number;
+        createdAt: Date;
+        userId: string;
+      }[]
+    ) {
+      let weights: number[] = [];
+      data.forEach((entry) => {
+        weights.push(entry.weight);
+      });
+      let diffs: number[] = [];
+      for (let i = 0; i < weights.length - 1; i++) {
+        const diff = weights[i + 1]! - weights[i]!;
+        diffs.push(diff);
+      }
+
+      return diffs;
+    }
+    weight.reverse();
+    diffs.reverse();
+    const formatted = weight.map((weight, index) => {
+      return {
+        diff: diffs[index],
+        ...weight,
+      };
+    });
+    console.log(formatted);
+    return formatted;
+  }),
   addWeight: privateProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
