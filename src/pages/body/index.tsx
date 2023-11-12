@@ -64,7 +64,7 @@ function Measurements() {
       </div>
     );
 
-  console.log(data);
+  if (!data) return <div>No data </div>
 
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
@@ -227,7 +227,7 @@ function PhotoList() {
       },
     });
 
-  if (photosAreLoading && !data) {
+  if (photosAreLoading) {
     return (
       <div className="flex items-center justify-center">
         <Spinner size={10} />
