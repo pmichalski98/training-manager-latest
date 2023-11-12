@@ -16,7 +16,12 @@ import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import Modal from "~/components/ui/Modal";
 import { useUtils } from "~/hooks/useUtils";
-import { addMeasurementsSchema, type addMeasurementsType } from "~/types/body";
+import {
+  addMeasurementsSchema,
+  type addMeasurementsType,
+  addWeightKcalSchema,
+  addWeightKcalType,
+} from "~/types/body";
 import { api } from "~/utils/api";
 
 type Measurements = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
@@ -45,6 +50,10 @@ export default function Index() {
           Body
         </h1>
         <AddPhotoModal />
+        <section className="mt-10">
+          <AddWeightKcalModal />
+          <WeightAndKcal />
+        </section>
         <section className="mt-10 ">
           <AddMeasurementsModal />
           <Measurements />
@@ -54,6 +63,100 @@ export default function Index() {
   );
 }
 
+function AddWeightKcalModal() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Modal open={open} onOpenChange={setOpen}>
+        <div className="flex items-center justify-between">
+          <h2 className=" text-2xl font-bold">Weight and Kcal</h2>
+          <Modal.Button>
+            <IconButton>+</IconButton>
+          </Modal.Button>
+        </div>
+        <Modal.Content title="Adding Weight and Kcal">
+          <div className="mx-auto px-14">
+            <AddWeightKcalForm closeModal={setOpen} />
+          </div>
+        </Modal.Content>
+      </Modal>
+    </>
+  );
+}
+
+function AddWeightKcalForm({
+  closeModal,
+}: {
+  closeModal: (value: boolean) => void;
+}) {
+  const { mutateAsync: addWeight, isLoading: weightLoading } =
+    api.body.addWeight.useMutation();
+  const { mutateAsync: addKcal, isLoading: kcalLoading } =
+    api.body.addKcal.useMutation();
+  const {
+    handleSubmit,
+    formState: { errors },
+    watch,
+    reset,
+    register,
+  } = useForm<addWeightKcalType>({
+    resolver: zodResolver(addWeightKcalSchema),
+  });
+
+  async function formSubmit(data: addWeightKcalType) {
+    if (data.kcal) {
+      await addKcal(data.kcal);
+    }
+    if (data.weight) {
+      await addWeight(data.weight);
+    }
+    reset();
+    closeModal(false);
+  }
+  return (
+    <form onSubmit={handleSubmit(formSubmit)}>
+      <div className=" mb-10 grid grid-cols-2 gap-10">
+        <div className="flex flex-col">
+          <label htmlFor="weight" className="capitalize text-slate-400">
+            Weight
+          </label>
+          <div className="flex items-center gap-1">
+            <Input
+              {...register("weight", { valueAsNumber: true })}
+              type="number"
+              id="weight"
+              className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
+            />
+            <span>kg</span>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="Kcal" className="capitalize text-slate-400">
+            Calories
+          </label>
+          <div className="flex items-center gap-1">
+            <Input
+              {...register("kcal", { valueAsNumber: true })}
+              type="number"
+              id="kcal"
+              className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
+            />
+            <span>kcal</span>
+          </div>
+        </div>
+      </div>
+      <div className="w-full text-right">
+        <Button className="w-1/3 font-medium " disabled={weightLoading}>
+          Add
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+function WeightAndKcal() {
+  return <div></div>;
+}
 function Measurements() {
   const { data, isLoading } = api.body.getMeasurements.useQuery();
 
@@ -64,7 +167,7 @@ function Measurements() {
       </div>
     );
 
-  if (!data) return <div>No data </div>
+  if (!data) return <div>No data </div>;
 
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">

@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { addMeasurementsSchema } from "~/types/body";
+import z from "zod";
 
 export const bodyRouter = createTRPCRouter({
   addNewMeasurements: privateProcedure
@@ -8,6 +9,30 @@ export const bodyRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const res = await ctx.prisma.body.create({
         data: { ...input, userId: ctx.userId },
+      });
+      if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
+      return res;
+    }),
+  addWeight: privateProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.weight.create({
+        data: {
+          weight: input,
+          userId: ctx.userId,
+        },
+      });
+      if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
+      return res;
+    }),
+  addKcal: privateProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.kcal.create({
+        data: {
+          kcal: input,
+          userId: ctx.userId,
+        },
       });
       if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
       return res;
