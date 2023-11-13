@@ -40,11 +40,11 @@ export const bodyRouter = createTRPCRouter({
         userId: string;
       }[]
     ) {
-      let weights: number[] = [];
+      const weights: number[] = [];
       data.forEach((entry) => {
         weights.push(entry.weight);
       });
-      let diffs: number[] = [];
+      const diffs: number[] = [];
       for (let i = 0; i < weights.length - 1; i++) {
         const diff = weights[i + 1]! - weights[i]!;
         diffs.push(diff);
