@@ -14,7 +14,7 @@ export const addMeasurementsSchema = z.object({
 });
 
 export const addWeightSchema = z.object({
-  weight: z.number().multipleOf(0.01).gte(0),
+  weight: z.number().multipleOf(0.1).gte(0),
 });
 export const addKcalSchema = z.object({
   kcal: z.number().gte(0),

@@ -4,7 +4,7 @@ import * as datefns from "date-fns";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Image from "next/image";
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
@@ -51,7 +51,7 @@ export default function Index() {
         </h1>
         <AddPhotoModal />
         <section className="mt-10">
-          <AddWeightKcalModal />
+          <AddWeightModal />
           <Weight />
         </section>
         <section className="mt-10 ">
@@ -63,7 +63,7 @@ export default function Index() {
   );
 }
 
-function AddWeightKcalModal() {
+function AddWeightModal() {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -74,7 +74,7 @@ function AddWeightKcalModal() {
             <IconButton>+</IconButton>
           </Modal.Button>
         </div>
-        <Modal.Content title="Adding Weight and Kcal">
+        <Modal.Content title="Adding Weight">
           <div className="mx-auto px-14">
             <AddWeightForm closeModal={setOpen} />
           </div>
@@ -96,9 +96,17 @@ function AddWeightForm({
         await utils.body.getWeight.invalidate();
       },
     });
-  const { handleSubmit, reset, register } = useForm<addWeightType>({
+  const {
+    formState: { errors },
+    handleSubmit,
+    reset,
+    setValue,
+    register,
+  } = useForm<addWeightType>({
     resolver: zodResolver(addWeightSchema),
   });
+
+  console.log(errors);
 
   async function formSubmit(data: addWeightType) {
     if (data.weight) {
@@ -106,6 +114,16 @@ function AddWeightForm({
     }
     reset();
     closeModal(false);
+  }
+
+  function handleDecimalInput(e: ChangeEvent<HTMLInputElement>) {
+    let test = [];
+    const value = e.target.value;
+    console.log(value);
+    const modified = value.replace(",", ".");
+    console.log(modified);
+
+    setValue("weight", Number(modified));
   }
   return (
     <form onSubmit={handleSubmit(formSubmit)}>
@@ -116,7 +134,11 @@ function AddWeightForm({
           </label>
           <div className="flex items-center gap-1">
             <Input
-              {...register("weight", { valueAsNumber: true })}
+              {...register("weight", {
+                valueAsNumber: true,
+                onBlur: (e) => handleDecimalInput(e),
+              })}
+              step="0.01"
               id="weight"
               className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
             />
@@ -315,7 +337,12 @@ function AddMeasurementsForm({
 }: {
   closeModal: (value: boolean) => void;
 }) {
-  const { mutateAsync, isLoading } = api.body.addNewMeasurements.useMutation();
+  const utils = useUtils();
+  const { mutateAsync, isLoading } = api.body.addNewMeasurements.useMutation({
+    onSuccess: async () => {
+      await utils.body.getMeasurements.invalidate();
+    },
+  });
   const {
     handleSubmit,
     formState: { errors },
