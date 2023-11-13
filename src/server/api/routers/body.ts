@@ -60,7 +60,6 @@ export const bodyRouter = createTRPCRouter({
         ...weight,
       };
     });
-    console.log(formatted);
     return formatted;
   }),
   addWeight: privateProcedure
@@ -103,8 +102,8 @@ export const bodyRouter = createTRPCRouter({
         createdAt: true,
       },
     });
-    if (!measurements) return;
-
+    if (!measurements || measurements.length === 0)
+      throw new TRPCError({ code: "NOT_FOUND" });
     const filteredMeasurements = measurements.filter(
       (measurement, index) => index === 0 || index === measurements.length - 1
     );

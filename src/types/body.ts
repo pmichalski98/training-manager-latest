@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 export type addMeasurementsType = z.infer<typeof addMeasurementsSchema>;
-export type addWeightKcalType = z.infer<typeof addWeightKcalSchema>;
+export type addWeightType = z.infer<typeof addWeightSchema>;
+export type addKcalType = z.infer<typeof addKcalSchema>;
 
 export const addMeasurementsSchema = z.object({
   neck: z.number().gte(0),
@@ -12,7 +13,9 @@ export const addMeasurementsSchema = z.object({
   biceps: z.number().gte(0),
 });
 
-export const addWeightKcalSchema = z.object({
-  weight: z.number().gte(0),
+export const addWeightSchema = z.object({
+  weight: z.number().multipleOf(0.01).gte(0),
+});
+export const addKcalSchema = z.object({
   kcal: z.number().gte(0),
 });

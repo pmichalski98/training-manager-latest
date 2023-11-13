@@ -23,7 +23,7 @@ const Navigation = () => {
         <NavItem title={"Stats"} Icon={IoIosStats} href={"/stats"} />
         <NavItem title={"Workouts"} Icon={IoBarbellSharp} href={"/"} />
         <NavItem title={"Body"} Icon={IoIosBody} href={"/body"} />
-        <div>
+        <div className="hidden md:block">
           {isSignedIn && (
             <Dropdown>
               <Dropdown.Button>

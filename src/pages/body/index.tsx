@@ -19,8 +19,8 @@ import { useUtils } from "~/hooks/useUtils";
 import {
   addMeasurementsSchema,
   type addMeasurementsType,
-  addWeightKcalSchema,
-  addWeightKcalType,
+  addWeightSchema,
+  addWeightType,
 } from "~/types/body";
 import { api } from "~/utils/api";
 
@@ -52,7 +52,7 @@ export default function Index() {
         <AddPhotoModal />
         <section className="mt-10">
           <AddWeightKcalModal />
-          <WeightAndKcal />
+          <Weight />
         </section>
         <section className="mt-10 ">
           <AddMeasurementsModal />
@@ -69,14 +69,14 @@ function AddWeightKcalModal() {
     <>
       <Modal open={open} onOpenChange={setOpen}>
         <div className="flex items-center justify-between">
-          <h2 className=" text-2xl font-bold">Weight and Kcal</h2>
+          <h2 className=" text-2xl font-bold">Weight</h2>
           <Modal.Button>
             <IconButton>+</IconButton>
           </Modal.Button>
         </div>
         <Modal.Content title="Adding Weight and Kcal">
           <div className="mx-auto px-14">
-            <AddWeightKcalForm closeModal={setOpen} />
+            <AddWeightForm closeModal={setOpen} />
           </div>
         </Modal.Content>
       </Modal>
@@ -84,29 +84,23 @@ function AddWeightKcalModal() {
   );
 }
 
-function AddWeightKcalForm({
+function AddWeightForm({
   closeModal,
 }: {
   closeModal: (value: boolean) => void;
 }) {
+  const utils = useUtils();
   const { mutateAsync: addWeight, isLoading: weightLoading } =
-    api.body.addWeight.useMutation();
-  const { mutateAsync: addKcal, isLoading: kcalLoading } =
-    api.body.addKcal.useMutation();
-  const {
-    handleSubmit,
-    formState: { errors },
-    watch,
-    reset,
-    register,
-  } = useForm<addWeightKcalType>({
-    resolver: zodResolver(addWeightKcalSchema),
+    api.body.addWeight.useMutation({
+      onSuccess: async () => {
+        await utils.body.getWeight.invalidate();
+      },
+    });
+  const { handleSubmit, reset, register } = useForm<addWeightType>({
+    resolver: zodResolver(addWeightSchema),
   });
 
-  async function formSubmit(data: addWeightKcalType) {
-    if (data.kcal) {
-      await addKcal(data.kcal);
-    }
+  async function formSubmit(data: addWeightType) {
     if (data.weight) {
       await addWeight(data.weight);
     }
@@ -123,25 +117,10 @@ function AddWeightKcalForm({
           <div className="flex items-center gap-1">
             <Input
               {...register("weight", { valueAsNumber: true })}
-              type="number"
               id="weight"
               className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
             />
             <span>kg</span>
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="Kcal" className="capitalize text-slate-400">
-            Calories
-          </label>
-          <div className="flex items-center gap-1">
-            <Input
-              {...register("kcal", { valueAsNumber: true })}
-              type="number"
-              id="kcal"
-              className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
-            />
-            <span>kcal</span>
           </div>
         </div>
       </div>
@@ -154,20 +133,17 @@ function AddWeightKcalForm({
   );
 }
 
-function WeightAndKcal() {
+function Weight() {
   const { data, isLoading } = api.body.getWeight.useQuery();
 
-  if (!data && isLoading)
+  if (!data || (data.length === 0 && isLoading))
     return (
       <div className="mx-auto w-1/12">
         <Spinner size={16} />
       </div>
     );
-
-  if (!data) return <div>No data </div>;
-  console.log(data, "here");
+  if (!data || data.length === 0) return <div>No data </div>;
   const reversed = data.reverse();
-  console.log(reversed, "revers");
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -195,6 +171,9 @@ function WeightAndKcal() {
                           Difference &nbsp;
                           <p className="">(kg)</p>
                         </div>
+                      </SortableColumn>{" "}
+                      <SortableColumn>
+                        <div className="sm:flex">Srednia</div>
                       </SortableColumn>
                     </tr>
                   </thead>
@@ -217,6 +196,11 @@ function WeightAndKcal() {
                           {weight.diff && weight.diff > 0
                             ? "+".concat(weight.diff.toString())
                             : weight.diff}
+                        </td>{" "}
+                        <td
+                          className={`whitespace-nowrap  py-4 pl-4 pr-3 text-sm font-medium capitalize sm:pl-6`}
+                        >
+                          Srednia
                         </td>
                       </tr>
                     ))}
@@ -232,8 +216,7 @@ function WeightAndKcal() {
 }
 function Measurements() {
   const { data, isLoading } = api.body.getMeasurements.useQuery();
-
-  if (!data && isLoading)
+  if (isLoading)
     return (
       <div className="mx-auto w-1/12">
         <Spinner size={16} />
@@ -269,15 +252,19 @@ function Measurements() {
                           </p>
                         </div>
                       </SortableColumn>
-                      <SortableColumn>
-                        <div className="sm:flex">
-                          Last &nbsp;
-                          <p className="">
-                            ({datefns.format(data.dates[1]!, "MMM d")}){" "}
-                          </p>
-                        </div>
-                      </SortableColumn>
-                      <SortableColumn>Change</SortableColumn>
+                      {data.dates[1] && (
+                        <>
+                          <SortableColumn>
+                            <div className="sm:flex">
+                              Last &nbsp;
+                              <p className="">
+                                ({datefns.format(data.dates[1]!, "MMM d")}){" "}
+                              </p>
+                            </div>
+                          </SortableColumn>
+                          <SortableColumn>Change</SortableColumn>
+                        </>
+                      )}
                     </tr>
                   </thead>
                   <tbody className="  divide-y divide-secondary bg-card">
@@ -289,12 +276,16 @@ function Measurements() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
                           {row.firstValue}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-                          {row.lastValue}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
-                          {row.change}
-                        </td>
+                        {data.dates[1] && (
+                          <>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
+                              {row.lastValue}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
+                              {row.change}
+                            </td>
+                          </>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -409,6 +400,9 @@ function PhotoList() {
         <Spinner size={10} />
       </div>
     );
+  }
+  if (!photos || photos.length === 0) {
+    return <div>No data</div>;
   }
   return (
     <div ref={ref} className=" overflow-hidden">
