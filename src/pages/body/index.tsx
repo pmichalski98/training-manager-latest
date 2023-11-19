@@ -4,7 +4,7 @@ import * as datefns from "date-fns";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Image from "next/image";
-import { useState, type ReactNode, ChangeEvent } from "react";
+import React, { useState, type ReactNode, ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
@@ -17,6 +17,8 @@ import Input from "~/components/ui/Input";
 import Modal from "~/components/ui/Modal";
 import { useUtils } from "~/hooks/useUtils";
 import {
+  addKcalSchema,
+  addKcalType,
   addMeasurementsSchema,
   type addMeasurementsType,
   addWeightSchema,
@@ -53,6 +55,10 @@ export default function Index() {
         <section className="mt-10">
           <AddWeightModal />
           <Weight />
+        </section>{" "}
+        <section className="mt-10">
+          <AddKcalModal />
+          <Kcal />
         </section>
         <section className="mt-10 ">
           <AddMeasurementsModal />
@@ -63,6 +69,26 @@ export default function Index() {
   );
 }
 
+function AddKcalModal() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Modal open={open} onOpenChange={setOpen}>
+        <div className="flex items-center justify-between">
+          <h2 className=" text-2xl font-bold">Kcal</h2>
+          <Modal.Button>
+            <IconButton>+</IconButton>
+          </Modal.Button>
+        </div>
+        <Modal.Content title="Adding Calories">
+          <div className="mx-auto px-14">
+            <AddkcalForm closeModal={setOpen} />
+          </div>
+        </Modal.Content>
+      </Modal>
+    </>
+  );
+}
 function AddWeightModal() {
   const [open, setOpen] = useState(false);
   return (
@@ -84,6 +110,52 @@ function AddWeightModal() {
   );
 }
 
+function AddkcalForm({ closeModal }: { closeModal: (value: boolean) => void }) {
+  const utils = useUtils();
+  const { mutateAsync: addKcal, isLoading: kcalLoading } =
+    api.body.addKcal.useMutation({
+      onSuccess: async () => {
+        await utils.body.getKcal.invalidate();
+      },
+    });
+  const { handleSubmit, reset, register } = useForm<addKcalType>({
+    resolver: zodResolver(addKcalSchema),
+  });
+
+  async function formSubmit(data: addKcalType) {
+    if (data.kcal) {
+      await addKcal(data.kcal);
+    }
+    reset();
+    closeModal(false);
+  }
+  return (
+    <form onSubmit={handleSubmit(formSubmit)}>
+      <div className=" mb-10 grid grid-cols-2 gap-10">
+        <div className="flex flex-col">
+          <label htmlFor="kcal" className="capitalize text-slate-400">
+            Calories
+          </label>
+          <div className="flex items-center gap-1">
+            <Input
+              {...register("kcal", {
+                valueAsNumber: true,
+              })}
+              id="kcal"
+              className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
+            />
+            <span>kcal</span>
+          </div>
+        </div>
+      </div>
+      <div className="w-full text-right">
+        <Button className="w-1/3 font-medium " disabled={kcalLoading}>
+          Add
+        </Button>
+      </div>
+    </form>
+  );
+}
 function AddWeightForm({
   closeModal,
 }: {
@@ -106,24 +178,12 @@ function AddWeightForm({
     resolver: zodResolver(addWeightSchema),
   });
 
-  console.log(errors);
-
   async function formSubmit(data: addWeightType) {
     if (data.weight) {
       await addWeight(data.weight);
     }
     reset();
     closeModal(false);
-  }
-
-  function handleDecimalInput(e: ChangeEvent<HTMLInputElement>) {
-    let test = [];
-    const value = e.target.value;
-    console.log(value);
-    const modified = value.replace(",", ".");
-    console.log(modified);
-
-    setValue("weight", Number(modified));
   }
   return (
     <form onSubmit={handleSubmit(formSubmit)}>
@@ -136,7 +196,6 @@ function AddWeightForm({
             <Input
               {...register("weight", {
                 valueAsNumber: true,
-                onBlur: (e) => handleDecimalInput(e),
               })}
               step="0.01"
               id="weight"
@@ -155,6 +214,81 @@ function AddWeightForm({
   );
 }
 
+function Kcal() {
+  const { data, isLoading } = api.body.getKcal.useQuery();
+
+  if (!data || (data.length === 0 && isLoading))
+    return (
+      <div className="mx-auto w-1/12">
+        <Spinner size={16} />
+      </div>
+    );
+  if (!data || data.length === 0) return <div>No data </div>;
+  return (
+    <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
+      <div className="flex items-center gap-1">
+        <label htmlFor="kcal" className=" font-medium text-slate-400">
+          Caloric daily target:
+        </label>
+        <Input
+          size={1}
+          id="kcalTarget"
+          className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
+        />
+      </div>
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="sm:flex sm:items-center">
+          <div className="sm:flex-auto"></div>
+        </div>
+        <div className="mt-8 flex flex-col">
+          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-300">
+                  <thead className="bg-nav">
+                    <tr className="">
+                      <SortableColumn>
+                        <div className="sm:flex">Date</div>
+                      </SortableColumn>
+                      <SortableColumn>
+                        <div className="sm:flex">
+                          Calories &nbsp;
+                          <p className="">(kcal)</p>
+                        </div>
+                      </SortableColumn>
+                      <SortableColumn>
+                        <div className="sm:flex">
+                          Success &nbsp;
+                          <p className="">(kg)</p>
+                        </div>
+                      </SortableColumn>
+                    </tr>
+                  </thead>
+                  <tbody className=" divide-y divide-secondary bg-card">
+                    {data.map((kcal) => (
+                      <tr key={kcal.id}>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
+                          {datefns.format(kcal.createdAt, "dd MMM yyyy")}
+                        </td>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
+                          {kcal.kcal}
+                        </td>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
+                          diff
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Weight() {
   const { data, isLoading } = api.body.getWeight.useQuery();
 
@@ -166,6 +300,7 @@ function Weight() {
     );
   if (!data || data.length === 0) return <div>No data </div>;
   const reversed = data.reverse();
+  console.log(reversed);
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -193,9 +328,6 @@ function Weight() {
                           Difference &nbsp;
                           <p className="">(kg)</p>
                         </div>
-                      </SortableColumn>{" "}
-                      <SortableColumn>
-                        <div className="sm:flex">Srednia</div>
                       </SortableColumn>
                     </tr>
                   </thead>
@@ -219,11 +351,6 @@ function Weight() {
                             ? "+".concat(weight.diff.toString())
                             : weight.diff}
                         </td>{" "}
-                        <td
-                          className={`whitespace-nowrap  py-4 pl-4 pr-3 text-sm font-medium capitalize sm:pl-6`}
-                        >
-                          Srednia
-                        </td>
                       </tr>
                     ))}
                   </tbody>
