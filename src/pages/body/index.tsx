@@ -402,10 +402,7 @@ function Measurements() {
                   <thead className="bg-nav">
                     <tr className="">
                       <SortableColumn>
-                        <div className="sm:flex">
-                          Body part &nbsp;
-                          <p className="">(cm)</p>
-                        </div>
+                        <div className="sm:flex">Body part</div>
                       </SortableColumn>
                       <SortableColumn>
                         <div className="sm:flex">
@@ -425,7 +422,7 @@ function Measurements() {
                               </p>
                             </div>
                           </SortableColumn>
-                          <SortableColumn>Change</SortableColumn>
+                          <SortableColumn>Change (cm)</SortableColumn>
                         </>
                       )}
                     </tr>
