@@ -26,6 +26,14 @@ import {
 } from "~/types/body";
 import { api } from "~/utils/api";
 
+enum BodyParts {
+  NECK,
+  CHEST,
+  WAIST,
+  HIPS,
+  THIGH,
+  BICEPS,
+}
 type Measurements = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
 const measurementParts: Measurements = [
   "neck",
@@ -300,7 +308,6 @@ function Weight() {
     );
   if (!data || data.length === 0) return <div>No data </div>;
   const reversed = data.reverse();
-  console.log(reversed);
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -374,6 +381,13 @@ function Measurements() {
 
   if (!data) return <div>No data </div>;
 
+  function estimateColor(value: number, bodyPart: string) {
+    if (bodyPart === "biceps" || bodyPart === "chest") {
+      return value > 0 ? "text-green-400" : "text-red-400";
+    } else {
+      return value <= 0 ? "text-green-400" : "text-red-400";
+    }
+  }
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -430,7 +444,12 @@ function Measurements() {
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
                               {row.lastValue}
                             </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-white">
+                            <td
+                              className={`whitespace-nowrap px-3 py-4 text-sm ${estimateColor(
+                                Number(row.change),
+                                row.bodypart
+                              )}`}
+                            >
                               {row.change}
                             </td>
                           </>
