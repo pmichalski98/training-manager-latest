@@ -239,9 +239,8 @@ function Kcal() {
           Caloric daily target:
         </label>
         <Input
-          size={1}
           id="kcalTarget"
-          className="mt-1 min-w-0 rounded-lg  bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
+          className="mt-1 max-w-[70px] rounded-lg text-sm bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
         />
       </div>
       <div className="px-4 sm:px-6 lg:px-8">
@@ -266,8 +265,7 @@ function Kcal() {
                       </SortableColumn>
                       <SortableColumn>
                         <div className="sm:flex">
-                          Success &nbsp;
-                          <p className="">(kg)</p>
+                          Success
                         </div>
                       </SortableColumn>
                     </tr>
