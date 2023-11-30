@@ -4,7 +4,7 @@ import * as datefns from "date-fns";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState, type ReactNode, ChangeEvent } from "react";
+import React, { useState, type ReactNode, ChangeEvent, FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
@@ -23,8 +23,13 @@ import {
   type addMeasurementsType,
   addWeightSchema,
   addWeightType,
+  caloricTargetSchema,
+  caloricTargetType,
 } from "~/types/body";
 import { api } from "~/utils/api";
+import CheckSvg from "~/components/Check";
+import XSvg from "~/components/ui/xSvg";
+import button from "~/components/ui/Button";
 
 enum BodyParts {
   NECK,
@@ -224,7 +229,24 @@ function AddWeightForm({
 
 function Kcal() {
   const { data, isLoading } = api.body.getKcal.useQuery();
-
+  const { data: caloricTarget } = api.user.getCaloricTarget.useQuery();
+  const utils = useUtils();
+  const { mutate } = api.user.setCaloricTarget.useMutation({
+    onSuccess: async () => {
+      await utils.user.getCaloricTarget.invalidate();
+    },
+  });
+  const {
+    handleSubmit,
+    getValues,
+    formState: { isDirty },
+    register,
+  } = useForm<caloricTargetType>({
+    resolver: zodResolver(caloricTargetSchema),
+    values: {
+      caloricTarget: caloricTarget || 0,
+    },
+  });
   if (!data || (data.length === 0 && isLoading))
     return (
       <div className="mx-auto w-1/12">
@@ -232,17 +254,37 @@ function Kcal() {
       </div>
     );
   if (!data || data.length === 0) return <div>No data </div>;
+
+  let counter = 0;
+  if (caloricTarget) {
+    data.forEach((kcal) => {
+      if (kcal.kcal <= caloricTarget) {
+        counter++;
+      }
+    });
+  }
+
+  function onSubmit(data: caloricTargetType) {
+    mutate({ target: data.caloricTarget });
+  }
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
-      <div className="flex items-center gap-1">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex items-center gap-1"
+      >
         <label htmlFor="kcal" className=" font-medium text-slate-400">
           Caloric daily target:
         </label>
         <Input
+          {...register("caloricTarget", {
+            valueAsNumber: true,
+            onBlur: () => mutate({ target: getValues("caloricTarget") }),
+          })}
           id="kcalTarget"
-          className="mt-1 max-w-[70px] rounded-lg text-sm bg-nav px-2 py-1 text-center ring-1 ring-slate-400/10 "
+          className="mt-1 max-w-[70px] rounded-lg bg-nav px-2 py-1 text-center text-sm ring-1 ring-slate-400/10 "
         />
-      </div>
+      </form>
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto"></div>
@@ -265,7 +307,14 @@ function Kcal() {
                       </SortableColumn>
                       <SortableColumn>
                         <div className="sm:flex">
-                          Success
+                          Success &nbsp;
+                          <p className="">
+                            (
+                            {((counter / data.length) * 100)
+                              .toFixed(2)
+                              .concat("%")}
+                            )
+                          </p>
                         </div>
                       </SortableColumn>
                     </tr>
@@ -280,7 +329,11 @@ function Kcal() {
                           {kcal.kcal}
                         </td>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium capitalize text-white sm:pl-6">
-                          diff
+                          {caloricTarget && kcal.kcal <= caloricTarget ? (
+                            <CheckSvg />
+                          ) : (
+                            <XSvg />
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -353,7 +406,7 @@ function Weight() {
                           } sm:pl-6`}
                         >
                           {weight.diff && weight.diff > 0
-                            ? "+".concat(weight.diff.toString())
+                            ? "+".concat(weight.diff.toFixed(1).toString())
                             : weight.diff}
                         </td>{" "}
                       </tr>

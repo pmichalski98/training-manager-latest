@@ -3,6 +3,8 @@ import {
   privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 
 export const userRouter = createTRPCRouter({
   login: publicProcedure.query(async ({ ctx }) => {
@@ -32,4 +34,26 @@ export const userRouter = createTRPCRouter({
       return res;
     }
   }),
+  getCaloricTarget: privateProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: ctx.userId },
+      select: {
+        caloricTarget: true,
+      },
+    });
+    if (!user) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+    return user.caloricTarget;
+  }),
+  setCaloricTarget: privateProcedure
+    .input(z.object({ target: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const res = await ctx.prisma.user.update({
+        where: {
+          id: ctx.userId,
+        },
+        data: { caloricTarget: input.target },
+      });
+      if (!res) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+      return res;
+    }),
 });
