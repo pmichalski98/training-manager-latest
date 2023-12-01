@@ -28,7 +28,7 @@ import {
 } from "~/types/body";
 import { api } from "~/utils/api";
 import CheckSvg from "~/components/Check";
-import XSvg from "~/components/ui/xSvg";
+import XSvg from "~/components/xSvg";
 import button from "~/components/ui/Button";
 
 enum BodyParts {

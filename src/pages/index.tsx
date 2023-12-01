@@ -52,6 +52,7 @@ export default function Home() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
       </Head>
       <div className="mb-10">
         <WelcomeUser />
