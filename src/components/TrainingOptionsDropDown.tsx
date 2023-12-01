@@ -23,12 +23,12 @@ function TrainingOptionsDropDown({
         await utils.training.getTrainings.invalidate();
       },
     });
+  const [open, setOpen] = useState(false);
+
   return (
-    <DropDown>
+    <DropDown open={open} onOpenChange={setOpen}>
       <DropDown.Button>
-        <IconButton>
-          <BsThreeDotsVertical size={20} />
-        </IconButton>
+        <IconButton type="edit" />
       </DropDown.Button>
       <DropDown.Content>
         <div className=" space-y-1 rounded border-2 border-[#7ECBFF]/20 bg-[#1B3A56]/50 px-3 py-1 outline-none ">
