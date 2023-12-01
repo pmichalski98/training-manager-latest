@@ -12,7 +12,7 @@ function Check() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-check"
+      className={`lucide lucide-check text-green-400`}
     >
       <path d="M20 6 9 17l-5-5" />
     </svg>

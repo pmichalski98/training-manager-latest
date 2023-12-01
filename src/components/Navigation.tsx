@@ -13,21 +13,20 @@ import { useClerk, useUser } from "@clerk/nextjs";
 import UserDropdown from "~/components/UserDropdown";
 
 const Navigation = () => {
-  const { user, isSignedIn } = useUser();
-  const { signOut } = useClerk();
-
   return (
     <nav className="fixed bottom-0 z-10 h-28 w-full bg-nav/80 py-6 shadow-2xl md:top-0  md:bg-nav ">
-      <ul className="  flex  max-w-screen-lg items-center justify-around px-10">
+      <div className="md:flex md:justify-between md:px-8">
         <Logo className={"hidden md:flex"} />
-        <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
-        <NavItem title={"Stats"} Icon={IoIosStats} href={"/stats"} />
-        <NavItem title={"Workouts"} Icon={IoBarbellSharp} href={"/"} />
-        <NavItem title={"Body"} Icon={IoIosBody} href={"/body"} />
+        <ul className="ml-auto flex max-w-screen-lg flex-1 items-center justify-around px-10">
+          <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
+          <NavItem title={"Stats"} Icon={IoIosStats} href={"/stats"} />
+          <NavItem title={"Workouts"} Icon={IoBarbellSharp} href={"/"} />
+          <NavItem title={"Body"} Icon={IoIosBody} href={"/body"} />
+        </ul>
         <div className="hidden md:block">
           <UserDropdown />
         </div>
-      </ul>
+      </div>
     </nav>
   );
 };

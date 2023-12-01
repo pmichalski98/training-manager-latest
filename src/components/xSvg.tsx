@@ -12,7 +12,7 @@ function XSvg() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="lucide lucide-x"
+      className={`lucide lucide-x text-red-500`}
     >
       <path d="M18 6 6 18" />
       <path d="m6 6 12 12" />

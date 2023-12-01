@@ -4,7 +4,7 @@ import * as datefns from "date-fns";
 import { motion } from "framer-motion";
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState, type ReactNode, ChangeEvent, FormEvent } from "react";
+import React, { type ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
 import { GoTrash } from "react-icons/go";
@@ -29,16 +29,6 @@ import {
 import { api } from "~/utils/api";
 import CheckSvg from "~/components/Check";
 import XSvg from "~/components/xSvg";
-import button from "~/components/ui/Button";
-
-enum BodyParts {
-  NECK,
-  CHEST,
-  WAIST,
-  HIPS,
-  THIGH,
-  BICEPS,
-}
 type Measurements = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
 const measurementParts: Measurements = [
   "neck",
@@ -90,7 +80,7 @@ function AddKcalModal() {
         <div className="flex items-center justify-between">
           <h2 className=" text-2xl font-bold">Kcal</h2>
           <Modal.Button>
-            <IconButton>+</IconButton>
+            <IconButton />
           </Modal.Button>
         </div>
         <Modal.Content title="Adding Calories">
@@ -110,7 +100,7 @@ function AddWeightModal() {
         <div className="flex items-center justify-between">
           <h2 className=" text-2xl font-bold">Weight</h2>
           <Modal.Button>
-            <IconButton>+</IconButton>
+            <IconButton />
           </Modal.Button>
         </div>
         <Modal.Content title="Adding Weight">
@@ -311,7 +301,7 @@ function Kcal() {
                           <p className="">
                             (
                             {((counter / data.length) * 100)
-                              .toFixed(2)
+                              .toFixed(0)
                               .concat("%")}
                             )
                           </p>
@@ -588,7 +578,7 @@ function AddMeasurementsModal() {
         <div className="flex items-center justify-between">
           <h2 className=" text-2xl font-bold">Measurements</h2>
           <Modal.Button>
-            <IconButton>+</IconButton>
+            <IconButton />
           </Modal.Button>
         </div>
         <Modal.Content title="Adding measurements">
@@ -684,7 +674,7 @@ function AddPhotoModal() {
         <h2 className=" text-2xl font-bold">Progress Pictures</h2>
         <Modal open={openAddModal} onOpenChange={setOpenAddModal}>
           <Modal.Button>
-            <IconButton>+</IconButton>
+            <IconButton />
           </Modal.Button>
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0 z-20  bg-black/50" />

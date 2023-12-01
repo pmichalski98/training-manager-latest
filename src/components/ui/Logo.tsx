@@ -8,9 +8,7 @@ export default function Logo(props: ComponentPropsWithoutRef<"div">) {
   return (
     <Link href="/" className={classes}>
       <IoBarbell size={40} className="rounded-lg bg-primaryText p-1 text-nav" />
-      <h1 className="text-2xl font-medium text-primary md:hidden">
-        Training Manager
-      </h1>
+      <h1 className="text-2xl font-medium text-primary">Training Manager</h1>
     </Link>
   );
 }
