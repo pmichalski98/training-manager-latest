@@ -68,7 +68,7 @@ function NavIcon({ name, className }: NavIconI) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`lucide lucide-history ${className}`}
+      className={`lucide lucide-history ${className || ""}`}
     >
       {path}
     </svg>

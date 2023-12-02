@@ -16,7 +16,7 @@ model User {
   body          Body[]
   kcal          Kcal[]
   photo         Photo[]
-  caloricTarget Int?
+  caloricTarget Int        @default(0)
 }
 
 model Photo {
