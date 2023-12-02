@@ -10,7 +10,7 @@ function UserDropdown() {
     <>
       {isSignedIn && (
         <Dropdown>
-          <Dropdown.Button>
+          <Dropdown.Button className="md:absolute md:left-0 md:ml-4">
             <Image
               width={50}
               height={50}
@@ -30,7 +30,9 @@ function UserDropdown() {
                 </button>
               </Dropdown.Item>
               <Dropdown.Item>
-                <button>Reset</button>
+                <button className=" text-white  hover:text-primary">
+                  Reset
+                </button>
               </Dropdown.Item>
             </div>
           </Dropdown.Content>

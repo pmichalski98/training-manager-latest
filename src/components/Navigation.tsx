@@ -1,56 +1,52 @@
-import React, { type ComponentType } from "react";
-import { LuHistory } from "react-icons/lu";
-import { IoIosBody, IoIosStats } from "react-icons/io";
-import { IoBarbellSharp } from "react-icons/io5";
+import React from "react";
 import Logo from "~/components/ui/Logo";
-import { type IconBaseProps } from "react-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import Dropdown from "~/components/ui/Dropdown";
-import Image from "next/image";
-import { useClerk, useUser } from "@clerk/nextjs";
 import UserDropdown from "~/components/UserDropdown";
+import NavIcon from "~/components/svgs/NavIcon";
 
 const Navigation = () => {
   return (
-    <nav className="fixed bottom-0 z-10 h-28 w-full bg-nav/80 py-6 shadow-2xl md:top-0  md:bg-nav ">
-      <div className="md:flex md:justify-between md:px-8">
-        <Logo className={"hidden md:flex"} />
-        <ul className="ml-auto flex max-w-screen-lg flex-1 items-center justify-around px-10">
-          <NavItem title={"History"} Icon={LuHistory} href={"/history"} />
-          <NavItem title={"Stats"} Icon={IoIosStats} href={"/stats"} />
-          <NavItem title={"Workouts"} Icon={IoBarbellSharp} href={"/"} />
-          <NavItem title={"Body"} Icon={IoIosBody} href={"/body"} />
-        </ul>
+    <nav
+      className="fixed bottom-0 z-10 h-20 w-full overflow-hidden bg-nav/90  transition md:left-0
+    md:h-full md:w-20 md:bg-nav md:hover:w-48 "
+    >
+      <ul className="flex items-center justify-around md:h-full md:flex-col  ">
         <div className="hidden md:block">
+          <Logo className={"md:absolute md:flex"} />
+        </div>
+        <NavItem title={"History"} href={"/history"} />
+        <NavItem title={"Stats"} href={"/stats"} />
+        <NavItem title={"Workouts"} href={"/"} />
+        <NavItem title={"Body"} href={"/body"} />
+        <div className=" hidden items-center md:flex">
           <UserDropdown />
         </div>
-      </div>
+      </ul>
     </nav>
   );
 };
 
-interface NavItemProps {
-  href: string;
+export default Navigation;
+
+interface NavItemI {
   title: string;
-  Icon: ComponentType<IconBaseProps>;
+  href: string;
 }
-export const NavItem = ({ href, title, Icon }: NavItemProps) => {
+function NavItem({ title, href }: NavItemI) {
   const path = usePathname();
   const active = path === href;
   const classes = twMerge(
-    "cursor-pointer opacity-75 hover:text-primary hover:opacity-100",
+    "cursor-pointer md:items-center left-0 ml-5 md:absolute  md:flex gap-2 opacity-75 hover:text-primary hover:opacity-100",
     active && "text-primary opacity-100"
   );
   return (
-    <li className={classes}>
-      <Link href={href}>
-        <Icon size={30} className="mx-auto mb-2" />
-        {title}
+    <li>
+      <Link href={href} className={classes}>
+        <NavIcon name={title} className="mx-auto md:h-10 md:w-10" />
+        <span className="relative md:ml-3 md:text-xl">{title}</span>
       </Link>
     </li>
   );
-};
-
-export default Navigation;
+}

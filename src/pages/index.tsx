@@ -6,7 +6,7 @@ import TrainingOptionsDropDown from "~/components/TrainingOptionsDropDown";
 import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
 import Link from "next/link";
-import Spinner from "~/components/Spinner";
+import Spinner from "~/components/svgs/Spinner";
 import Chart from "~/components/Chart";
 import * as datefns from "date-fns";
 

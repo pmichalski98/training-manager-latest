@@ -11,7 +11,7 @@ import Modal from "~/components/ui/Modal";
 import { FaTrash } from "react-icons/fa";
 import Button from "~/components/ui/Button";
 import Link from "next/link";
-import Spinner from "~/components/Spinner";
+import Spinner from "~/components/svgs/Spinner";
 
 function Id() {
   const [checkedRow, setCheckedRow] = useState<boolean[]>([]);

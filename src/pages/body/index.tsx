@@ -11,7 +11,7 @@ import { GoTrash } from "react-icons/go";
 import useMeasure from "react-use-measure";
 import FileDropZone from "~/components/FileDropZone";
 import IconButton from "~/components/IconButton";
-import Spinner from "~/components/Spinner";
+import Spinner from "~/components/svgs/Spinner";
 import Button from "~/components/ui/Button";
 import Input from "~/components/ui/Input";
 import Modal from "~/components/ui/Modal";
@@ -27,8 +27,8 @@ import {
   caloricTargetType,
 } from "~/types/body";
 import { api } from "~/utils/api";
-import CheckSvg from "~/components/Check";
-import XSvg from "~/components/xSvg";
+import CheckSvg from "~/components/svgs/Check";
+import XSvg from "~/components/svgs/xSvg";
 type Measurements = ["neck", "chest", "waist", "hips", "thigh", "biceps"];
 const measurementParts: Measurements = [
   "neck",

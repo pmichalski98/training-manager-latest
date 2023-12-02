@@ -3,7 +3,7 @@ import { api } from "~/utils/api";
 import FormData from "form-data";
 import Button from "~/components/ui/Button";
 import Image from "next/image";
-import Spinner from "~/components/Spinner";
+import Spinner from "~/components/svgs/Spinner";
 import Input from "~/components/ui/Input";
 
 interface Fields {

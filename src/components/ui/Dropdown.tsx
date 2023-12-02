@@ -18,6 +18,8 @@ function DropDownContent({ children }: { children: ReactNode }) {
     <DropDownMenu.Portal>
       <DropDownMenu.Content
         align={"start"}
+        sideOffset={77}
+        side="left"
         className={
           "absolute right-0 top-0 z-50 mt-2 translate-x-1/3 overflow-auto "
         }
