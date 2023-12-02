@@ -55,15 +55,15 @@ export default function Index() {
           Body
         </h1>
         <AddPhotoModal />
-        <section className="mt-10">
+        <section className="mt-10 max-w-6xl">
           <AddWeightModal />
           <Weight />
         </section>{" "}
-        <section className="mt-10">
+        <section className="mt-10 max-w-6xl">
           <AddKcalModal />
           <Kcal />
         </section>
-        <section className="mt-10 ">
+        <section className="mt-10 max-w-6xl">
           <AddMeasurementsModal />
           <Measurements />
         </section>
@@ -275,7 +275,7 @@ function Kcal() {
           className="mt-1 max-w-[70px] rounded-lg bg-nav px-2 py-1 text-center text-sm ring-1 ring-slate-400/10 "
         />
       </form>
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 md:px-0">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto"></div>
         </div>
@@ -351,7 +351,7 @@ function Weight() {
   const reversed = data.reverse();
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 md:px-0">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto"></div>
         </div>
@@ -431,7 +431,7 @@ function Measurements() {
   }
   return (
     <div className="mx-auto max-w-6xl py-8 lg:py-16 ">
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 md:px-0">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto"></div>
         </div>
@@ -669,7 +669,7 @@ function AddPhotoModal() {
   const [openAddModal, setOpenAddModal] = useState(false);
 
   return (
-    <div className="">
+    <section className="mt-10 max-w-6xl">
       <div className="my-10 flex items-center justify-between ">
         <h2 className=" text-2xl font-bold">Progress Pictures</h2>
         <Modal open={openAddModal} onOpenChange={setOpenAddModal}>
@@ -699,6 +699,6 @@ function AddPhotoModal() {
         </Modal>
       </div>
       <PhotoList />
-    </div>
+    </section>
   );
 }
