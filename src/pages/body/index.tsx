@@ -47,10 +47,10 @@ export default function Index() {
         <link rel="icon" href="/icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
-      <div className=" mt-10 w-full bg-primary">
+      <main className=" mt-10 w-full bg-primary">
         <h1
-          className=" text-4xl font-medium
-         text-white"
+          className="
+         text-4xl font-medium text-white"
         >
           Body
         </h1>
@@ -67,7 +67,7 @@ export default function Index() {
           <AddMeasurementsModal />
           <Measurements />
         </section>
-      </div>
+      </main>
     </>
   );
 }
@@ -593,7 +593,7 @@ function AddMeasurementsModal() {
 
 function PhotoList() {
   const [openPhotoModal, setOpenPhotomodal] = useState(false);
-  const [chosenPhoto, setChosenPhoto] = useState();
+  const [chosenPhoto, setChosenPhoto] = useState("");
   const [ref, bounds] = useMeasure();
   const utils = useUtils();
 
@@ -622,7 +622,7 @@ function PhotoList() {
       <motion.div
         dragConstraints={{
           right: 0,
-          left: -bounds.width,
+          left: 0,
         }}
         className="flex cursor-grab gap-2"
         drag="x"

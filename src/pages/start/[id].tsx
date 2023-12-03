@@ -33,7 +33,7 @@ function Id() {
     }
   );
 
-  const { mutate: finishTraining } =
+  const { mutate: finishTraining, isLoading: isFinishing } =
     api.training.finishTrainingUnit.useMutation();
 
   const { handleSubmit, control, watch, getValues, setValue, register } =
@@ -87,17 +87,41 @@ function Id() {
                 <Button
                   className=" font-medium"
                   onClick={handleSubmit(formSubmit)}
+                  disabled={isFinishing}
                 >
                   Save training
                 </Button>
                 <Modal.Button asChild>
-                  <Button variant="danger" className="">
+                  <Button disabled={isFinishing} variant="danger" className="">
                     Go back
                   </Button>
                 </Modal.Button>
               </div>
             </Modal.Content>
           </Modal>
+          <section>
+            <Modal>
+              <Modal.Button className="flex w-full items-center gap-2  rounded-lg bg-red-700/60 px-3 py-4 hover:bg-red-800 ">
+                <FaTrash size={15} />
+                Cancel workout
+              </Modal.Button>
+              <Modal.Content title="Are you sure you want to cancel workout ? ">
+                <h2 className={"text-center  text-lg text-slate-300"}>
+                  All of this workouts data will be lost !
+                </h2>
+                <div className="mt-6 flex w-full justify-between px-10">
+                  <Link href="/">
+                    <Button type="button">Cancel</Button>
+                  </Link>
+                  <Modal.Button asChild>
+                    <Button variant="danger" className="">
+                      Go back
+                    </Button>
+                  </Modal.Button>
+                </div>
+              </Modal.Content>
+            </Modal>
+          </section>
         </div>
       </section>
       {fields.map((exercise, index) => {
@@ -189,29 +213,6 @@ function Id() {
           </section>
         );
       })}
-      <section>
-        <Modal>
-          <Modal.Button className="flex w-full items-center gap-2  rounded-lg bg-red-700/60 px-3 py-4 hover:bg-red-800 ">
-            <FaTrash size={15} />
-            Cancel workout
-          </Modal.Button>
-          <Modal.Content title="Are you sure you want to cancel workout ? ">
-            <h2 className={"text-center  text-lg text-slate-300"}>
-              All of this workouts data will be lost !
-            </h2>
-            <div className="mt-6 flex w-full justify-between px-10">
-              <Link href="/">
-                <Button type="button">Cancel</Button>
-              </Link>
-              <Modal.Button asChild>
-                <Button variant="danger" className="">
-                  Go back
-                </Button>
-              </Modal.Button>
-            </div>
-          </Modal.Content>
-        </Modal>
-      </section>
     </form>
   );
 }

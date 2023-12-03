@@ -4,6 +4,9 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+        standalone: { raw: "(display-mode: standalone)" },
+      },
       borderColor: {
         // primary: "#7ECBFF",
       },

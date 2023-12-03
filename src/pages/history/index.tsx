@@ -4,10 +4,17 @@ import { api } from "~/utils/api";
 import { MdUpdate } from "react-icons/md";
 import * as datefns from "date-fns";
 import TrainingUnitOptionsDropDown from "~/components/TrainingUnitOptionsDropDown";
+import Spinner from "~/components/svgs/Spinner";
 
 function Index() {
-  const { data } = api.trainingUnit.getTrainingHistory.useQuery();
+  const { data, isLoading } = api.trainingUnit.getTrainingHistory.useQuery();
 
+  if (isLoading)
+    return (
+      <div className="-my-40 flex h-screen items-center justify-center">
+        <Spinner size={24} />
+      </div>
+    );
   if (!data) return <div>Go and start your first workout!</div>;
 
   return (
@@ -20,7 +27,7 @@ function Index() {
       </Head>
       <div className="fixed mt-10 w-full bg-primary">
         <h1
-          className=" text-5xl font-medium
+          className=" text-4xl font-medium
          text-white"
         >
           Training History
