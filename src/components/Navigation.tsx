@@ -9,10 +9,10 @@ import NavIcon from "~/components/svgs/NavIcon";
 const Navigation = () => {
   return (
     <nav
-      className="fixed bottom-0 z-10 h-20 w-full overflow-hidden bg-nav/90  transition md:left-0
+      className="fixed bottom-0 z-10  w-full overflow-hidden bg-nav/90  transition md:left-0
     md:h-full md:w-20 md:bg-nav md:hover:w-48 "
     >
-      <ul className="flex items-center justify-around md:h-full md:flex-col  ">
+      <ul className="flex items-center  justify-around md:h-full md:flex-col  ">
         <div className="hidden md:block">
           <Logo className={"md:absolute md:flex"} />
         </div>
@@ -38,7 +38,7 @@ function NavItem({ title, href }: NavItemI) {
   const path = usePathname();
   const active = path === href;
   const classes = twMerge(
-    "cursor-pointer md:items-center left-0 ml-5 md:absolute  md:flex gap-2 opacity-75 hover:text-primary hover:opacity-100",
+    "cursor-pointer flex flex-col py-4 md:items-center left-0 ml-5 md:absolute  md:flex gap-2 opacity-75 hover:text-primary hover:opacity-100",
     active && "text-primary opacity-100"
   );
   return (
