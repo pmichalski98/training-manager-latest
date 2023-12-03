@@ -592,6 +592,8 @@ function AddMeasurementsModal() {
 }
 
 function PhotoList() {
+  const [openPhotoModal, setOpenPhotomodal] = useState(false);
+  const [chosenPhoto, setChosenPhoto] = useState();
   const [ref, bounds] = useMeasure();
   const utils = useUtils();
 
@@ -627,37 +629,67 @@ function PhotoList() {
       >
         {photos?.map((photo) => {
           return (
-            <div
-              key={photo.id}
-              className={` rounded-lg border border-lightCyan`}
-            >
-              <div className="pointer-events-none relative min-h-[240px] min-w-[200px] ">
-                <Image
-                  src={`https://training-manager.s3.eu-central-1.amazonaws.com/${photo.id}`}
-                  alt={"photo"}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  priority
-                  className={"rounded-lg"}
-                />
-              </div>
-              <div className={"flex items-start justify-between p-3"}>
-                <div>
-                  <h2 className="font-medium">
-                    {datefns.format(photo.createdAt, "MMM do ")}
-                  </h2>
-                  <p className="text-fadedBlue">{photo.weight} kg</p>
+            <Modal open={openPhotoModal} onOpenChange={setOpenPhotomodal}>
+              <Modal.Button
+                key={photo.id}
+                className={` rounded-lg border border-lightCyan`}
+                onClick={() => setChosenPhoto(photo.id)}
+              >
+                <div className="pointer-events-none relative min-h-[240px] min-w-[200px] ">
+                  <Image
+                    src={`https://training-manager.s3.eu-central-1.amazonaws.com/${photo.id}`}
+                    alt={"photo"}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                    className={"rounded-lg"}
+                  />
                 </div>
-                <Button
-                  onClick={() => deletePhoto({ photoId: photo.id })}
-                  variant="secondary"
-                  className="flex items-center gap-1"
-                  disabled={deleteIsLoading}
+                <div className={"flex items-start justify-between p-3"}>
+                  <div>
+                    <h2 className="font-medium">
+                      {datefns.format(photo.createdAt, "MMM do ")}
+                    </h2>
+                    <p className="text-fadedBlue">{photo.weight} kg</p>
+                  </div>
+                  <Button
+                    onClick={() => deletePhoto({ photoId: photo.id })}
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                    disabled={deleteIsLoading}
+                  >
+                    {deleteIsLoading ? <Spinner /> : <GoTrash size={25} />}
+                  </Button>
+                </div>
+              </Modal.Button>
+              <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 z-20  bg-black/50" />
+                <Dialog.Content
+                  className={
+                    "fixed left-1/2 top-1/2 z-30 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-3xl "
+                  }
                 >
-                  {deleteIsLoading ? <Spinner /> : <GoTrash size={25} />}
-                </Button>
-              </div>
-            </div>
+                  <Dialog.Title
+                    className={" sr-only mx-auto h-full text-xl text-slate-400"}
+                  >
+                    Photo zoomed
+                  </Dialog.Title>
+                  <Dialog.Close className="hover:text-gray-400">
+                    <AiOutlineClose size={35} />
+                  </Dialog.Close>
+                  <Image
+                    src={`https://training-manager.s3.eu-central-1.amazonaws.com/${chosenPhoto}`}
+                    alt={"photo"}
+                    width={500}
+                    height={500}
+                    // fill
+                    // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw (max-width: 1800px) 100vw, 100vw"
+                    priority
+                    className={"rounded-lg"}
+                  />
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Modal>
           );
         })}
       </motion.div>

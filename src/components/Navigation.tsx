@@ -38,7 +38,7 @@ function NavItem({ title, href }: NavItemI) {
   const path = usePathname();
   const active = path === href;
   const classes = twMerge(
-    "cursor-pointer flex flex-col py-4 md:items-center left-0 ml-5 md:absolute  md:flex gap-2 opacity-75 hover:text-primary hover:opacity-100",
+    "cursor-pointer flex flex-col md:flex-row py-4 md:items-center left-0 ml-5 md:absolute  md:flex gap-2 opacity-75 hover:text-primary hover:opacity-100",
     active && "text-primary opacity-100"
   );
   return (
