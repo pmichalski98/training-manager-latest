@@ -629,7 +629,11 @@ function PhotoList() {
       >
         {photos?.map((photo) => {
           return (
-            <Modal open={openPhotoModal} onOpenChange={setOpenPhotomodal}>
+            <Modal
+              key={photo.id}
+              open={openPhotoModal}
+              onOpenChange={setOpenPhotomodal}
+            >
               <Modal.Button
                 key={photo.id}
                 className={` rounded-lg border border-lightCyan`}
