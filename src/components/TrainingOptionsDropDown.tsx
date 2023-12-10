@@ -25,7 +25,6 @@ function TrainingOptionsDropDown({
     });
   const [open, setOpen] = useState(false);
 
-  console.log(open);
   return (
     <>
       <DropDown open={open} onOpenChange={setOpen}>
