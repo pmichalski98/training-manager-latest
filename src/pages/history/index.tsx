@@ -24,8 +24,16 @@ function Index() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta
+          name="viewport"
+          content="initial-scale=1, user-scalable=no, viewport-fit=cover"
+        />
       </Head>
-      <div className="fixed mt-10 w-full bg-primary">
+      <div className=" mt-10 w-full bg-primary standalone:mt-16">
         <h1
           className=" text-4xl font-medium
          text-white"
@@ -49,7 +57,7 @@ function Index() {
             trainingUnit.endedAt.getSeconds() -
             trainingUnit.createdAt.getSeconds();
           return (
-            <div className="mt-32" key={trainingUnit.id}>
+            <div className="mt-16" key={trainingUnit.id}>
               <h2 className="mb-6 text-xl font-medium text-fadedBlue">
                 {datefns.format(trainingUnit.createdAt, "do MMMM")}
               </h2>

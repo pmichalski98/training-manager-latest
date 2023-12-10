@@ -59,7 +59,10 @@ export default function Home() {
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
-        <meta name="viewport" content="initial-scale=1, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="initial-scale=1, user-scalable=no, viewport-fit=cover"
+        />
         <link
           rel="apple-touch-startup-image"
           href="/apple-splash-2048-2732.jpg"
@@ -211,7 +214,7 @@ export default function Home() {
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
         />
       </Head>
-      <div className="mb-10">
+      <main className="mb-10 standalone:mt-16">
         <WelcomeUser />
         <div className="mt-10 rounded-md  bg-card p-4 text-white">
           <Chart />
@@ -256,7 +259,7 @@ export default function Home() {
             </div>
           );
         })}
-      </div>
+      </main>
     </>
   );
 }

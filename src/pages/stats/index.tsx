@@ -1,19 +1,37 @@
 import React from "react";
 import Chart from "~/components/Chart";
+import Head from "next/head";
 
 function Index() {
   return (
-    <main className=" mt-10 w-full bg-primary">
-      <h1
-        className="
+    <>
+      <Head>
+        <title>Training Manager</title>
+        <meta name="description" content="Training Manager gym application" />
+        <link rel="icon" href="/icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta
+          name="viewport"
+          content="initial-scale=1, user-scalable=no, viewport-fit=cover"
+        />
+      </Head>
+
+      <main className=" mt-10 w-full bg-primary standalone:mt-16">
+        <h1
+          className="
          text-4xl font-medium text-white"
-      >
-        Statistics
-      </h1>
-      <section className="mt-10 rounded-md  bg-card p-4 text-white">
-        <Chart />
-      </section>
-    </main>
+        >
+          Statistics
+        </h1>
+        <section className="mt-10 rounded-md  bg-card p-4 text-white">
+          <Chart />
+        </section>
+      </main>
+    </>
   );
 }
 

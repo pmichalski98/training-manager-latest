@@ -46,8 +46,16 @@ export default function Index() {
         <meta name="description" content="Training Manager gym application" />
         <link rel="icon" href="/icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta
+          name="viewport"
+          content="initial-scale=1, user-scalable=no, viewport-fit=cover"
+        />
       </Head>
-      <main className=" mt-10 w-full bg-primary">
+      <main className=" mt-10 w-full bg-primary standalone:mt-16">
         <h1
           className="
          text-4xl font-medium text-white"
