@@ -216,7 +216,7 @@ export default function Home() {
       </Head>
       <main className="mb-10 standalone:mt-16">
         <WelcomeUser />
-        <div className="mt-10 rounded-md  bg-card p-4 text-white">
+        <div className="mt-10 rounded-md  p-4 text-white">
           <RandomChart />
         </div>
         <AddWorkoutModal />

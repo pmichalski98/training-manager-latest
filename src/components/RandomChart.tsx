@@ -49,7 +49,7 @@ interface InnerChartProps<T> {
 }
 
 interface ChartData {
-  x: number;
+  x: number | Date;
   y: number;
   yInfo?: string;
 }

@@ -28,10 +28,10 @@ function Index() {
         >
           Statistics
         </h1>
-        <section className="mt-10 rounded-md  bg-card p-4 text-white">
+        <section className="mt-10 rounded-md   p-4 text-white">
           <RandomChart />
         </section>
-        <section className="mt-10 rounded-md  bg-card p-4 text-white">
+        <section className="mt-10 rounded-md   p-4 text-white">
           <WeightChart />
         </section>
       </main>

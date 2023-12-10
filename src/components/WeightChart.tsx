@@ -3,7 +3,7 @@ import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
 import { InnerChart } from "~/components/RandomChart";
 import * as datefns from "date-fns";
-function WeightChart(props) {
+function WeightChart() {
   const [ref, bounds] = useMeasure();
   // @ts-ignore
   const { data: entries } = api.stats.getWeightData.useQuery({
