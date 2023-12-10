@@ -30,6 +30,7 @@ export const statsRouter = createTRPCRouter({
       where: {
         userId: ctx.userId,
       },
+      orderBy: { createdAt: "asc" },
       select: { weight: true, createdAt: true, id: true },
     });
     if (!weightData) throw new TRPCError({ code: "NOT_FOUND" });

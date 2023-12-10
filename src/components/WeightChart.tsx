@@ -13,9 +13,8 @@ function WeightChart(props) {
   console.log(entries);
   const data = entries.map((weight, index) => {
     return {
-      x: weight.weight,
-      y: index,
-      yInfo: datefns.format(weight.createdAt, "do MMMM"),
+      x: weight.createdAt,
+      y: weight.weight,
     };
   });
 

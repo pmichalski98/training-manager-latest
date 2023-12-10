@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
 import { motion } from "framer-motion";
+import * as datefns from "date-fns";
 
 export default function RandomChart() {
   const [ref, bounds] = useMeasure();
@@ -13,8 +14,8 @@ export default function RandomChart() {
   if (!entries) return;
   const data = entries.data.map((weight, index) => {
     return {
-      x: weight.weight,
-      y: index + 1,
+      x: index + 1,
+      y: weight.weight,
     };
   });
 
@@ -68,24 +69,24 @@ export function InnerChart<T extends ChartData>({
     .scaleLinear()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    .domain(d3.extent(data.map((d) => d.y)))
+    .domain(d3.extent(data.map((d) => d.x)))
     .range([margin.left, width - margin.right]);
   const yScale = d3
     .scaleLinear()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    .domain(d3.extent(data.map((d) => d.x)))
+    .domain(d3.extent(data.map((d) => d.y)))
     .range([height - margin.top, margin.bottom]);
   const line = d3
     .line()
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    .x((d) => xScale(d.y))
+    .x((d) => xScale(d.x))
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    .y((d) => yScale(d.x));
+    .y((d) => yScale(d.y));
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const d = line(data);
@@ -115,7 +116,7 @@ export function InnerChart<T extends ChartData>({
               stroke="currentColor"
               strokeWidth={1.5}
             />
-            {yScale.ticks(5).map((y, index, array) => (
+            {yScale.ticks(3).map((y, index, array) => (
               <g
                 className="text-slate-400"
                 transform={`translate(0,${yScale(y)})`}
@@ -137,6 +138,8 @@ export function InnerChart<T extends ChartData>({
               </g>
             ))}
             {xScale.ticks(data.length - 1).map((x) => {
+              const date = datefns.fromUnixTime(x / 1000);
+              const formated = datefns.format(date, "MMM");
               return (
                 <g
                   transform={`translate(${xScale(x)},${height})`}
@@ -148,7 +151,8 @@ export function InnerChart<T extends ChartData>({
                     textAnchor="middle"
                     fill="currentColor"
                   >
-                    fix this
+                    {/*This is a check if x is a unixdate or just a number */}
+                    {x > 10000 ? formated : x}
                   </text>
                 </g>
               );
