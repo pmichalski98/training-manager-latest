@@ -5,12 +5,18 @@ import React, { type ReactNode } from "react";
 
 export default function DropDown({
   children,
+  open,
+  onOpenChange,
 }: {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children: ReactNode;
 }) {
-  return <DropDownMenu.Root>{children}</DropDownMenu.Root>;
+  return (
+    <DropDownMenu.Root open={open} onOpenChange={onOpenChange}>
+      {children}
+    </DropDownMenu.Root>
+  );
 }
 
 function DropDownContent({ children }: { children: ReactNode }) {
@@ -21,7 +27,7 @@ function DropDownContent({ children }: { children: ReactNode }) {
         sideOffset={77}
         side="left"
         className={
-          "absolute right-0 top-0 z-50 mt-2 translate-x-1/3 overflow-auto "
+          "absolute right-0 top-0 z-50 mt-2 translate-x-1/3 overflow-auto standalone:translate-x-16 "
         }
       >
         {children}

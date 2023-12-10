@@ -25,40 +25,47 @@ function TrainingOptionsDropDown({
     });
   const [open, setOpen] = useState(false);
 
+  console.log(open);
   return (
-    <DropDown open={open} onOpenChange={setOpen}>
-      <DropDown.Button>
-        <IconButton type="edit" />
-      </DropDown.Button>
-      <DropDown.Content>
-        <div className=" space-y-1 rounded border-2 border-[#7ECBFF]/20 bg-[#1B3A56]/50 px-3 py-1 outline-none ">
-          <Button
-            onClick={() => deleteTraining({ trainingId: training.trainingId })}
-            disabled={isDeleting}
-            variant="secondary"
-            className="capitalize"
-          >
-            delete
-          </Button>
-          <Modal open={openEditModal} onOpenChange={setOpenEditModal}>
-            <Modal.Button>
-              <Button variant="secondary" className="capitalize">
-                edit
-              </Button>
-            </Modal.Button>
-            <Modal.Content title={`Editing ${training.trainingName} workout`}>
-              <h3 className="text-center text-3xl font-medium text-white">
-                Workout Details
-              </h3>
-              <EditWorkoutForm
-                closeModal={setOpenEditModal}
-                training={training}
-              />
-            </Modal.Content>
-          </Modal>
-        </div>
-      </DropDown.Content>
-    </DropDown>
+    <>
+      <DropDown open={open} onOpenChange={setOpen}>
+        <DropDown.Button>
+          <IconButton type="edit" />
+        </DropDown.Button>
+        <DropDown.Content>
+          <div className=" space-y-1 rounded border-2 border-[#7ECBFF]/20 bg-[#1B3A56]/50 px-3 py-1 outline-none ">
+            <Button
+              onClick={() =>
+                deleteTraining({ trainingId: training.trainingId })
+              }
+              disabled={isDeleting}
+              variant="secondary"
+              className="capitalize"
+            >
+              delete
+            </Button>
+            <Button
+              onClick={() => {
+                setOpen(false);
+                setOpenEditModal(true);
+              }}
+              variant="secondary"
+              className="capitalize"
+            >
+              edit
+            </Button>
+          </div>
+        </DropDown.Content>
+      </DropDown>
+      <Modal open={openEditModal} onOpenChange={setOpenEditModal}>
+        <Modal.Content title={`Editing ${training.trainingName} workout`}>
+          <h3 className="text-center text-3xl font-medium text-white">
+            Workout Details
+          </h3>
+          <EditWorkoutForm closeModal={setOpenEditModal} training={training} />
+        </Modal.Content>
+      </Modal>
+    </>
   );
 }
 
