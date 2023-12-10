@@ -1,10 +1,10 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "~/server/api/routers/user";
 import { trainingRouter } from "~/server/api/routers/training";
-import { exerciseRouter } from "~/server/api/routers/exercise";
 import { trainingUnitRouter } from "~/server/api/routers/trainingUnit";
 import { photosRouter } from "~/server/api/routers/photos";
 import { bodyRouter } from "~/server/api/routers/body";
+import { statsRouter } from "~/server/api/routers/stats";
 
 /**
  * This is the primary router for your server.
@@ -14,7 +14,7 @@ import { bodyRouter } from "~/server/api/routers/body";
 export const appRouter = createTRPCRouter({
   user: userRouter,
   training: trainingRouter,
-  exercise: exerciseRouter,
+  stats: statsRouter,
   trainingUnit: trainingUnitRouter,
   photos: photosRouter,
   body: bodyRouter,

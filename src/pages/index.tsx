@@ -7,7 +7,7 @@ import WelcomeUser from "~/components/WelcomeUser";
 import AddWorkoutModal from "~/components/AddWorkoutModal";
 import Link from "next/link";
 import Spinner from "~/components/svgs/Spinner";
-import Chart from "~/components/Chart";
+import RandomChart from "~/components/RandomChart";
 import * as datefns from "date-fns";
 
 export default function Home() {
@@ -217,7 +217,7 @@ export default function Home() {
       <main className="mb-10 standalone:mt-16">
         <WelcomeUser />
         <div className="mt-10 rounded-md  bg-card p-4 text-white">
-          <Chart />
+          <RandomChart />
         </div>
         <AddWorkoutModal />
         {workoutsWithoutDuplicatedEx.map((training) => {

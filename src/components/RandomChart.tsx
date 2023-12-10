@@ -4,14 +4,17 @@ import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
 import { motion } from "framer-motion";
 
-export default function Chart() {
+export default function RandomChart() {
   const [ref, bounds] = useMeasure();
-  const { data: entries } = api.exercise.getRandomExercise.useQuery();
+  // @ts-ignore
+  const { data: entries } = api.stats.getRandomExercise.useQuery({
+    cacheTime: 0,
+  });
   if (!entries) return;
   const data = entries.data.map((weight, index) => {
     return {
-      weight: weight.weight,
-      trainingsCount: index + 1,
+      x: weight.weight,
+      y: index + 1,
     };
   });
 
@@ -38,15 +41,22 @@ export default function Chart() {
   );
 }
 
-function InnerChart({
+interface InnerChartProps<T> {
+  data: T[];
+  width: number;
+  height: number;
+}
+
+interface ChartData {
+  x: number;
+  y: number;
+  yInfo?: string;
+}
+export function InnerChart<T extends ChartData>({
   width,
   height,
   data,
-}: {
-  data: { weight: number; trainingsCount: number }[];
-  width: number;
-  height: number;
-}) {
+}: InnerChartProps<T>) {
   const margin = {
     top: 25,
     right: 20,
@@ -58,24 +68,24 @@ function InnerChart({
     .scaleLinear()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
-    .domain(d3.extent(data.map((d) => d.trainingsCount)))
+    .domain(d3.extent(data.map((d) => d.y)))
     .range([margin.left, width - margin.right]);
   const yScale = d3
     .scaleLinear()
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    .domain(d3.extent(data.map((d) => d.weight)))
+    .domain(d3.extent(data.map((d) => d.x)))
     .range([height - margin.top, margin.bottom]);
   const line = d3
     .line()
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    .x((d) => xScale(d.trainingsCount))
+    .x((d) => xScale(d.y))
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/ban-ts-comment
     //@ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    .y((d) => yScale(d.weight));
+    .y((d) => yScale(d.x));
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const d = line(data);
@@ -105,11 +115,11 @@ function InnerChart({
               stroke="currentColor"
               strokeWidth={1.5}
             />
-            {yScale.ticks(5).map((weight, index, array) => (
+            {yScale.ticks(5).map((y, index, array) => (
               <g
                 className="text-slate-400"
-                transform={`translate(0,${yScale(weight)})`}
-                key={weight}
+                transform={`translate(0,${yScale(y)})`}
+                key={y}
               >
                 <line
                   strokeDasharray="1,6"
@@ -122,25 +132,27 @@ function InnerChart({
                   className="text-sm "
                   fill="currentColor"
                 >
-                  {weight}
+                  {y}
                 </text>
               </g>
             ))}
-            {xScale.ticks(data.length - 1).map((trainingsCount) => (
-              <g
-                transform={`translate(${xScale(trainingsCount)},${height})`}
-                className="text-slate-400"
-                key={trainingsCount}
-              >
-                <text
-                  className="text-sm "
-                  textAnchor="middle"
-                  fill="currentColor"
+            {xScale.ticks(data.length - 1).map((x) => {
+              return (
+                <g
+                  transform={`translate(${xScale(x)},${height})`}
+                  className="text-slate-400"
+                  key={x}
                 >
-                  {trainingsCount}
-                </text>
-              </g>
-            ))}
+                  <text
+                    className="text-sm "
+                    textAnchor="middle"
+                    fill="currentColor"
+                  >
+                    fix this
+                  </text>
+                </g>
+              );
+            })}
           </>
         )}
       </svg>

@@ -1,6 +1,7 @@
 import React from "react";
-import Chart from "~/components/Chart";
+import RandomChart from "~/components/RandomChart";
 import Head from "next/head";
+import WeightChart from "~/components/WeightChart";
 
 function Index() {
   return (
@@ -28,7 +29,10 @@ function Index() {
           Statistics
         </h1>
         <section className="mt-10 rounded-md  bg-card p-4 text-white">
-          <Chart />
+          <RandomChart />
+        </section>
+        <section className="mt-10 rounded-md  bg-card p-4 text-white">
+          <WeightChart />
         </section>
       </main>
     </>
