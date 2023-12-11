@@ -27,7 +27,7 @@ function Index() {
           className="
          text-4xl font-medium text-white"
         >
-          Statistics
+          Stats and Charts
         </h1>
         <section className="mt-10 rounded-md   p-4 text-white">
           <ExerciseChart />

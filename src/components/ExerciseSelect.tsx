@@ -49,22 +49,19 @@ interface SelectItemI extends Select.SelectItemProps {
   className?: string;
   children: ReactNode;
 }
-const SelectItem = React.forwardRef(
-  ({ children, className, ...props }: SelectItemI, forwardedRef) => {
-    return (
-      <Select.Item
-        className={twMerge(
-          "text-violet11 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-lg capitalize leading-none data-[disabled]:pointer-events-none data-[highlighted]:outline-none",
-          className
-        )}
-        {...props}
-        ref={forwardedRef}
-      >
-        <Select.ItemText>{children}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-          <CheckIcon />
-        </Select.ItemIndicator>
-      </Select.Item>
-    );
-  }
-);
+const SelectItem = ({ children, className, ...props }: SelectItemI) => {
+  return (
+    <Select.Item
+      className={twMerge(
+        "text-violet11 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-lg capitalize leading-none data-[disabled]:pointer-events-none data-[highlighted]:outline-none",
+        className
+      )}
+      {...props}
+    >
+      <Select.ItemText>{children}</Select.ItemText>
+      <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+        <CheckIcon />
+      </Select.ItemIndicator>
+    </Select.Item>
+  );
+};
