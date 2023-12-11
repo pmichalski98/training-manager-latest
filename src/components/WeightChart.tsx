@@ -5,7 +5,6 @@ import { InnerChart } from "~/components/RandomChart";
 import * as datefns from "date-fns";
 function WeightChart() {
   const [ref, bounds] = useMeasure();
-  // @ts-ignore
   const { data: entries } = api.stats.getWeightData.useQuery({
     cacheTime: 0,
   });

@@ -7,7 +7,6 @@ import * as datefns from "date-fns";
 
 export default function RandomChart() {
   const [ref, bounds] = useMeasure();
-  // @ts-ignore
   const { data: entries } = api.stats.getRandomExercise.useQuery({
     cacheTime: 0,
   });
