@@ -2,6 +2,19 @@ import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 
 export const statsRouter = createTRPCRouter({
+  getExerciseList: privateProcedure.query(async ({ ctx }) => {
+    const res = await ctx.prisma.exercise.findMany({
+      where: {
+        userId: ctx.userId,
+      },
+      select: {
+        exerciseName: true,
+      },
+      distinct: ["exerciseName"],
+    });
+    if (!res) throw new TRPCError({ code: "NOT_FOUND" });
+    return res;
+  }),
   getRandomExercise: privateProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.exercise.findMany({
       where: { userId: ctx.userId },

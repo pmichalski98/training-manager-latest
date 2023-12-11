@@ -1,23 +1,17 @@
 import React from "react";
 import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
-import { InnerChart } from "~/components/RandomChart";
-import * as datefns from "date-fns";
+import { InnerChart } from "~/components/InnerChart";
 function WeightChart() {
   const [ref, bounds] = useMeasure();
-  const { data: entries } = api.stats.getWeightData.useQuery(_, {
-    cacheTime: 0,
-  });
+  const { data: entries } = api.stats.getWeightData.useQuery();
   if (!entries) return;
-  console.log(entries);
   const data = entries.map((weight, index) => {
     return {
       x: weight.createdAt,
       y: weight.weight,
     };
   });
-
-  console.log(data);
 
   return (
     <>

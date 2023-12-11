@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 
 const svgPaths = [
   {
@@ -54,7 +54,9 @@ interface NavIconI {
 }
 function NavIcon({ name, className }: NavIconI) {
   const path = svgPaths.map((svgPath) =>
-    svgPath.name === name ? svgPath.path : null
+    svgPath.name === name ? (
+      <Fragment key={svgPath.name}>{svgPath.path}</Fragment>
+    ) : null
   );
 
   return (
