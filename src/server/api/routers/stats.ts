@@ -1,5 +1,6 @@
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
 export const statsRouter = createTRPCRouter({
   getExerciseList: privateProcedure.query(async ({ ctx }) => {
@@ -15,6 +16,18 @@ export const statsRouter = createTRPCRouter({
     if (!res) throw new TRPCError({ code: "NOT_FOUND" });
     return res;
   }),
+  getChosenExercise: privateProcedure
+    .input(z.string())
+    .query(async ({ input, ctx }) => {
+      const res = await ctx.prisma.exercise.findMany({
+        where: {
+          userId: ctx.userId,
+          exerciseName: input,
+        },
+      });
+      if (!res) throw new TRPCError({ code: "BAD_REQUEST" });
+      return res;
+    }),
   getRandomExercise: privateProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.exercise.findMany({
       where: { userId: ctx.userId },

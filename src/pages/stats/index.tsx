@@ -29,12 +29,13 @@ function Index() {
         >
           Stats and Charts
         </h1>
-        <section className="mt-10 rounded-md   p-4 text-white">
-          <ExerciseChart />
-          <RandomChart />
-        </section>
-        <section className="mt-10 rounded-md   p-4 text-white">
-          <WeightChart />
+        <section className="mt-10 space-y-12">
+          <div>
+            <ExerciseChart />
+          </div>
+          <div>
+            <WeightChart />
+          </div>
         </section>
       </main>
     </>
