@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useMeasure from "react-use-measure";
 import { api } from "~/utils/api";
 import { InnerChart } from "~/components/InnerChart";
@@ -7,10 +7,12 @@ function ExerciseChart() {
   const [selectedExercise, setSelectedExercise] = useState<string>();
   const [ref, bounds] = useMeasure();
   const { data: exercises } = api.stats.getExerciseList.useQuery();
-  const { data: chosenExercise, refetch } =
-    api.stats.getChosenExercise.useQuery(selectedExercise || "", {
+  const { data: chosenExercise } = api.stats.getChosenExercise.useQuery(
+    selectedExercise || "",
+    {
       retry: false,
-    });
+    }
+  );
   if (!exercises) return <div>error</div>;
   let data: {
     x: number | Date;
@@ -24,6 +26,7 @@ function ExerciseChart() {
       };
     });
   }
+
   return (
     <>
       <div className="space-y-1 font-medium">
@@ -40,7 +43,7 @@ function ExerciseChart() {
           />
         </div>
       </div>
-      {chosenExercise ? (
+      {chosenExercise?.length !== 0 && (
         <div ref={ref} className="relative h-full w-full ">
           {bounds.width > 0 && (
             <InnerChart
@@ -50,8 +53,6 @@ function ExerciseChart() {
             />
           )}
         </div>
-      ) : (
-        <div ref={ref} className="relative h-full w-full "></div>
       )}
     </>
   );

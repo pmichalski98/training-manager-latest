@@ -1,10 +1,9 @@
 import React from "react";
-import RandomChart from "~/components/RandomChart";
 import Head from "next/head";
 import WeightChart from "~/components/WeightChart";
 import ExerciseChart from "~/components/ExerciseChart";
 
-function Index() {
+export default function Index() {
   return (
     <>
       <Head>
@@ -29,7 +28,7 @@ function Index() {
         >
           Stats and Charts
         </h1>
-        <section className="mt-10 space-y-12">
+        <section className="mt-10 space-y-24">
           <div>
             <ExerciseChart />
           </div>
@@ -41,5 +40,3 @@ function Index() {
     </>
   );
 }
-
-export default Index;

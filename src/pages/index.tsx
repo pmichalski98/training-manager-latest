@@ -9,6 +9,7 @@ import Link from "next/link";
 import Spinner from "~/components/svgs/Spinner";
 import RandomChart from "~/components/RandomChart";
 import * as datefns from "date-fns";
+import Button from "~/components/ui/Button";
 
 export default function Home() {
   api.user.login.useQuery();
@@ -253,7 +254,7 @@ export default function Home() {
               </div>
               <div className="text-right">
                 <Link href={`/start/${training.trainingId}`} className="">
-                  Start training
+                  <Button>Start training</Button>
                 </Link>
               </div>
             </div>

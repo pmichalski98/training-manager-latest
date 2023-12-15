@@ -16,23 +16,29 @@ export default function RandomChart() {
 
   return (
     <>
-      <div className="space-y-1 font-medium">
-        <h2 className="text-sm  uppercase text-slate-400">
-          your stats at a glance
-        </h2>
-        <p>Weight per training</p>
-      </div>
-      <p className="text-center text-2xl capitalize">{entries.exerciseName}</p>
-      <div ref={ref} className="relative h-full w-full ">
-        {bounds.width > 0 && (
-          <InnerChart
-            key={entries.exerciseName}
-            width={bounds.width}
-            data={data}
-            height={bounds.height}
-          />
-        )}
-      </div>
+      {data.length > 1 && (
+        <>
+          <div className="space-y-1 font-medium">
+            <h2 className="text-sm  uppercase text-slate-400">
+              your stats at a glance
+            </h2>
+            <p>Weight per training</p>
+          </div>
+          <p className="text-center text-2xl capitalize">
+            {entries.exerciseName}
+          </p>
+          <div ref={ref} className="relative h-full w-full ">
+            {bounds.width > 0 && (
+              <InnerChart
+                key={entries.exerciseName}
+                width={bounds.width}
+                data={data}
+                height={bounds.height}
+              />
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }

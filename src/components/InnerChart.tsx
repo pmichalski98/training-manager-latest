@@ -54,16 +54,7 @@ export function InnerChart<T extends ChartData>({
   return (
     <>
       <svg viewBox={`0 0 ${width} ${height}`}>
-        {data.length <= 1 ? (
-          <text
-            y={height / 2}
-            className="mx-auto text-center text-xl"
-            fill="currentColor"
-            alignmentBaseline="middle"
-          >
-            Not enough data for this exercise
-          </text>
-        ) : (
+        {data.length > 1 && (
           <>
             <motion.path
               initial={{
